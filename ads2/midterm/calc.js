@@ -1,18 +1,42 @@
 class Calculator {
     #stack = new Stack()
-    #memory = new CalcSymbolList()
+    #memory = new SymbolTable()
+
+    clear() {
+        this.clearStack()
+        this.clearMemory()
+    }
+
+    clearStack() {
+        this.#stack = new Stack()
+    }
+
+    clearMemory() {
+        this.#memory = new SymbolTable()
+    }
+
+    addToMemory(calcSymbol) {
+        if (!CalcSymbol.is(calcSymbol)) throw new Error("Invalid symbol to save in memory")
+        this.#memory.add(calcSymbol)
+    }
 
     input(entry) {
         if (Operand.test(entry)) {
             this.#stack.add(new Operand(entry))
             return
         }
-        if (CalcSymbol.test(entry)) {
-            this.#stack.add(entry)
+        if (CalcSymbol.isKey(entry)) {
+            let calcSymbol
+            if (this.#memory.has(entry)) {
+                calcSymbol = this.#memory.get(entry)
+            } else {
+                calcSymbol = new CalcSymbol(entry)
+            }
+            this.#stack.add(calcSymbol)
             return
         }
         if (Operator.test(entry)) {
-            const operator = Operator.create(entry)
+            const operator = Operator.create(entry, this)
             this.processOperation(operator)
             return
         }
@@ -23,10 +47,7 @@ class Calculator {
         const v1 = this.#stack.pop()
         const v2 = this.#stack.pop()
         const result = operator.execute(v1, v2)
-        if (CalcSymbol.is(result)) {
-            this.#memory.add(result)
-            return
-        }
+        if (!result) return
         if (!Operand.is(result)) throw new Error('invalid result')
         this.#stack.add(result)
     }
@@ -51,7 +72,7 @@ class Stack {
 }
 
 class Operand {
-    static #allowed = /^\d+$/
+    static #allowed = /^-?\d+$/
     #value
     
     constructor(value) {
@@ -88,7 +109,7 @@ class Operator {
         return v instanceof Operator
     }
 
-    static create(v) {
+    static create(v, calc) {
         if (!this.test(v)) throw new Error('Invalid operator')
         switch(v) {
             case this.#SUM:
@@ -100,7 +121,7 @@ class Operator {
             case this.#DIV:
                 return new DivOperator()
             case this.#EQ:
-                return new EqualsOperator()
+                return new EqualsOperator(calc)
         }
     }
 }
@@ -131,10 +152,18 @@ class DivOperator extends Operator{
 }
 
 class EqualsOperator extends Operator {
-    execute(calcSymbolKey, operand) {
-        if (!CalcSymbol.test(calcSymbolKey)) throw new Error('[EqualsOperator] invalid CalcSymbol key')
+    #calc
+
+    constructor(calc) {
+        super()
+        this.#calc = calc
+    }
+
+    execute(operand, calcSymbol) {
+        if (!CalcSymbol.is(calcSymbol)) throw new Error(`[EqualsOperator] invalid CalcSymbol key: ${calcSymbol.value()}`)
         if (!Operand.is(operand)) throw new Error('[EqualsOperator] invalid operand')
-        return new CalcSymbol(calcSymbolKey, operand)
+        calcSymbol.setOperand(operand)
+        this.#calc.addToMemory(calcSymbol)
     }
 }
 
@@ -143,16 +172,19 @@ class CalcSymbol {
     // allows single uppercase letter from A to Z
     static #allowed = /^[A-Z]$/
     #key
-    #value
+    #operand
 
-    constructor(key, value) {
-        if (!CalcSymbol.test(key)) throw new Error('[CalcSymbol] Invalid key')
-        if (!Operand.is(value)) throw new Error("[CalcSymbol] Invalid value")
-        this.#value = value
+    constructor(key, operand) {
+        if (!CalcSymbol.isKey(key)) throw new Error('[CalcSymbol] Invalid key')
         this.#key = key
+        if (operand) {
+            if (!Operand.is(operand)) throw new Error("[CalcSymbol] Invalid operand")
+            this.#operand = operand
+        }
     }
 
-    static test(value) {
+
+    static isKey(value) {
         return this.#allowed.test(value)
     }    
 
@@ -160,28 +192,37 @@ class CalcSymbol {
         return value instanceof CalcSymbol
     }
 
-    get key() {
+    key() {
         return this.#key
     }
 
-    get value() {
-        if (!this.#value) throw new Error('[CalcSymbol] value not set')
-        return this.#value
+    value() {
+        if (!this.#operand) throw new Error(`[CalcSymbol] value not set: ${this.key()}`)
+        return this.#operand.value()
+    }
+
+    setOperand(operand) {
+        if (!Operand.is(operand)) throw new Error("[CalcSymbol] Invalid value")
+        this.#operand = operand
     }
 }
 
-class CalcSymbolList {
+class SymbolTable {
     #list = new Map()
 
     add(calcSymbol) {
         if (!CalcSymbol.is(calcSymbol)) throw new Error('[CalcSymbolList] invalid calcSymbol')
-        this.#list.set(calcSymbol.key, calcSymbol)
+        this.#list.set(calcSymbol.key(), calcSymbol)
     }
 
     get(key) {
         const calcSymbol = this.#list.get(key)
         if (!calcSymbol) throw new Error("[CalcSymbolList] calcSymbol not in memory")
         return calcSymbol
+    }
+
+    has(key) {
+        return this.#list.has(key)
     }
 }
 
@@ -193,6 +234,20 @@ function main() {
     }
     const result = c.result()
     console.log("final result:", result)
+    c.clear()
+    const tokens2 = [3, 'A', 5, '=', 'B', 2, '=', 'A', 'B', '+', '*']
+    for (const t of tokens2) {
+        c.input(t)
+    }
+    const result2 = c.result()
+    console.log("final result2:", result2)
+    c.clear()
+    const tokens3 = [3, 'A', 5, '=', 'A', '+', 10, 'A', '-']
+    for (const t of tokens3) {
+        c.input(t)
+    }
+    const result3 = c.result()
+    console.log("final result3:", result3)
 }
 
 main()
