@@ -9,12 +9,4 @@ int main()
 {
     MerkelMain app;
     app.init();
-    // Wallet wallet;
-    // wallet.insertCurrency("BTC", 10);
-    // wallet.insertCurrency("USDT", 100);
-    // std::cout << wallet.toString() << std::endl;
-    // wallet.removeCurrency("USDT", 10);
-    // std::cout << wallet.toString() << std::endl;
-    // wallet.removeCurrency("USD", 100);
-    // std::cout << wallet.toString() << std::endl;
 }

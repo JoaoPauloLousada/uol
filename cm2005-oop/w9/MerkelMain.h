@@ -21,7 +21,7 @@ class MerkelMain
         int getUserOption();
         void processUserOption(int userOption);
         std::string currentTime;
-        OrderBook orderBook{"test.csv"};
+        // OrderBook orderBook{"datase.csv"};
         Wallet wallet;
-        // OrderBook orderBook{"dataset.csv"};
+        OrderBook orderBook{"dataset.csv"};
 };

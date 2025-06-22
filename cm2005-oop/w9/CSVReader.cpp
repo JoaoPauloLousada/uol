@@ -24,7 +24,7 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename)
             }
             catch (std::exception &e)
             {
-                std::cout << "Invalid format" << std::endl;
+                // std::cout << "Invalid format" << std::endl;
             }
         }
         csvFile.close();
@@ -46,7 +46,7 @@ OrderBookEntry CSVReader::stringsToOBE(std::vector<std::string> tokens)
     double price, amount;
     if (tokens.size() != 5) // bad
     {
-        std::cout << "Bad line " << std::endl;
+        // std::cout << "Bad line " << std::endl;
         throw std::exception{};
     }
     // we have 5 tokens
