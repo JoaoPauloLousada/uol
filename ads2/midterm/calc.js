@@ -20,7 +20,7 @@ class Calculator {
         this.#memory.add(calcSymbol)
     }
 
-    input(entry) {
+    processInput(entry) {
         if (Operand.test(entry)) {
             this.#stack.add(new Operand(entry))
             return
@@ -74,7 +74,7 @@ class Stack {
 class Operand {
     static #allowed = /^-?\d+$/
     #value
-    
+
     constructor(value) {
         if (!Operand.test(value)) throw new Error(`Invalid operand: ${value}`)
         this.#value = Number(value)
@@ -111,7 +111,7 @@ class Operator {
 
     static create(v, calc) {
         if (!this.test(v)) throw new Error('Invalid operator')
-        switch(v) {
+        switch (v) {
             case this.#SUM:
                 return new SumOperator()
             case this.#SUB:
@@ -132,19 +132,19 @@ class SumOperator extends Operator {
     }
 }
 
-class SubOperator extends Operator{
+class SubOperator extends Operator {
     execute(o1, o2) {
         return new Operand(o1.value() - o2.value())
     }
 }
 
-class MultOperator extends Operator{
+class MultOperator extends Operator {
     execute(o1, o2) {
         return new Operand(o1.value() * o2.value())
     }
 }
 
-class DivOperator extends Operator{
+class DivOperator extends Operator {
     execute(o1, o2) {
         if (o2.value() == 0) throw new Error('division by zero')
         return new Operand(o1.value() / o2.value())
@@ -186,7 +186,7 @@ class CalcSymbol {
 
     static isKey(value) {
         return this.#allowed.test(value)
-    }    
+    }
 
     static is(value) {
         return value instanceof CalcSymbol
@@ -230,21 +230,21 @@ function main() {
     const c = new Calculator()
     const tokens = [3, 4, 5, '+', '*']
     for (const t of tokens) {
-        c.input(t)
+        c.processInput(t)
     }
     const result = c.result()
     console.log("final result:", result)
     c.clear()
     const tokens2 = [3, 'A', 5, '=', 'B', 2, '=', 'A', 'B', '+', '*']
     for (const t of tokens2) {
-        c.input(t)
+        c.processInput(t)
     }
     const result2 = c.result()
     console.log("final result2:", result2)
     c.clear()
     const tokens3 = [3, 'A', 5, '=', 'A', '+', 10, 'A', '-']
     for (const t of tokens3) {
-        c.input(t)
+        c.processInput(t)
     }
     const result3 = c.result()
     console.log("final result3:", result3)
