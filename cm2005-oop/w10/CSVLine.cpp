@@ -33,3 +33,8 @@ int CSVLine::getYear()
 {
     return year;
 }
+
+double CSVLine::getGB_temperature()
+{
+    return GB_temperature;
+}
