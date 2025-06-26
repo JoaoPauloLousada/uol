@@ -29,7 +29,7 @@ std::string CSVLine::getDate()
     return date;
 }
 
-int CSVLine::getYear()
+int CSVLine::getYear() const
 {
     return year;
 }
