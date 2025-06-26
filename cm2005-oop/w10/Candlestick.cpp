@@ -3,17 +3,24 @@
 #include <string>
 #include <vector>
 
-Candlestick::Candlestick(std::vector<CSVLine> _lines) {
+Candlestick::Candlestick(std::vector<CSVLine> _lines, double _open) {
   lines = _lines;
   date = lines[0].getDate();
+  open = _open;
   close = calculateClose();
   high = calculateHigh();
   low = calculateLow();
 }
 
-std::string Candlestick::getDate() { return date; }
+std::string Candlestick::getDate() const { return date; }
 
-double Candlestick::getClose() { return close; }
+double Candlestick::getOpen() const { return open; }
+
+double Candlestick::getClose() const { return close; }
+
+double Candlestick::getHigh() const { return high; }
+
+double Candlestick::getLow() const { return low; }
 
 double Candlestick::calculateClose() {
   double close = 0;

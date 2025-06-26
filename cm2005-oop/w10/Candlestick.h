@@ -5,13 +5,16 @@
 
 class Candlestick {
     public:
-        Candlestick(std::vector<CSVLine> lines);
-        std::string getDate();
-        double getClose();
+        Candlestick(std::vector<CSVLine> lines, double open = 0);
+        std::string getDate() const;
+        double getClose() const;
+        double getOpen() const;
+        double getHigh() const;
+        double getLow() const;
     private:
         std::string date;
         std::vector<CSVLine> lines;
-        // double open;
+        double open;
         double close;
         double calculateClose();
         double high;
