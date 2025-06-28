@@ -33,7 +33,7 @@ void CandlestickPlotter::plot()
         {
             if (temp < candlestick.getLow() || temp > candlestick.getHigh())
             {
-                std::cout << "      ";
+                std::cout << "     ";
                 continue;
             }
             int boxTop = std::max(candlestick.getClose(), candlestick.getOpen());
@@ -42,30 +42,30 @@ void CandlestickPlotter::plot()
             {
                 if (candlestick.getClose() > candlestick.getOpen())
                 {
-                    std::cout << GREEN << " [  ] " << RESET;
+                    std::cout << GREEN << " [ ] " << RESET;
                 }
                 else if (candlestick.getClose() < candlestick.getOpen())
                 {
-                    std::cout << RED << " [  ] " << RESET;
+                    std::cout << RED << " [ ] " << RESET;
                 }
                 else
                 {
-                    std::cout << WHITE << " [==] " << RESET;
+                    std::cout << WHITE << " [=] " << RESET;
                 }
             } 
             else 
             {
                 if (candlestick.getClose() > candlestick.getOpen())
                 {
-                    std::cout << GREEN << "  ||  " << RESET;
+                    std::cout << GREEN << "  |  " << RESET;
                 }
                 else if (candlestick.getClose() < candlestick.getOpen())
                 {
-                    std::cout << RED << "  ||  " << RESET;
+                    std::cout << RED << "  |  " << RESET;
                 }
                 else
                 {
-                    std::cout << WHITE << "  ||  " << RESET;
+                    std::cout << WHITE << "  |  " << RESET;
                 }
             }
         }
@@ -76,7 +76,7 @@ void CandlestickPlotter::plot()
     std::cout << "   ";
     for (int i = 0; i < candlesticks.size(); i++)
     {
-        std::cout << candlesticks[i].getYear() << "  ";
+        std::cout << candlesticks[i].getYear() << " ";
     }
     std::cout << std::endl;
 }
