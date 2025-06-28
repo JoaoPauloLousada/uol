@@ -7,6 +7,8 @@
 #include "CSVLine.h"
 #include "CSVLineList.h"
 #include "Candlestick.h"
+#include "CandlestickPlotter.h"
+#include <limits>
 
 int main() {
     std::cout << "Initial!" << std::endl;
@@ -40,15 +42,20 @@ int main() {
     }
     // Create candlesticks
     std::vector<Candlestick> candlesticks;
-    double open = 0;
+    double open = std::numeric_limits<double>::lowest();
     for (auto it = groupedLines.begin(); it != groupedLines.end(); it++)
     {
         Candlestick candlestick(it->second, open);
         candlesticks.push_back(candlestick);
         open = candlestick.getClose();
     }
+    // Print candlesticks
+    std::cout << "Candlesticks:" << std::endl;
     for (Candlestick candlestick : candlesticks)
     {
         std::cout << "Date: " << candlestick.getDate() << " Open: " << candlestick.getOpen() << " Close: " << candlestick.getClose() << " High: " << candlestick.getHigh() << " Low: " << candlestick.getLow() << std::endl;
     }
+    // Plot candlesticks
+    CandlestickPlotter candlestickPlotter(candlesticks);
+    candlestickPlotter.plot();
 }
