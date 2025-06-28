@@ -6,13 +6,19 @@
 Candlestick::Candlestick(std::vector<CSVLine> _lines, double _open) {
   lines = _lines;
   date = lines[0].getDate();
-  open = _open;
+  year = lines[0].getYear();
   close = calculateClose();
   high = calculateHigh();
   low = calculateLow();
+  open = _open;
+  if (open == std::numeric_limits<double>::lowest()) {
+    open = close;
+  }
 }
 
 std::string Candlestick::getDate() const { return date; }
+
+int Candlestick::getYear() const { return year; }
 
 double Candlestick::getOpen() const { return open; }
 
