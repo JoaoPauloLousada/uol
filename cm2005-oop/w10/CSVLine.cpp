@@ -3,8 +3,10 @@
 #include <string>
 #include <iostream>
 
-CSVLine::CSVLine(std::vector<std::string> tokens, std::unordered_map<std::string, int> columnMap)
+CSVLine::CSVLine(std::vector<std::string> _tokens, std::unordered_map<std::string, int> _columnMap)
 {
+    tokens = _tokens;
+    columnMap = _columnMap;
     date = tokens[0];
     std::string yearString = date.substr(0, 4);
     try{
@@ -13,14 +15,6 @@ CSVLine::CSVLine(std::vector<std::string> tokens, std::unordered_map<std::string
     catch(const std::exception& e)
     {
         std::cout << "Error converting year string to int" << std::endl;
-    }
-    try{
-        GB_temperature = std::stod(tokens[columnMap["GB_temperature"]]);
-    }
-    catch(const std::exception& e)
-    {
-        std::cout << "Error converting values from csv line" << std::endl;
-        std::cerr << "Error: " << e.what() << std::endl;
     }
 }
 
@@ -34,7 +28,15 @@ int CSVLine::getYear() const
     return year;
 }
 
-double CSVLine::getGB_temperature()
+double CSVLine::getTemperature(std::string countryTemperatureColumn)
 {
-    return GB_temperature;
+    try{
+        return std::stod(tokens[columnMap[countryTemperatureColumn]]);
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << "Error converting values from csv line" << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
+        throw std::invalid_argument("Invalid country temperature column");
+    }
 }

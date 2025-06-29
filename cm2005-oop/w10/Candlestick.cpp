@@ -2,8 +2,10 @@
 #include "CSVLine.h"
 #include <string>
 #include <vector>
+#include <limits>
 
-Candlestick::Candlestick(std::vector<CSVLine> _lines, double _open) {
+Candlestick::Candlestick(std::vector<CSVLine> _lines, CountryFilter _country, double _open) {
+  country = _country;
   lines = _lines;
   date = lines[0].getDate();
   year = lines[0].getYear();
@@ -31,26 +33,28 @@ double Candlestick::getLow() const { return low; }
 double Candlestick::calculateClose() {
   double close = 0;
   for (CSVLine line : lines) {
-    close += line.getGB_temperature();
+    close += line.getTemperature(country.getAsColumnName());
   }
   return close / lines.size();
 }
 
 double Candlestick::calculateHigh() {
-  double high = 0;
+  double high = std::numeric_limits<double>::lowest();
   for (CSVLine line : lines) {
-    if (line.getGB_temperature() > high) {
-      high = line.getGB_temperature();
+    double temp = line.getTemperature(country.getAsColumnName());
+    if (temp > high) {
+      high = temp;
     }
   }
   return high;
 }
 
 double Candlestick::calculateLow() {
-  double low = 0;
+  double low = std::numeric_limits<double>::max();
   for (CSVLine line : lines) {
-    if (line.getGB_temperature() < low) {
-      low = line.getGB_temperature();
+    double temp = line.getTemperature(country.getAsColumnName());
+    if (temp < low) {
+      low = temp;
     }
   }
   return low;

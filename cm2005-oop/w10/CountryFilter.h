@@ -6,6 +6,7 @@
 class CountryFilter 
 {
     public:
+        CountryFilter();
         CountryFilter(const std::string& country);
         std::string getAsColumnName() const;
         std::string getCountry() const;

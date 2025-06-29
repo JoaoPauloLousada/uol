@@ -2,6 +2,10 @@
 #include <string>
 #include <vector>
 
+CountryFilter::CountryFilter()
+{
+  country = "GB";
+}
 CountryFilter::CountryFilter(const std::string& _country)
 {
   if (!isAllowed(_country))

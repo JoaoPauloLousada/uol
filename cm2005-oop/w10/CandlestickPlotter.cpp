@@ -20,7 +20,8 @@ void CandlestickPlotter::plot()
     std::cout << "Plotting candlesticks" << std::endl;
     double minTemp = candlesticks[0].getLow();
     double maxTemp = candlesticks[0].getHigh();
-    for (const Candlestick& candlestick : candlesticks)
+    std::cout << "Candlesticks size: " << candlesticks.size() << std::endl;
+    for (const Candlestick candlestick : candlesticks)
     {
         minTemp = std::min(minTemp, candlestick.getLow());
         maxTemp = std::max(maxTemp, candlestick.getHigh());
@@ -29,7 +30,7 @@ void CandlestickPlotter::plot()
     for (int temp = maxTemp; temp >= minTemp; temp--)
     {
         std::cout << std::setw(2) << std::setfill('0')<< temp << " ";
-        for (const Candlestick& candlestick : candlesticks)
+        for (const Candlestick candlestick : candlesticks)
         {
             if (temp < candlestick.getLow() || temp > candlestick.getHigh())
             {

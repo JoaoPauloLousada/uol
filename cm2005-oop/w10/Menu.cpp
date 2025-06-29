@@ -1,8 +1,10 @@
 #include "Menu.h"
 #include <iostream>
 #include "CountryFilter.h"
+#include "Candlestick.h"
+#include "CandlestickPlotter.h"
 
-Menu::Menu()
+Menu::Menu(CSVLineList _csvLineList) : csvLineList(_csvLineList)
 {
     status = MenuStatus::INITIALISING;
 }
@@ -27,6 +29,7 @@ void Menu::printMenu()
     std::cout << "Summary: " << std::endl;
     std::cout << "\t" << " selected Country: " << countryFilter.getCountry() << std::endl;
     std::cout << "1: Select country" << std::endl;
+    std::cout << "2: Plot chart" << std::endl;
     std::cout << "5: Exit app" << std::endl;
 }
 
@@ -52,6 +55,9 @@ void Menu::processUserOption(int userOption)
     {
         case 1:
             selectCountry();
+            break;
+        case 2:
+            plotChart();
             break;
         case 5:
             exit();
@@ -85,4 +91,27 @@ void Menu::exit()
 {
     std::cout << "Exit app" << std::endl;
     status = MenuStatus::EXIT;
+}
+
+void Menu::plotChart()
+{
+    std::cout << "Plotting chart" << std::endl;
+    // Create candlesticks
+    std::vector<Candlestick> candlesticks;
+    double open = std::numeric_limits<double>::lowest();
+    std::map<int, std::vector<CSVLine> > linesByYear = csvLineList.getLinesByYear();
+    for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
+    {
+        std::cout << "Year: " << it->first << " Number of lines: " << it->second.size() << std::endl;
+    }
+    for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
+    {
+        Candlestick candlestick(it->second, countryFilter, open);
+        candlesticks.push_back(candlestick);
+        open = candlestick.getClose();
+        std::cout << "Candlestick: " << candlestick.getDate() << " " << candlestick.getOpen() << " " << candlestick.getClose() << " " << candlestick.getHigh() << " " << candlestick.getLow() << std::endl;
+    }
+    // Plot candlesticks
+    CandlestickPlotter candlestickPlotter(candlesticks);
+    candlestickPlotter.plot();
 }
