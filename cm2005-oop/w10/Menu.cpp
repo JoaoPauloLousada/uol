@@ -4,7 +4,10 @@
 #include "Candlestick.h"
 #include "CandlestickPlotter.h"
 
-Menu::Menu(CSVLineList _csvLineList) : csvLineList(_csvLineList)
+Menu::Menu(CSVLineList _csvLineList) : 
+csvLineList(_csvLineList), 
+dateRangeFilter(1980, 2020),
+countryFilter("GB")
 {
     status = MenuStatus::INITIALISING;
 }
@@ -28,9 +31,11 @@ void Menu::printMenu()
 {
     std::cout << "Summary: " << std::endl;
     std::cout << "\t" << " selected Country: " << countryFilter.getCountry() << std::endl;
+    std::cout << "\t" << " selected Date range: " << dateRangeFilter.getStartYear() << " - " << dateRangeFilter.getEndYear() << std::endl;
     std::cout << "1: Select country" << std::endl;
-    std::cout << "2: Plot chart" << std::endl;
-    std::cout << "5: Exit app" << std::endl;
+    std::cout << "2: Select date range" << std::endl;
+    std::cout << "3: Plot chart" << std::endl;
+    std::cout << "4: Exit app" << std::endl;
 }
 
 int Menu::getUserOption()
@@ -57,6 +62,9 @@ void Menu::processUserOption(int userOption)
             selectCountry();
             break;
         case 2:
+            selectDateRange();
+            break;
+        case 3:
             plotChart();
             break;
         case 5:
@@ -106,6 +114,16 @@ void Menu::plotChart()
     }
     for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
     {
+        if (dateRangeFilter.isOneYearBefore(it->first))
+        {
+            Candlestick candlestick(it->second, countryFilter, open);
+            open = candlestick.getClose();
+            continue;
+        }
+        if (!dateRangeFilter.isInRange(it->first))
+        {
+            continue;
+        }
         Candlestick candlestick(it->second, countryFilter, open);
         candlesticks.push_back(candlestick);
         open = candlestick.getClose();
@@ -114,4 +132,22 @@ void Menu::plotChart()
     // Plot candlesticks
     CandlestickPlotter candlestickPlotter(candlesticks);
     candlestickPlotter.plot();
+}
+
+void Menu::selectDateRange()
+{
+    std::cout << "Select date range" << std::endl;
+    std::cout << "Enter start year: ";
+    std::string startYear;
+    std::getline(std::cin, startYear);
+    std::cout << "Enter end year: ";
+    std::string endYear;
+    std::getline(std::cin, endYear);
+    try{
+        dateRangeFilter = DateRangeFilter(std::stoi(startYear), std::stoi(endYear));
+    } catch(const std::invalid_argument& e) {
+        std::cout << "Invalid date range: " << e.what() << std::endl;
+    } catch(const std::out_of_range& e) {
+        std::cout << "Date range out of range: " << e.what() << std::endl;
+    }
 }

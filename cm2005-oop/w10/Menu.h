@@ -3,6 +3,7 @@
 #include <string>
 #include "CountryFilter.h"
 #include "CSVLineList.h"
+#include "DateRangeFilter.h"
 
 enum MenuStatus {
     INITIALISING,
@@ -18,11 +19,13 @@ class Menu
     private:
         CSVLineList csvLineList;
         MenuStatus status;
-        CountryFilter countryFilter = CountryFilter("GB");
+        CountryFilter countryFilter;
+        DateRangeFilter dateRangeFilter;
         void printMenu();
         int getUserOption();
         void processUserOption(int userOption);
         void selectCountry();
+        void selectDateRange();
         void exit();
         void plotChart();
         // void printOptions();
