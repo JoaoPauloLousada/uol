@@ -6,10 +6,10 @@
 
 class CSVLineList {
     public:
-        CSVLineList(std::vector<CSVLine> _lines = std::vector<CSVLine>());
+        CSVLineList();
         std::vector<CSVLine> getLines();
-        void addLine(CSVLine line);
-        std::map<int, std::vector<CSVLine> > getLinesByYear();
+        void addLine(CSVLine& line);
+        std::map<int, std::vector<CSVLine> >& getLinesByYear();
         void groupByYear();
     private:
         std::vector<CSVLine> lines;

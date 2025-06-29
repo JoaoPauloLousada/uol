@@ -7,7 +7,7 @@ DateRangeFilter::DateRangeFilter(int _startYear, int _endYear): startYear(_start
     {
         throw std::invalid_argument("Start year must be less than end year");
     }
-    if (startYear < 1980 || endYear > 2020)
+    if (startYear < 1980 || endYear > 2025)
     {
         throw std::out_of_range("Date range out of range");
     }

@@ -37,9 +37,10 @@ int main() {
     }
 
     // Create CSVLineList
+    std::cout << "Creating CSVLineList" << std::endl;
     CSVLineList csvLineList;
-    // for (int i = 1; i < lines.size(); i++)
-    for (int i = 1; i < 100000; i++)
+    // for (int i = 1; i < 100000; i++)
+    for (int i = 1; i < lines.size(); i++)
     {
         std::vector<std::string> tokens = Tokeniser::tokenise(lines[i], ',');
         CSVLine line(tokens, columnMap);

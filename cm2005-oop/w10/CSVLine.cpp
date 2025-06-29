@@ -3,10 +3,8 @@
 #include <string>
 #include <iostream>
 
-CSVLine::CSVLine(std::vector<std::string> _tokens, std::unordered_map<std::string, int> _columnMap)
+CSVLine::CSVLine(std::vector<std::string>& _tokens, std::unordered_map<std::string, int>& _columnMap) : tokens(_tokens), columnMap(_columnMap)
 {
-    tokens = _tokens;
-    columnMap = _columnMap;
     date = tokens[0];
     std::string yearString = date.substr(0, 4);
     try{

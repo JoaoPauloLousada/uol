@@ -2,9 +2,8 @@
 #include <map>
 #include <iostream>
 
-CSVLineList::CSVLineList(std::vector<CSVLine> _lines)
+CSVLineList::CSVLineList()
 {
-    lines = _lines;
 }
 
 std::vector<CSVLine> CSVLineList::getLines()
@@ -12,7 +11,7 @@ std::vector<CSVLine> CSVLineList::getLines()
     return lines;
 }
 
-std::map<int, std::vector<CSVLine> > CSVLineList::getLinesByYear()
+std::map<int, std::vector<CSVLine> >& CSVLineList::getLinesByYear()
 {
     return linesByYear;
 }
@@ -20,17 +19,13 @@ std::map<int, std::vector<CSVLine> > CSVLineList::getLinesByYear()
 void CSVLineList::groupByYear()
 {
     std::cout << "Grouping lines by year" << std::endl;
-    std::map<int, std::vector<CSVLine> > groupedLines;
-    
     for (CSVLine& line : lines) {
         int year = line.getYear();
-        groupedLines[year].push_back(line);
+        linesByYear[year].push_back(line);
     }
-
-    linesByYear = groupedLines;
 } 
 
-void CSVLineList::addLine(CSVLine line)
+void CSVLineList::addLine(CSVLine& line)
 {
     lines.push_back(line);
 }

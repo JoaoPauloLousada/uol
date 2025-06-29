@@ -6,7 +6,7 @@
 
 Menu::Menu(CSVLineList _csvLineList) : 
 csvLineList(_csvLineList), 
-dateRangeFilter(1980, 2020),
+dateRangeFilter(1980, 2025),
 countryFilter("GB")
 {
     status = MenuStatus::INITIALISING;
@@ -35,7 +35,7 @@ void Menu::printMenu()
     std::cout << "1: Select country" << std::endl;
     std::cout << "2: Select date range" << std::endl;
     std::cout << "3: Plot chart" << std::endl;
-    std::cout << "4: Exit app" << std::endl;
+    std::cout << "5: Exit app" << std::endl;
 }
 
 int Menu::getUserOption()
@@ -107,11 +107,11 @@ void Menu::plotChart()
     // Create candlesticks
     std::vector<Candlestick> candlesticks;
     double open = std::numeric_limits<double>::lowest();
-    std::map<int, std::vector<CSVLine> > linesByYear = csvLineList.getLinesByYear();
-    for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
-    {
-        std::cout << "Year: " << it->first << " Number of lines: " << it->second.size() << std::endl;
-    }
+    std::map<int, std::vector<CSVLine> >& linesByYear = csvLineList.getLinesByYear();
+    // for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
+    // {
+    //     std::cout << "Year: " << it->first << " Number of lines: " << it->second.size() << std::endl;
+    // }
     for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
     {
         if (dateRangeFilter.isOneYearBefore(it->first))
