@@ -50,8 +50,8 @@ void TemperaturePredictor::displayPredictions(int yearsToPredict) {
     std::cout << "Country: " << country.getCountry() << std::endl;
     std::cout << "Last recorded temperature: " << lastYearTemp << "°C" << std::endl;
     std::cout << "Yearly temperature change: " << yearlyChange << "°C per year" << std::endl;
-    std::cout << "Predicted temperature for " << yearsToPredict << " years: " << std::endl;
-    std::cout << "\nPredicted Average Temperatures:" << std::endl;
+    std::cout << "Predicted temperature for " << yearsToPredict << " years." << std::endl;
+    std::cout << "Predicted Average Temperatures:" << std::endl;
     std::cout << std::fixed << std::setprecision(2);
     for (const auto& prediction : predictions) {
         std::cout << prediction.first << ": " << prediction.second << "°C" << std::endl;
