@@ -3,6 +3,7 @@
 #include "CountryFilter.h"
 #include "Candlestick.h"
 #include "CandlestickPlotter.h"
+#include "TemperaturePredictor.h"
 
 Menu::Menu(CSVLineList _csvLineList) : 
 csvLineList(_csvLineList), 
@@ -29,13 +30,17 @@ void Menu::run()
 
 void Menu::printMenu()
 {
-    std::cout << "Summary: " << std::endl;
+    std::cout << "=== MENU ===" << std::endl;
+    std::cout << "Applied filters: " << std::endl;
     std::cout << "\t" << " selected Country: " << countryFilter.getCountry() << std::endl;
     std::cout << "\t" << " selected Date range: " << dateRangeFilter.getStartYear() << " - " << dateRangeFilter.getEndYear() << std::endl;
+    std::cout << "Options: " << std::endl;
     std::cout << "1: Select country" << std::endl;
     std::cout << "2: Select date range" << std::endl;
     std::cout << "3: Plot chart" << std::endl;
+    std::cout << "4: Predict temperature" << std::endl;
     std::cout << "5: Exit app" << std::endl;
+    std::cout << "=== END MENU ===" << std::endl;
 }
 
 int Menu::getUserOption()
@@ -48,7 +53,7 @@ int Menu::getUserOption()
     try {
         userOption = std::stoi(line);
     }catch(const std::exception& e) {
-        //
+        std::cout << "Invalid choice. Choose 1-6" << std::endl;
     }
     std::cout << "You chose: " << userOption << std::endl;
     return userOption;
@@ -67,6 +72,9 @@ void Menu::processUserOption(int userOption)
         case 3:
             plotChart();
             break;
+        case 4:
+            predictTemperature();
+            break;
         case 5:
             exit();
             break;
@@ -78,6 +86,7 @@ void Menu::processUserOption(int userOption)
 
 void Menu::selectCountry()
 {
+    std::cout << "=== SELECT COUNTRY ===" << std::endl;
     std::cout << "Available countries: " << CountryFilter::allowedCountries[0];
     for (int i = 1; i < CountryFilter::allowedCountries.size(); i++) {
         std::cout << ", " << CountryFilter::allowedCountries[i];
@@ -103,15 +112,11 @@ void Menu::exit()
 
 void Menu::plotChart()
 {
-    std::cout << "Plotting chart" << std::endl;
+    std::cout << "=== PLOT CHART ===" << std::endl;
     // Create candlesticks
     std::vector<Candlestick> candlesticks;
     double open = std::numeric_limits<double>::lowest();
     std::map<int, std::vector<CSVLine> >& linesByYear = csvLineList.getLinesByYear();
-    // for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
-    // {
-    //     std::cout << "Year: " << it->first << " Number of lines: " << it->second.size() << std::endl;
-    // }
     for (auto it = linesByYear.begin(); it != linesByYear.end(); it++)
     {
         if (dateRangeFilter.isOneYearBefore(it->first))
@@ -136,7 +141,7 @@ void Menu::plotChart()
 
 void Menu::selectDateRange()
 {
-    std::cout << "Select date range" << std::endl;
+    std::cout << "=== SELECT DATE RANGE ===" << std::endl;
     std::cout << "Enter start year: ";
     std::string startYear;
     std::getline(std::cin, startYear);
@@ -149,5 +154,32 @@ void Menu::selectDateRange()
         std::cout << "Invalid date range: " << e.what() << std::endl;
     } catch(const std::out_of_range& e) {
         std::cout << "Date range out of range: " << e.what() << std::endl;
+    }
+}
+
+void Menu::predictTemperature()
+{
+    std::cout << "=== TEMPERATURE PREDICTION ===" << std::endl;
+    std::cout << "Selected Country: " << countryFilter.getCountry() << std::endl;
+    std::cout << "Enter number of years to predict (1-5): ";
+    std::string input;
+    std::getline(std::cin, input);
+    int yearsToPredict = 0;
+    try {
+        yearsToPredict = std::stoi(input);
+    } catch(const std::exception& e) {
+        std::cout << "Invalid input. Please enter a number between 1-5." << std::endl;
+        return;
+    }
+    if (yearsToPredict < 1 || yearsToPredict > 5) {
+        std::cout << "Invalid range. Please enter a number between 1-5." << std::endl;
+        return;
+    }
+    std::cout << "Analyzing historical data..." << std::endl;
+    try {
+        TemperaturePredictor predictor(csvLineList, countryFilter);
+        predictor.displayPredictions(yearsToPredict);
+    } catch(const std::exception& e) {
+        std::cout << "Error during prediction: " << e.what() << std::endl;
     }
 }

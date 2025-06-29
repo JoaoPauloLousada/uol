@@ -28,6 +28,5 @@ class Menu
         void selectDateRange();
         void exit();
         void plotChart();
-        // void printOptions();
-        // void printExit();
+        void predictTemperature();
 };
