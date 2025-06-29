@@ -22,7 +22,7 @@ void CSVLineList::groupByYear()
     std::cout << "Grouping lines by year" << std::endl;
     std::map<int, std::vector<CSVLine> > groupedLines;
     
-    for (CSVLine line : lines) {
+    for (CSVLine& line : lines) {
         int year = line.getYear();
         groupedLines[year].push_back(line);
     }

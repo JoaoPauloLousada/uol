@@ -6,7 +6,7 @@
 
 class Candlestick {
     public:
-        Candlestick(std::vector<CSVLine> lines, CountryFilter country, double open);
+        Candlestick(std::vector<CSVLine>& lines, CountryFilter country, double open);
         std::string getDate() const;
         int getYear() const;
         double getClose() const;
@@ -17,7 +17,7 @@ class Candlestick {
         std::string date;
         int year;
         CountryFilter country;
-        std::vector<CSVLine> lines;
+        std::vector<CSVLine>& lines;
         double open;
         double close;
         double calculateClose();

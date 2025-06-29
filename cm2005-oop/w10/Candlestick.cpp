@@ -4,9 +4,8 @@
 #include <vector>
 #include <limits>
 
-Candlestick::Candlestick(std::vector<CSVLine> _lines, CountryFilter _country, double _open) {
+Candlestick::Candlestick(std::vector<CSVLine>& _lines, CountryFilter _country, double _open) : lines(_lines) {
   country = _country;
-  lines = _lines;
   date = lines[0].getDate();
   year = lines[0].getYear();
   close = calculateClose();

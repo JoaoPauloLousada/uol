@@ -10,10 +10,8 @@
 #define WHITE "\033[37m"
 #define RESET "\033[0m"
 
-CandlestickPlotter::CandlestickPlotter(std::vector<Candlestick> _candlesticks)
-{
-    candlesticks = _candlesticks;
-}
+CandlestickPlotter::CandlestickPlotter(std::vector<Candlestick>& _candlesticks): candlesticks(_candlesticks)
+{}
 
 void CandlestickPlotter::plot()
 {
@@ -21,7 +19,7 @@ void CandlestickPlotter::plot()
     double minTemp = candlesticks[0].getLow();
     double maxTemp = candlesticks[0].getHigh();
     std::cout << "Candlesticks size: " << candlesticks.size() << std::endl;
-    for (const Candlestick candlestick : candlesticks)
+    for (const Candlestick& candlestick : candlesticks)
     {
         minTemp = std::min(minTemp, candlestick.getLow());
         maxTemp = std::max(maxTemp, candlestick.getHigh());
@@ -30,7 +28,7 @@ void CandlestickPlotter::plot()
     for (int temp = maxTemp; temp >= minTemp; temp--)
     {
         std::cout << std::setw(2) << std::setfill('0')<< temp << " ";
-        for (const Candlestick candlestick : candlesticks)
+        for (const Candlestick& candlestick : candlesticks)
         {
             if (temp < candlestick.getLow() || temp > candlestick.getHigh())
             {

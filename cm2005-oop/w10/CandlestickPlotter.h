@@ -5,8 +5,8 @@
 
 class CandlestickPlotter {
     public:
-        CandlestickPlotter(std::vector<Candlestick> _candlesticks);
+        CandlestickPlotter(std::vector<Candlestick>& _candlesticks);
         void plot();
     private:
-        std::vector<Candlestick> candlesticks;
+        std::vector<Candlestick>& candlesticks;
 };
