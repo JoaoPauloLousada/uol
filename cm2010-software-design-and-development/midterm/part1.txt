@@ -1,0 +1,180 @@
+# Module Coupling Analysis: Data Coupling and Content Coupling
+This code is part of my solution for the midterm coursework CM2005 Object-Oriented Programming.
+
+## 1. Data Coupling
+The code below shows and example of data coupling where modules communicate by passing only the necessary data through parameters. Components remain independent and interact through well-defined interfaces.
+
+### Code Example from CSVReader and Tokeniser
+
+```cpp
+// CSVReader.h
+class CSVReader {
+    public:
+        std::vector<std::string> readCSV(std::string csvFile);
+};
+
+// CSVReader.cpp
+std::vector<std::string> CSVReader::readCSV(std::string csvFilename)
+{
+    std::vector<std::string> lines;
+    std::ifstream csvFile{csvFilename};
+    std::string line;
+    // ... file reading logic ...
+    return lines;
+}
+
+// Tokeniser.h
+class Tokeniser {
+    public:
+        static std::vector<std::string> tokenise(std::string csvLine, char separator);
+};
+
+// Usage in main.cpp
+CSVReader csvReader;
+std::vector<std::string> lines = csvReader.readCSV(csvFile);
+std::vector<std::string> headerTokens = Tokeniser::tokenise(lines[0], ',');
+```
+
+### Why This is Good Practice
+
+1. **Clear Interface**: Both classes expose simple, well-defined methods that take only the necessary parameters:
+   - `readCSV()` takes only a filename string
+   - `tokenise()` takes only the string to parse and the separator character
+
+2. **Independence**: The classes don't share any global state or access each other's internal data:
+   - CSVReader doesn't know or care what happens to the strings it returns
+   - Tokeniser doesn't know or care where the string comes from
+
+3. **Reusability**: These classes can be easily reused in other contexts:
+   - CSVReader can read any CSV file
+   - Tokeniser can tokenise any string with any separator
+
+4. **Testability**: Each class can be tested independently:
+   - You can test CSVReader with different file paths
+   - You can test Tokeniser with various strings and separators
+
+5. **Maintainability**: Changes to internal implementation don't affect other modules:
+   - If CSVReader changes how it reads files (buffered vs unbuffered), it doesn't affect the caller
+   - If Tokeniser optimizes its parsing algorithm, it doesn't affect other components
+
+## 2. Content Coupling (Problematic)
+
+The code below shows an example of content coupling, when one module directly accesses or modifies the internal data structures of another module, violating encapsulation principles and creating tight dependencies.
+
+### Code Example from Menu class accessing CountryFilter
+
+```cpp
+// CountryFilter.h
+class CountryFilter 
+{
+    public:
+        CountryFilter();
+        CountryFilter(const std::string& country);
+        std::string getAsColumnName() const;
+        std::string getCountry() const;
+        static const std::vector<std::string> allowedCountries;  // Public static data
+    private:
+        std::string country;
+        bool isAllowed(const std::string& country);
+};
+
+// CountryFilter.cpp
+const std::string countries[] = {
+    "AT", "BE", "BG", "CH", "CZ", "DE", "DK", "EE", "ES", "FI",
+    "FR", "GB", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV",
+    "NL", "NO", "PL", "PT", "RO", "SE", "SI", "SK"
+};
+
+const std::vector<std::string> CountryFilter::allowedCountries(
+    countries, countries + sizeof(countries)/sizeof(countries[0])
+);
+
+// Menu.cpp - PROBLEMATIC CODE
+void Menu::selectCountry()
+{
+    std::cout << "=== SELECT COUNTRY ===" << std::endl;
+    // DIRECT ACCESS to another class's internal data structure
+    std::cout << "Available countries: " << CountryFilter::allowedCountries[0];
+    for (int i = 1; i < CountryFilter::allowedCountries.size(); i++) {
+        std::cout << ", " << CountryFilter::allowedCountries[i];
+    }
+    std::cout << "." << std::endl;
+    // ... rest of method
+}
+```
+---
+
+# Calculator System Analysis: Cohesion Examples
+This code is part of my solution for midterm coursework of Algorithms and Data Structures II.
+
+## 5. Functional Cohesion Example
+Every element contributes to the single purpose of managing a stack data structure.
+
+### Stack Class
+
+```javascript
+class Stack {
+    #value = []
+
+    add(v) {
+        this.#value.push(v)
+    }
+
+    pop() {
+        return this.#value.pop()
+    }
+}
+```
+
+### Individual Operator Classes
+Single, well-defined purpose - multiply two operands.
+
+```javascript
+class MultOperator extends Operator {
+    execute(o1, o2) {
+        return new Operand(o1.value() * o2.value())
+    }
+}
+```
+
+
+## 6. Communicational Cohesion Example
+All methods operate on the same shared data structures (`#stack` and `#memory`) but perform different operations. 
+
+### Calculator Class
+
+```javascript
+class Calculator {
+    #stack = new Stack()
+    #memory = new SymbolTable()
+
+    clearStack() {
+        this.#stack = new Stack()
+    }
+
+    clearMemory() {
+        this.#memory = new SymbolTable()
+    }
+
+    processInput(entry) {
+        // Works with both stack and memory
+        if (Operand.test(entry)) {
+            this.#stack.add(new Operand(entry))
+        }
+        if (CalcSymbol.isKey(entry)) {
+            if (this.#memory.has(entry)) {
+                calcSymbol = this.#memory.get(entry)
+            }
+            this.#stack.add(calcSymbol)
+        }
+    }
+
+    addToMemory(calcSymbol) {
+        this.#memory.add(calcSymbol)
+    }
+
+    result() {
+        return this.#stack.pop()
+    }
+}
+```
