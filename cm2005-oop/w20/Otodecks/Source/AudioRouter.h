@@ -10,20 +10,30 @@
 
 #pragma once
 
-#include <JuceHeader.h>
 
 //==============================================================================
 /*
 */
-class AudioRouter  : public juce::Component
+class AudioRouter
 {
 public:
     AudioRouter();
-    ~AudioRouter() override;
+    ~AudioRouter();
+    
+    juce::AudioFormatManager& getFormatManager() noexcept { return formatManager; }
 
-    void paint (juce::Graphics&) override;
-    void resized() override;
+    /** Adds a deck into the mixer; call once per DeckAudioEngine. */
+    void addInput (juce::AudioSource* source);
+    void removeInput (juce::AudioSource* source);
+
+    /** Device init (stereo out, no input). */
+    void initialiseAudio();
 
 private:
+    juce::AudioDeviceManager deviceManager;
+    juce::AudioSourcePlayer  player;
+    juce::MixerAudioSource   mixer;
+
+    juce::AudioFormatManager formatManager;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioRouter)
 };

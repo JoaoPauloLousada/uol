@@ -1,0 +1,66 @@
+---
+description: Object Oriented Programming Principles and Best Practices
+globs:
+  - "**/*.cpp"
+  - "**/*.h"
+  - "**/*.hpp"
+  - "**/*.java"
+  - "**/*.cs"
+  - "**/*.py"
+  - "**/*.ts"
+  - "**/*.js"
+alwaysApply: true
+---
+
+# Object-Oriented Programming Principles
+
+## Core OOP Principles
+
+### 1. Encapsulation
+### 2. Inheritance
+### 3. Polymorphism
+### 4. Abstraction
+## SOLID Principles
+### Single Responsibility Principle (SRP)
+### Open/Closed Principle (OCP)
+### Liskov Substitution Principle (LSP)
+### Interface Segregation Principle (ISP)
+### Dependency Inversion Principle (DIP)
+## Design Patterns Guidelines
+### Creational Patterns
+### Structural Patterns
+### Behavioral Patterns
+## Best Practices
+### Class Design
+- Keep classes small and focused
+- Use meaningful and descriptive class names
+- Implement proper copy constructors and assignment operators when needed
+- Follow the Rule of Three/Five/Zero in C++
+
+### Method Design
+- Keep methods short and focused on a single task
+- Use const correctness in C++
+- Prefer const references for parameters that won't be modified
+- Make methods virtual when they might be overridden
+
+### Memory Management
+- Use RAII (Resource Acquisition Is Initialization) principles
+- Prefer smart pointers over raw pointers in modern C++
+- Ensure proper cleanup in destructors
+- Avoid memory leaks and dangling pointers
+
+### Code Organization
+- Use namespaces to organize related classes
+- Keep public interfaces minimal and stable
+- Document class contracts and invariants
+- Use forward declarations to reduce compilation dependencies
+
+## Common Anti-Patterns to Avoid
+
+- **God Classes**: Avoid classes that do too much
+- **Anemic Domain Model**: Don't create classes with only getters/setters and no behavior
+- **Circular Dependencies**: Avoid classes that depend on each other
+- **Deep Inheritance Hierarchies**: Keep inheritance trees shallow and focused
+- **Interface Pollution**: Don't add methods to interfaces that not all implementers need
+
+Always prioritize clean, maintainable, and extensible code that follows these object-oriented principles.
