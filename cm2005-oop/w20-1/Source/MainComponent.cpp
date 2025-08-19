@@ -13,7 +13,7 @@ MainComponent::MainComponent()
 {
     // Make sure you set the size of the component after
     // you add any child components.
-    setSize (800, 600);
+    setSize (1200, 800);
 
     // Some platforms require permissions to open input channels so request that here
     if (RuntimePermissions::isRequired (RuntimePermissions::recordAudio)
@@ -31,6 +31,7 @@ MainComponent::MainComponent()
     addAndMakeVisible(deckGUI1); 
     addAndMakeVisible(deckGUI2);  
     addAndMakeVisible(playlistComponent);
+    addAndMakeVisible(mixerComponent);
 
     formatManager.registerBasicFormats();
 }
@@ -80,8 +81,20 @@ void MainComponent::paint (Graphics& g)
 
 void MainComponent::resized()
 {
-    deckGUI1.setBounds(0, 0, getWidth()/2, getHeight()/2);
-    deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, getHeight()/2);
-    playlistComponent.setBounds(0, getHeight()/2, getWidth(), getHeight()/2);
+//    deckGUI1.setBounds(0, 0, getWidth()/2, getHeight()/2);
+//    deckGUI2.setBounds(getWidth()/2, 0, getWidth()/2, getHeight()/2);
+//    playlistComponent.setBounds(0, getHeight()/2, getWidth(), getHeight()/2);
+    auto area = getLocalBounds();
+        
+    int deckWidth = area.getWidth() / 3;  // Each deck takes 1/3 of width
+    int centerWidth = area.getWidth() / 3; // Center section takes 1/3 of width
+    int topHeight = area.getHeight() / 2;  // Top half for playlist
+    int bottomHeight = area.getHeight() / 2; // Bottom half for mixer
+    
+    deckGUI1.setBounds(0, 0, deckWidth, area.getHeight());
+    playlistComponent.setBounds(deckWidth, 0, centerWidth, topHeight);
+    deckGUI2.setBounds(deckWidth + centerWidth, 0, deckWidth, area.getHeight());
+    
+    mixerComponent.setBounds(deckWidth, topHeight, centerWidth, bottomHeight);
 }
 
