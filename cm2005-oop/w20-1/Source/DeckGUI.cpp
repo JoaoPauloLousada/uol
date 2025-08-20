@@ -38,10 +38,23 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     speedSlider.addListener(this);
     posSlider.addListener(this);
 
-
+    volSlider.setSliderStyle(Slider::LinearVertical);
     volSlider.setRange(0.0, 1.0);
+    volSlider.setValue(0.5);
+    
+    speedSlider.setSliderStyle(Slider::LinearVertical);
     speedSlider.setRange(0.0, 100.0);
+    speedSlider.setValue(1.0);
+
+    posSlider.setSliderStyle(Slider::LinearHorizontal);
     posSlider.setRange(0.0, 1.0);
+
+    // volSlider.setRange(0.0, 1.0);
+    // speedSlider.setRange(0.0, 100.0);
+    // posSlider.setRange(0.0, 1.0);
+    playButton.setButtonText("PLAY");
+    stopButton.setButtonText("PAUSE");
+    loadButton.setButtonText("LOAD");
 
     startTimer(500);
 
@@ -75,15 +88,30 @@ void DeckGUI::paint (Graphics& g)
 
 void DeckGUI::resized()
 {
-    double rowH = getHeight() / 8; 
-    playButton.setBounds(0, 0, getWidth(), rowH);
-    stopButton.setBounds(0, rowH, getWidth(), rowH);  
-    volSlider.setBounds(0, rowH * 2, getWidth(), rowH);
-    speedSlider.setBounds(0, rowH * 3, getWidth(), rowH);
-    posSlider.setBounds(0, rowH * 4, getWidth(), rowH);
-    waveformDisplay.setBounds(0, rowH * 5, getWidth(), rowH * 2);
-    loadButton.setBounds(0, rowH * 7, getWidth(), rowH);
-
+    auto area = getLocalBounds();
+    area.removeFromTop(30); // Space for deck label
+    
+    // Layout according to your sketch:
+    // Top: Waveform (full width)
+    auto waveformArea = area.removeFromTop(area.getHeight() * 0.3);
+    waveformDisplay.setBounds(waveformArea);
+    
+    // Middle section: Main area with volume slider on the right
+    auto middleArea = area.removeFromBottom(60); // Leave space for buttons at bottom
+    auto volumeArea = middleArea.removeFromRight(60);
+    volSlider.setBounds(volumeArea);
+    
+    // Speed and position controls in the remaining middle area
+    auto controlsArea = middleArea;
+    speedSlider.setBounds(controlsArea.removeFromRight(60));
+    posSlider.setBounds(controlsArea.removeFromTop(40));
+    
+    // Bottom: Play and Pause buttons
+    auto buttonArea = area;
+    int buttonWidth = buttonArea.getWidth() / 3;
+    playButton.setBounds(buttonArea.removeFromLeft(buttonWidth));
+    stopButton.setBounds(buttonArea.removeFromLeft(buttonWidth));
+    loadButton.setBounds(buttonArea); // Remaining space
 }
 
 void DeckGUI::buttonClicked(Button* button)
@@ -145,6 +173,7 @@ void DeckGUI::filesDropped (const StringArray &files, int x, int y)
   if (files.size() == 1)
   {
     player->loadURL(URL{File{files[0]}});
+    waveformDisplay.loadURL(URL{File{files[0]}});
   }
 }
 
