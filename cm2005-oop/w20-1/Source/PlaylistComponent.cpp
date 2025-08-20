@@ -20,7 +20,6 @@ PlaylistComponent::PlaylistComponent()
     trackTitles.push_back("Track 2");
     trackTitles.push_back("Track 3");
     tableComponent.getHeader().addColumn("Track title", 1, 400);
-    tableComponent.getHeader().addColumn("", 2, 200);
     tableComponent.setModel(this);
     addAndMakeVisible(tableComponent);
 }
@@ -31,22 +30,10 @@ PlaylistComponent::~PlaylistComponent()
 
 void PlaylistComponent::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (14.0f));
-    g.drawText ("PlaylistComponent", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
 }
 
 void PlaylistComponent::resized()
@@ -82,28 +69,10 @@ void PlaylistComponent::paintCell (Graphics& g,
                         int width, int height,
                         bool rowIsSelected)
 {
-    g.drawText(trackTitles[rowNumber], 2, 0, width - 4, height, Justification::centredLeft);
-}
-
-Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected,
-                                            Component* existingComponentToUpdate)
-{
-    if (columnId == 2)
+    if (columnId == 1) // Only paint the track title column
     {
-        if (existingComponentToUpdate == nullptr)
-        {
-            TextButton* btn = new TextButton{"play"};
-            String id{std::to_string(rowNumber)};
-            btn->setComponentID(id);
-            btn->addListener(this);
-            existingComponentToUpdate = btn;
-        }
+        g.drawText(trackTitles[rowNumber], 2, 0, width - 4, height, Justification::centredLeft);
     }
-    return existingComponentToUpdate;
 }
 
-void PlaylistComponent::buttonClicked (Button* b)
-{
-    int id = std::stoi(b->getComponentID().toStdString());
-    std::cout << "button clicked: " << trackTitles[id] << std::endl;
-}
+
