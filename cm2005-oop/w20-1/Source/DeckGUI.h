@@ -48,7 +48,6 @@ private:
 
     TextButton playButton{"PLAY"};
     TextButton stopButton{"STOP"};
-    TextButton loadButton{"LOAD"};
   
     Slider volSlider; 
     Slider speedSlider;

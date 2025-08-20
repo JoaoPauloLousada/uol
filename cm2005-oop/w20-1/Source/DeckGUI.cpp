@@ -21,7 +21,6 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
-    addAndMakeVisible(loadButton);
        
     addAndMakeVisible(volSlider);
     addAndMakeVisible(speedSlider);
@@ -32,7 +31,6 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 
     playButton.addListener(this);
     stopButton.addListener(this);
-    loadButton.addListener(this);
 
     volSlider.addListener(this);
     speedSlider.addListener(this);
@@ -54,7 +52,6 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     // posSlider.setRange(0.0, 1.0);
     playButton.setButtonText("PLAY");
     stopButton.setButtonText("PAUSE");
-    loadButton.setButtonText("LOAD");
 
     startTimer(500);
 
@@ -91,27 +88,93 @@ void DeckGUI::resized()
     auto area = getLocalBounds();
     area.removeFromTop(30); // Space for deck label
     
-    // Layout according to your sketch:
-    // Top: Waveform (full width)
-    auto waveformArea = area.removeFromTop(area.getHeight() * 0.3);
-    waveformDisplay.setBounds(waveformArea);
+    // Create main layout: 3 rows
+    FlexBox mainLayout;
+    mainLayout.flexDirection = FlexBox::Direction::column;
     
-    // Middle section: Main area with volume slider on the right
-    auto middleArea = area.removeFromBottom(60); // Leave space for buttons at bottom
-    auto volumeArea = middleArea.removeFromRight(60);
-    volSlider.setBounds(volumeArea);
+    // ROW 1: Waveform and Position slider (stacked vertically)
+    FlexBox row1Layout;
+    row1Layout.flexDirection = FlexBox::Direction::column;
     
-    // Speed and position controls in the remaining middle area
-    auto controlsArea = middleArea;
-    speedSlider.setBounds(controlsArea.removeFromRight(60));
-    posSlider.setBounds(controlsArea.removeFromTop(40));
+    // Waveform (fixed height)
+    FlexItem waveformItem(waveformDisplay);
+    waveformItem.height = 120;
+    waveformItem.minHeight = 120;
+    waveformItem.maxHeight = 120;
     
-    // Bottom: Play and Pause buttons
-    auto buttonArea = area;
-    int buttonWidth = buttonArea.getWidth() / 3;
-    playButton.setBounds(buttonArea.removeFromLeft(buttonWidth));
-    stopButton.setBounds(buttonArea.removeFromLeft(buttonWidth));
-    loadButton.setBounds(buttonArea); // Remaining space
+    // Position slider (fixed height)
+    FlexItem positionItem(posSlider);
+    positionItem.height = 40;
+    positionItem.minHeight = 40;
+    positionItem.maxHeight = 40;
+    
+    row1Layout.items.add(waveformItem);
+    row1Layout.items.add(positionItem);
+    
+    // ROW 2: Three columns (Empty 60%, Speed slider, Volume slider)
+    FlexBox row2Layout;
+    row2Layout.flexDirection = FlexBox::Direction::row;
+    
+    // Column 1: Empty space (60% width)
+    FlexItem emptyColumn;
+    emptyColumn.flexGrow = 0.6f; // 60% of the width
+    
+    // Column 2: Speed slider
+    FlexItem speedItem(speedSlider);
+    speedItem.flexGrow = 0.2f; // 20% of the width
+    
+    // Column 3: Volume slider  
+    FlexItem volumeItem(volSlider);
+    volumeItem.flexGrow = 0.2f; // 20% of the width
+    
+    row2Layout.items.add(emptyColumn);
+    row2Layout.items.add(speedItem);
+    row2Layout.items.add(volumeItem);
+    
+    // ROW 3: Two columns for buttons
+    FlexBox row3Layout;
+    row3Layout.flexDirection = FlexBox::Direction::row;
+    
+    // Play button (50% width)
+    FlexItem playItem(playButton);
+    playItem.flexGrow = 0.5f;
+    playItem.height = 40;
+    playItem.minHeight = 40;
+    playItem.maxHeight = 40;
+    
+    // Pause button (50% width)
+    FlexItem pauseItem(stopButton);
+    pauseItem.flexGrow = 0.5f;
+    pauseItem.height = 40;
+    pauseItem.minHeight = 40;
+    pauseItem.maxHeight = 40;
+    
+    row3Layout.items.add(playItem);
+    row3Layout.items.add(pauseItem);
+    
+    // Assemble the 3 rows into main layout
+    FlexItem row1Item;
+    row1Item.associatedFlexBox = &row1Layout;
+    row1Item.height = 160; // 120 (waveform) + 40 (position)
+    row1Item.minHeight = 160;
+    row1Item.maxHeight = 160;
+    
+    FlexItem row2Item;
+    row2Item.associatedFlexBox = &row2Layout;
+    row2Item.flexGrow = 1.0f; // Take remaining space
+    
+    FlexItem row3Item;
+    row3Item.associatedFlexBox = &row3Layout;
+    row3Item.height = 50;
+    row3Item.minHeight = 50;
+    row3Item.maxHeight = 50;
+    
+    mainLayout.items.add(row1Item);
+    mainLayout.items.add(row2Item);
+    mainLayout.items.add(row3Item);
+    
+    // Apply the layout
+    mainLayout.performLayout(area);
 }
 
 void DeckGUI::buttonClicked(Button* button)
@@ -127,19 +190,7 @@ void DeckGUI::buttonClicked(Button* button)
         player->stop();
 
     }
-    if (button == &loadButton)
-    {
-       auto fileChooserFlags = 
-        FileBrowserComponent::canSelectFiles;
-        fChooser.launchAsync(fileChooserFlags, [this](const FileChooser& chooser)
-        {
-            File chosenFile = chooser.getResult();
-            if (chosenFile.exists()){
-                player->loadURL(URL{chooser.getResult()});
-                waveformDisplay.loadURL(URL{chooser.getResult()});
-            }
-        });
-    }
+
 }
 
 void DeckGUI::sliderValueChanged (Slider *slider)
