@@ -134,30 +134,34 @@ void DeckGUI::resized()
     row2Layout.items.add(speedItem);
     row2Layout.items.add(volumeItem);
     
-    // ROW 3: Three columns for buttons
+    // ROW 3: Three columns for buttons with spacing
     FlexBox row3Layout;
     row3Layout.flexDirection = FlexBox::Direction::row;
+    row3Layout.justifyContent = FlexBox::JustifyContent::spaceBetween;
     
-    // Play button (33.3% width)
+    // Play button
     FlexItem playItem(playButton);
-    playItem.flexGrow = 0.333f;
+    playItem.flexGrow = 1.0f;
     playItem.height = 40;
     playItem.minHeight = 40;
     playItem.maxHeight = 40;
+    playItem.margin = FlexItem::Margin(0, 5, 0, 0); // right margin of 5px
     
-    // Pause button (33.3% width)
+    // Pause button
     FlexItem pauseItem(pauseButton);
-    pauseItem.flexGrow = 0.333f;
+    pauseItem.flexGrow = 1.0f;
     pauseItem.height = 40;
     pauseItem.minHeight = 40;
     pauseItem.maxHeight = 40;
+    pauseItem.margin = FlexItem::Margin(0, 5, 0, 5); // left and right margin of 5px
     
-    // Stop button (33.3% width)
+    // Stop button
     FlexItem stopItem(stopButton);
-    stopItem.flexGrow = 0.334f;
+    stopItem.flexGrow = 1.0f;
     stopItem.height = 40;
     stopItem.minHeight = 40;
     stopItem.maxHeight = 40;
+    stopItem.margin = FlexItem::Margin(0, 0, 0, 5); // left margin of 5px
     
     row3Layout.items.add(playItem);
     row3Layout.items.add(pauseItem);
@@ -179,6 +183,7 @@ void DeckGUI::resized()
     row3Item.height = 50;
     row3Item.minHeight = 50;
     row3Item.maxHeight = 50;
+    row3Item.margin = FlexItem::Margin(10, 15, 10, 15); // top, right, bottom, left padding
     
     mainLayout.items.add(row1Item);
     mainLayout.items.add(row2Item);
