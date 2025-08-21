@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(OTODECKS VERSION 0.0.1)
 
-add_subdirectory(../JUCE JUCE)                    # If you've put JUCE in a subdirectory called JUCE
+add_subdirectory(~/JUCE JUCE)                    # If you've put JUCE in a subdirectory called JUCE
 
 juce_add_gui_app(OtoDecks
     # VERSION ...                       # Set this if the app version is different to the project version

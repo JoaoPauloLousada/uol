@@ -235,6 +235,16 @@ void DeckGUI::timerCallback()
             player->getPositionRelative());
 }
 
+void DeckGUI::loadTrack(const juce::File& audioFile)
+{
+    if (audioFile.existsAsFile())
+    {
+        player->loadURL(URL{audioFile});
+        waveformDisplay.loadURL(URL{audioFile});
+        std::cout << "Loaded track: " << audioFile.getFileName() << std::endl;
+    }
+}
+
 
     
 

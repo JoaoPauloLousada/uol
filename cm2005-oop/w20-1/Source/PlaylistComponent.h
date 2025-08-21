@@ -13,10 +13,14 @@
 #include <JuceHeader.h>
 #include <vector>
 #include <string>
+#include "DeckGUI.h"
+
 //==============================================================================
 /*
 */
-class PlaylistComponent  : public juce::Component, public juce::TableListBoxModel
+class PlaylistComponent  : public juce::Component, 
+                          public juce::TableListBoxModel,
+                          public juce::Button::Listener
 {
 public:
     PlaylistComponent();
@@ -34,12 +38,28 @@ public:
                             int columnId,
                             int width, int height,
                             bool rowIsSelected) override;
+    
+    Component* refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected,
+                                       Component* existingComponentToUpdate) override;
 
-
+    void buttonClicked (Button* button) override;
+    
+    void setDeckReferences(DeckGUI* deck1, DeckGUI* deck2);
+    void addTrack(const juce::File& audioFile);
+    void clearTracks();
 
     
 private:
     TableListBox tableComponent;
-    std::vector<std::string> trackTitles;
+    
+    struct TrackInfo {
+        std::string title;
+        juce::File filePath;
+    };
+    
+    std::vector<TrackInfo> tracks;
+    DeckGUI* deckGUI1;
+    DeckGUI* deckGUI2;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };

@@ -33,6 +33,9 @@ MainComponent::MainComponent()
     addAndMakeVisible(playlistComponent);
     addAndMakeVisible(mixerComponent);
 
+    // Set deck references in playlist component
+    playlistComponent.setDeckReferences(&deckGUI1, &deckGUI2);
+
     formatManager.registerBasicFormats();
 }
 

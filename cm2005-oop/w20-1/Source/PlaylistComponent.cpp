@@ -12,14 +12,22 @@
 #include "PlaylistComponent.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent()
+PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
-    trackTitles.push_back("Track 1");
-    trackTitles.push_back("Track 2");
-    trackTitles.push_back("Track 3");
-    tableComponent.getHeader().addColumn("Track title", 1, 400);
+    
+    // Add some sample tracks with dummy file paths for now
+    // Users can add real tracks using the addTrack() method
+    tracks.push_back({"Sample Track 1", juce::File()});
+    tracks.push_back({"Sample Track 2", juce::File()});
+    tracks.push_back({"Sample Track 3", juce::File()});
+    
+    // Set up table columns: Left Button | Track Title | Right Button
+    tableComponent.getHeader().addColumn("Load L", 1, 80);      // Left button column
+    tableComponent.getHeader().addColumn("Track Title", 2, 240); // Track title column  
+    tableComponent.getHeader().addColumn("Load R", 3, 80);      // Right button column
+    
     tableComponent.setModel(this);
     addAndMakeVisible(tableComponent);
 }
@@ -45,7 +53,7 @@ void PlaylistComponent::resized()
 
 int PlaylistComponent::getNumRows()
 {
-    return trackTitles.size();
+    return tracks.size();
 }
 
 void PlaylistComponent::paintRowBackground (Graphics& g,
@@ -69,10 +77,103 @@ void PlaylistComponent::paintCell (Graphics& g,
                         int width, int height,
                         bool rowIsSelected)
 {
-    if (columnId == 1) // Only paint the track title column
+    if (columnId == 2) // Track title column
     {
-        g.drawText(trackTitles[rowNumber], 2, 0, width - 4, height, Justification::centredLeft);
+        g.drawText(tracks[rowNumber].title, 2, 0, width - 4, height, Justification::centredLeft);
     }
+    // Columns 1 and 3 will have buttons, so we don't paint text for them
+}
+
+Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected,
+                                                      Component* existingComponentToUpdate)
+{
+    if (columnId == 1 || columnId == 3) // Button columns
+    {
+        TextButton* button = dynamic_cast<TextButton*>(existingComponentToUpdate);
+        
+        if (button == nullptr)
+        {
+            button = new TextButton();
+            button->addListener(this);
+        }
+        
+        // Set button text and properties based on column
+        if (columnId == 1) // Left deck button
+        {
+            button->setButtonText("L");
+            button->setComponentID(String(rowNumber) + "_left");
+        }
+        else // Right deck button (columnId == 3)
+        {
+            button->setButtonText("R");  
+            button->setComponentID(String(rowNumber) + "_right");
+        }
+        
+        return button;
+    }
+    
+    return nullptr;
+}
+
+void PlaylistComponent::buttonClicked (Button* button)
+{
+    String componentId = button->getComponentID();
+    int rowNumber = componentId.upToFirstOccurrenceOf("_", false, false).getIntValue();
+    bool isLeftDeck = componentId.contains("left");
+    
+    if (rowNumber >= 0 && rowNumber < tracks.size())
+    {
+        if (isLeftDeck && deckGUI1 != nullptr)
+        {
+            // Load track into left deck (deck 1)
+            if (tracks[rowNumber].filePath.existsAsFile())
+            {
+                deckGUI1->loadTrack(tracks[rowNumber].filePath);
+                DBG("Loading " + tracks[rowNumber].title + " into left deck");
+            }
+            else
+            {
+                DBG("Track file does not exist: " + tracks[rowNumber].title);
+            }
+        }
+        else if (!isLeftDeck && deckGUI2 != nullptr)
+        {
+            // Load track into right deck (deck 2)  
+            if (tracks[rowNumber].filePath.existsAsFile())
+            {
+                deckGUI2->loadTrack(tracks[rowNumber].filePath);
+                DBG("Loading " + tracks[rowNumber].title + " into right deck");
+            }
+            else
+            {
+                DBG("Track file does not exist: " + tracks[rowNumber].title);
+            }
+        }
+    }
+}
+
+void PlaylistComponent::setDeckReferences(DeckGUI* deck1, DeckGUI* deck2)
+{
+    deckGUI1 = deck1;
+    deckGUI2 = deck2;
+}
+
+void PlaylistComponent::addTrack(const juce::File& audioFile)
+{
+    if (audioFile.existsAsFile())
+    {
+        TrackInfo newTrack;
+        newTrack.title = audioFile.getFileNameWithoutExtension().toStdString();
+        newTrack.filePath = audioFile;
+        tracks.push_back(newTrack);
+        tableComponent.updateContent();
+    }
+}
+
+void PlaylistComponent::clearTracks()
+{
+    tracks.clear();
+    tableComponent.updateContent();
 }
 
 

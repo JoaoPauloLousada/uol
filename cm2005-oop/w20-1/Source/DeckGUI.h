@@ -42,6 +42,8 @@ public:
     void filesDropped (const StringArray &files, int x, int y) override; 
 
     void timerCallback() override; 
+    
+    void loadTrack(const juce::File& audioFile);
 
 private:
     juce::FileChooser fChooser{"Select a file..."};
