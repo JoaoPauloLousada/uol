@@ -17,6 +17,15 @@ PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr)
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     
+    // Set up application properties for persistence
+    PropertiesFile::Options options;
+    options.applicationName = "OtoDecks";
+    options.filenameSuffix = ".settings";
+    options.osxLibrarySubFolder = "Application Support";
+    
+    appProperties.reset(new ApplicationProperties());
+    appProperties->setStorageParameters(options);
+    
     // Set up table columns: Left Button | Track Title | Right Button
     tableComponent.getHeader().addColumn("Load L", 1, 80);      // Left button column
     tableComponent.getHeader().addColumn("Track Title", 2, 240); // Track title column  
@@ -28,10 +37,15 @@ PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr)
     // Add and configure the load button
     addAndMakeVisible(loadButton);
     loadButton.addListener(this);
+    
+    // Load saved playlist
+    loadPlaylist();
 }
 
 PlaylistComponent::~PlaylistComponent()
 {
+    // Save playlist when component is destroyed
+    savePlaylist();
 }
 
 void PlaylistComponent::paint (juce::Graphics& g)
@@ -189,6 +203,9 @@ void PlaylistComponent::addTrack(const juce::File& audioFile)
         newTrack.filePath = audioFile;
         tracks.push_back(newTrack);
         tableComponent.updateContent();
+        
+        // Auto-save playlist when new track is added
+        savePlaylist();
     }
 }
 
@@ -196,6 +213,76 @@ void PlaylistComponent::clearTracks()
 {
     tracks.clear();
     tableComponent.updateContent();
+    
+    // Auto-save playlist when cleared
+    savePlaylist();
+}
+
+void PlaylistComponent::savePlaylist()
+{
+    if (appProperties != nullptr)
+    {
+        auto* userSettings = appProperties->getUserSettings();
+        if (userSettings != nullptr)
+        {
+            // Clear existing playlist entries
+            userSettings->removeValue("playlistSize");
+            for (int i = 0; i < 1000; ++i) // Clear up to 1000 entries
+            {
+                userSettings->removeValue("track_" + String(i) + "_title");
+                userSettings->removeValue("track_" + String(i) + "_path");
+            }
+            
+            // Save current playlist
+            userSettings->setValue("playlistSize", (int)tracks.size());
+            for (int i = 0; i < tracks.size(); ++i)
+            {
+                userSettings->setValue("track_" + String(i) + "_title", String(tracks[i].title));
+                userSettings->setValue("track_" + String(i) + "_path", tracks[i].filePath.getFullPathName());
+            }
+            
+            appProperties->saveIfNeeded();
+            DBG("Playlist saved with " + String(tracks.size()) + " tracks");
+        }
+    }
+}
+
+void PlaylistComponent::loadPlaylist()
+{
+    if (appProperties != nullptr)
+    {
+        auto* userSettings = appProperties->getUserSettings();
+        if (userSettings != nullptr)
+        {
+            tracks.clear();
+            
+            int playlistSize = userSettings->getIntValue("playlistSize", 0);
+            for (int i = 0; i < playlistSize; ++i)
+            {
+                String title = userSettings->getValue("track_" + String(i) + "_title");
+                String path = userSettings->getValue("track_" + String(i) + "_path");
+                
+                if (title.isNotEmpty() && path.isNotEmpty())
+                {
+                    File audioFile(path);
+                    if (audioFile.existsAsFile())
+                    {
+                        TrackInfo track;
+                        track.title = title.toStdString();
+                        track.filePath = audioFile;
+                        tracks.push_back(track);
+                    }
+                    else
+                    {
+                        DBG("Saved track file no longer exists: " + path);
+                    }
+                }
+            }
+            
+            tableComponent.updateContent();
+            DBG("Playlist loaded with " + String(tracks.size()) + " tracks");
+        }
+    }
 }
 
 

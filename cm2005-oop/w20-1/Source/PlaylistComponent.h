@@ -47,6 +47,8 @@ public:
     void setDeckReferences(DeckGUI* deck1, DeckGUI* deck2);
     void addTrack(const juce::File& audioFile);
     void clearTracks();
+    void savePlaylist();
+    void loadPlaylist();
 
     
 private:
@@ -64,6 +66,7 @@ private:
     std::vector<TrackInfo> tracks;
     DeckGUI* deckGUI1;
     DeckGUI* deckGUI2;
+    std::unique_ptr<ApplicationProperties> appProperties;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };
