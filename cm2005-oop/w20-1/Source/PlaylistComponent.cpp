@@ -17,12 +17,6 @@ PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr)
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
     
-    // Add some sample tracks with dummy file paths for now
-    // Users can add real tracks using the addTrack() method
-    tracks.push_back({"Sample Track 1", juce::File()});
-    tracks.push_back({"Sample Track 2", juce::File()});
-    tracks.push_back({"Sample Track 3", juce::File()});
-    
     // Set up table columns: Left Button | Track Title | Right Button
     tableComponent.getHeader().addColumn("Load L", 1, 80);      // Left button column
     tableComponent.getHeader().addColumn("Track Title", 2, 240); // Track title column  
@@ -30,6 +24,10 @@ PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr)
     
     tableComponent.setModel(this);
     addAndMakeVisible(tableComponent);
+    
+    // Add and configure the load button
+    addAndMakeVisible(loadButton);
+    loadButton.addListener(this);
 }
 
 PlaylistComponent::~PlaylistComponent()
@@ -48,7 +46,15 @@ void PlaylistComponent::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
-    tableComponent.setBounds(0, 0, getWidth(), getHeight());
+    
+    auto area = getLocalBounds();
+    
+    // Reserve space for the load button at the top
+    auto buttonArea = area.removeFromTop(30);
+    loadButton.setBounds(buttonArea.reduced(5)); // Add some padding
+    
+    // Use remaining space for the table
+    tableComponent.setBounds(area);
 }
 
 int PlaylistComponent::getNumRows()
@@ -117,6 +123,22 @@ Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int column
 
 void PlaylistComponent::buttonClicked (Button* button)
 {
+    if (button == &loadButton)
+    {
+        // Open file chooser to load a new track
+        fileChooser.launchAsync(FileBrowserComponent::openMode | FileBrowserComponent::canSelectFiles,
+                               [this](const FileChooser& chooser)
+                               {
+                                   auto results = chooser.getResults();
+                                   if (results.size() > 0)
+                                   {
+                                       addTrack(results[0]);
+                                   }
+                               });
+        return;
+    }
+    
+    // Handle deck loading buttons
     String componentId = button->getComponentID();
     int rowNumber = componentId.upToFirstOccurrenceOf("_", false, false).getIntValue();
     bool isLeftDeck = componentId.contains("left");
