@@ -20,6 +20,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 {
 
     addAndMakeVisible(playButton);
+    addAndMakeVisible(pauseButton);
     addAndMakeVisible(stopButton);
        
     addAndMakeVisible(volSlider);
@@ -30,6 +31,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 
 
     playButton.addListener(this);
+    pauseButton.addListener(this);
     stopButton.addListener(this);
 
     volSlider.addListener(this);
@@ -51,7 +53,8 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     // speedSlider.setRange(0.0, 100.0);
     // posSlider.setRange(0.0, 1.0);
     playButton.setButtonText("PLAY");
-    stopButton.setButtonText("PAUSE");
+    pauseButton.setButtonText("PAUSE");
+    stopButton.setButtonText("STOP");
 
     startTimer(500);
 
@@ -131,26 +134,34 @@ void DeckGUI::resized()
     row2Layout.items.add(speedItem);
     row2Layout.items.add(volumeItem);
     
-    // ROW 3: Two columns for buttons
+    // ROW 3: Three columns for buttons
     FlexBox row3Layout;
     row3Layout.flexDirection = FlexBox::Direction::row;
     
-    // Play button (50% width)
+    // Play button (33.3% width)
     FlexItem playItem(playButton);
-    playItem.flexGrow = 0.5f;
+    playItem.flexGrow = 0.333f;
     playItem.height = 40;
     playItem.minHeight = 40;
     playItem.maxHeight = 40;
     
-    // Pause button (50% width)
-    FlexItem pauseItem(stopButton);
-    pauseItem.flexGrow = 0.5f;
+    // Pause button (33.3% width)
+    FlexItem pauseItem(pauseButton);
+    pauseItem.flexGrow = 0.333f;
     pauseItem.height = 40;
     pauseItem.minHeight = 40;
     pauseItem.maxHeight = 40;
     
+    // Stop button (33.3% width)
+    FlexItem stopItem(stopButton);
+    stopItem.flexGrow = 0.334f;
+    stopItem.height = 40;
+    stopItem.minHeight = 40;
+    stopItem.maxHeight = 40;
+    
     row3Layout.items.add(playItem);
     row3Layout.items.add(pauseItem);
+    row3Layout.items.add(stopItem);
     
     // Assemble the 3 rows into main layout
     FlexItem row1Item;
@@ -184,11 +195,16 @@ void DeckGUI::buttonClicked(Button* button)
         std::cout << "Play button was clicked " << std::endl;
         player->start();
     }
-     if (button == &stopButton)
+    if (button == &pauseButton)
+    {
+        std::cout << "Pause button was clicked " << std::endl;
+        player->stop(); // Pause by stopping without resetting position
+    }
+    if (button == &stopButton)
     {
         std::cout << "Stop button was clicked " << std::endl;
         player->stop();
-
+        player->setPositionRelative(0.0); // Reset position to beginning
     }
 
 }

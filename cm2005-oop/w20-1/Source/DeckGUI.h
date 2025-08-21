@@ -49,6 +49,7 @@ private:
     juce::FileChooser fChooser{"Select a file..."};
 
     TextButton playButton{"PLAY"};
+    TextButton pauseButton{"PAUSE"};
     TextButton stopButton{"STOP"};
   
     Slider volSlider; 
