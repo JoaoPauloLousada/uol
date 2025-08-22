@@ -50,6 +50,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
 
     posSlider.setSliderStyle(Slider::LinearHorizontal);
     posSlider.setRange(0.0, 1.0);
+    posSlider.setValue(0.0);  // Initialize to 0
 
     playButton.setButtonText("PLAY");
     pauseButton.setButtonText("PAUSE");
