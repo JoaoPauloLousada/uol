@@ -72,13 +72,19 @@ void MixerComponent::sliderValueChanged (Slider *slider)
 {
     if (slider == &crossfader)
     {
-        // Handle crossfader change
-        // This will be connected to the audio mixing logic
+        // Handle crossfader change - notify MainComponent via callback
+        if (crossfaderCallback)
+        {
+            crossfaderCallback(crossfader.getValue());
+        }
     }
     else if (slider == &masterVolume)
     {
-        // Handle master volume change
-        // This will be connected to the master output gain
+        // Handle master volume change - notify MainComponent via callback
+        if (masterVolumeCallback)
+        {
+            masterVolumeCallback(masterVolume.getValue());
+        }
     }
 }
 
@@ -95,4 +101,19 @@ double MixerComponent::getCrossfaderValue() const
 void MixerComponent::setMasterVolume(double volume)
 {
     masterVolume.setValue(volume, dontSendNotification);
+}
+
+double MixerComponent::getMasterVolume() const
+{
+    return masterVolume.getValue();
+}
+
+void MixerComponent::setCrossfaderCallback(std::function<void(double)> callback)
+{
+    crossfaderCallback = callback;
+}
+
+void MixerComponent::setMasterVolumeCallback(std::function<void(double)> callback)
+{
+    masterVolumeCallback = callback;
 }

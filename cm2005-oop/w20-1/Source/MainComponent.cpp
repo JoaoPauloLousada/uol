@@ -35,6 +35,14 @@ MainComponent::MainComponent()
 
     // Set deck references in playlist component
     playlistComponent.setDeckReferences(&deckGUI1, &deckGUI2);
+    
+    // Setup mixer callbacks
+    mixerComponent.setCrossfaderCallback([this](double value) { onCrossfaderChanged(value); });
+    mixerComponent.setMasterVolumeCallback([this](double volume) { onMasterVolumeChanged(volume); });
+    
+    // Initialize mixer with default values to set proper initial gains
+    onCrossfaderChanged(0.5);  // Start with both decks at equal volume
+    onMasterVolumeChanged(0.7);  // Start with 70% master volume
 
     formatManager.registerBasicFormats();
 }
@@ -99,5 +107,56 @@ void MainComponent::resized()
     deckGUI2.setBounds(deckWidth + centerWidth, 0, deckWidth, area.getHeight());
     
     mixerComponent.setBounds(deckWidth, topHeight, centerWidth, bottomHeight);
+}
+
+void MainComponent::onCrossfaderChanged(double value)
+{
+    // Crossfader logic: 0.0 = full left (deck1), 0.5 = center (both equal), 1.0 = full right (deck2)
+    // Calculate gains for each deck based on crossfader position
+    double deck1Gain, deck2Gain;
+    
+    if (value <= 0.5) 
+    {
+        // Crossfader is on the left half - fade from deck1 only to both decks equally
+        deck1Gain = 1.0;  // Deck 1 always at full volume when crossfader is left of center
+        deck2Gain = value * 2.0;  // Deck 2 fades in from 0 to 1 as crossfader moves to center
+    }
+    else 
+    {
+        // Crossfader is on the right half - fade from both decks equally to deck2 only
+        deck1Gain = 2.0 * (1.0 - value);  // Deck 1 fades out from 1 to 0 as crossfader moves right
+        deck2Gain = 1.0;  // Deck 2 always at full volume when crossfader is right of center
+    }
+    
+    // Apply the calculated gains to each deck
+    player1.setGain(deck1Gain);
+    player2.setGain(deck2Gain);
+}
+
+void MainComponent::onMasterVolumeChanged(double volume)
+{
+    // Master volume affects the overall output by scaling both deck gains
+    // We'll apply master volume by adjusting the mixer source gain
+    // For now, we'll apply it to both players equally and maintain crossfader ratios
+    
+    // Get current crossfader value to maintain the balance
+    double crossfaderValue = mixerComponent.getCrossfaderValue();
+    
+    // Recalculate and apply gains with master volume scaling
+    double deck1Gain, deck2Gain;
+    
+    if (crossfaderValue <= 0.5) 
+    {
+        deck1Gain = volume;
+        deck2Gain = volume * crossfaderValue * 2.0;
+    }
+    else 
+    {
+        deck1Gain = volume * 2.0 * (1.0 - crossfaderValue);
+        deck2Gain = volume;
+    }
+    
+    player1.setGain(deck1Gain);
+    player2.setGain(deck2Gain);
 }
 

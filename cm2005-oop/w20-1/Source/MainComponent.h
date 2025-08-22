@@ -35,6 +35,13 @@ public:
     //==============================================================================
     void paint (Graphics& g) override;
     void resized() override;
+    
+    //==============================================================================
+    /** Handle crossfader changes from mixer component */
+    void onCrossfaderChanged(double value);
+    
+    /** Handle master volume changes from mixer component */
+    void onMasterVolumeChanged(double volume);
 
 private:
     //==============================================================================
