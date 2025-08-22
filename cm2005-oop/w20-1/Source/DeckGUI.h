@@ -59,6 +59,8 @@ private:
     WaveformDisplay waveformDisplay;
 
     DJAudioPlayer* player; 
+    
+    bool isUpdatingPosition; // Flag to prevent recursion when updating position slider
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

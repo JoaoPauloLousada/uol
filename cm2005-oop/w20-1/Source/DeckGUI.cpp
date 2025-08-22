@@ -17,7 +17,8 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
                 AudioFormatManager & 	formatManagerToUse,
                 AudioThumbnailCache & 	cacheToUse
            ) : player(_player), 
-               waveformDisplay(formatManagerToUse, cacheToUse)
+               waveformDisplay(formatManagerToUse, cacheToUse),
+               isUpdatingPosition(false)
 {
 
     addAndMakeVisible(playButton);
@@ -226,7 +227,11 @@ void DeckGUI::sliderValueChanged (Slider *slider)
     
     if (slider == &posSlider)
     {
-        player->setPositionRelative(slider->getValue());
+        // Only update player position if we're not currently updating from timer
+        if (!isUpdatingPosition)
+        {
+            player->setPositionRelative(slider->getValue());
+        }
     }
     
 }
@@ -257,8 +262,22 @@ void DeckGUI::timerCallback()
     
     double currentPosition = player->getPositionRelative();
     
+    // Additional safety check: ensure position is valid and within range
+    if (std::isnan(currentPosition) || std::isinf(currentPosition) || 
+        currentPosition < 0.0 || currentPosition > 1.0)
+    {
+        // If position is invalid, don't update anything
+        return;
+    }
+    
     // Update waveform display with current position (this was working before)
     waveformDisplay.setPositionRelative(currentPosition);
+    
+    // Update position slider to match current position
+    // Set flag to prevent recursion when updating slider value
+    isUpdatingPosition = true;
+    posSlider.setValue(currentPosition, dontSendNotification);
+    isUpdatingPosition = false;
     
     // Check if audio has reached the end (position >= 1.0 means end of track)
     // Use a simpler check to avoid potential issues

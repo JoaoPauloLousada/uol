@@ -97,5 +97,20 @@ void DJAudioPlayer::stop()
 
 double DJAudioPlayer::getPositionRelative()
 {
-    return transportSource.getCurrentPosition() / transportSource.getLengthInSeconds();
+    double lengthInSeconds = transportSource.getLengthInSeconds();
+    
+    // Prevent division by zero and ensure valid values
+    if (lengthInSeconds <= 0.0)
+    {
+        return 0.0;
+    }
+    
+    double currentPosition = transportSource.getCurrentPosition();
+    double relativePosition = currentPosition / lengthInSeconds;
+    
+    // Clamp the result to valid range [0.0, 1.0]
+    if (relativePosition < 0.0) return 0.0;
+    if (relativePosition > 1.0) return 1.0;
+    
+    return relativePosition;
 }
