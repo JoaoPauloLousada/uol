@@ -10,6 +10,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DeckGUI.h"
+#include <cmath>
 
 //==============================================================================
 DeckGUI::DeckGUI(DJAudioPlayer* _player, 
@@ -249,8 +250,26 @@ void DeckGUI::filesDropped (const StringArray &files, int x, int y)
 void DeckGUI::timerCallback()
 {
     //std::cout << "DeckGUI::timerCallback" << std::endl;
-    waveformDisplay.setPositionRelative(
-            player->getPositionRelative());
+    
+    // Add safety check to ensure player is valid
+    if (player == nullptr)
+        return;
+    
+    double currentPosition = player->getPositionRelative();
+    
+    // Update waveform display with current position (this was working before)
+    waveformDisplay.setPositionRelative(currentPosition);
+    
+    // Check if audio has reached the end (position >= 1.0 means end of track)
+    // Use a simpler check to avoid potential issues
+    if (currentPosition >= 0.99)  // Use 0.99 to catch end slightly before actual end
+    {
+        // Stop playback and reset to beginning
+        player->stop();
+        player->setPositionRelative(0.0);
+        
+        std::cout << "Track finished - stopped and reset to beginning" << std::endl;
+    }
 }
 
 void DeckGUI::loadTrack(const juce::File& audioFile)
