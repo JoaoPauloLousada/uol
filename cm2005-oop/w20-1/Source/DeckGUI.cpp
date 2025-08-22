@@ -43,15 +43,12 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     volSlider.setValue(0.5);
     
     speedSlider.setSliderStyle(Slider::LinearVertical);
-    speedSlider.setRange(0.0, 100.0);
-    speedSlider.setValue(1.0);
+    speedSlider.setRange(0.1, 3.0);  // 0.1x to 3.0x speed range
+    speedSlider.setValue(1.0);       // Default to normal speed
 
     posSlider.setSliderStyle(Slider::LinearHorizontal);
     posSlider.setRange(0.0, 1.0);
 
-    // volSlider.setRange(0.0, 1.0);
-    // speedSlider.setRange(0.0, 100.0);
-    // posSlider.setRange(0.0, 1.0);
     playButton.setButtonText("PLAY");
     pauseButton.setButtonText("PAUSE");
     stopButton.setButtonText("STOP");
