@@ -27,9 +27,9 @@ PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr)
     appProperties->setStorageParameters(options);
     
     // Set up table columns: Left Button | Track Title | Right Button
-    tableComponent.getHeader().addColumn("Load L", 1, 80);      // Left button column
+    tableComponent.getHeader().addColumn("Deck 1", 1, 80);      // Left button column
     tableComponent.getHeader().addColumn("Track Title", 2, 240); // Track title column  
-    tableComponent.getHeader().addColumn("Load R", 3, 80);      // Right button column
+    tableComponent.getHeader().addColumn("Deck 2", 3, 80);      // Right button column
     
     tableComponent.setModel(this);
     addAndMakeVisible(tableComponent);
@@ -109,27 +109,44 @@ Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int column
 {
     if (columnId == 1 || columnId == 3) // Button columns
     {
-        TextButton* button = dynamic_cast<TextButton*>(existingComponentToUpdate);
+        // Create a container component to hold the button with padding
+        Component* container = existingComponentToUpdate;
+        TextButton* button = nullptr;
         
-        if (button == nullptr)
+        if (container == nullptr)
         {
+            container = new Component();
             button = new TextButton();
             button->addListener(this);
+            container->addAndMakeVisible(button);
+        }
+        else
+        {
+            // Get the existing button from the container
+            button = dynamic_cast<TextButton*>(container->getChildComponent(0));
         }
         
-        // Set button text and properties based on column
-        if (columnId == 1) // Left deck button
+        if (button != nullptr)
         {
-            button->setButtonText("L");
-            button->setComponentID(String(rowNumber) + "_left");
-        }
-        else // Right deck button (columnId == 3)
-        {
-            button->setButtonText("R");  
-            button->setComponentID(String(rowNumber) + "_right");
+            // Set button text and properties based on column
+            if (columnId == 1) // Left deck button
+            {
+                button->setButtonText("Load");
+                button->setComponentID(String(rowNumber) + "_left");
+            }
+            else // Right deck button (columnId == 3)
+            {
+                button->setButtonText("Load");  
+                button->setComponentID(String(rowNumber) + "_right");
+            }
+            
+            // Set button bounds with padding (1px padding on all sides)
+            auto containerBounds = Rectangle<int>(0, 0, 80, tableComponent.getRowHeight());
+            container->setSize(containerBounds.getWidth(), containerBounds.getHeight());
+            button->setBounds(containerBounds.reduced(1));
         }
         
-        return button;
+        return container;
     }
     
     return nullptr;
