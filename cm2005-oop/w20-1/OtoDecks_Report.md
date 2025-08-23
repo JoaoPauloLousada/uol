@@ -13,3 +13,15 @@ The PlayListComponent lets users load audio tracks via juce::FileChooser, constr
 - The track metadata is appended to the internal std::vector<Track>.
 - savePlaylist() is invoked, which iterates over the vector and writes each track’s title and path to ApplicationProperties (via its PropertySet).
 - On startup, loadPlaylist() reads from ApplicationProperties and repopulates the in-memory vector, restoring the user’s playlist.
+
+# How I Customised the User Interface (R3)
+Based on my research about other applications (more details will be in topic R4)
+and based on what has been developed during this module I first created a wireframe
+that contains the components and their corresponding functionalities.
+![DJ Software Interface Wireframe](wireframe.png)
+With the layout clarified, I implemented it in JUCE using FlexBox (https://docs.juce.com/master/classFlexBox.html) and FlexItem (https://docs.juce.com/master/classFlexItem.html).
+This approach let me organize the UI into rows and columns that resize cleanly, keep consistent spacing/alignment, and adapt well when the window is resized.
+Also I found these tutorials explaining how layout UI using FlexBox:
+- https://juce.com/tutorials/tutorial_flex_box_grid/
+- https://www.youtube.com/watch?v=RzfUS_xnUnw
+
