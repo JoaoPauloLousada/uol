@@ -242,9 +242,12 @@ void PlaylistComponent::savePlaylist()
         auto* userSettings = appProperties->getUserSettings();
         if (userSettings != nullptr)
         {
+            // Get current playlist size before clearing
+            int currentPlaylistSize = userSettings->getIntValue("playlistSize", 0);
+        
             // Clear existing playlist entries
             userSettings->removeValue("playlistSize");
-            for (int i = 0; i < 1000; ++i) // Clear up to 1000 entries
+            for (int i = 0; i < currentPlaylistSize; ++i)
             {
                 userSettings->removeValue("track_" + String(i) + "_title");
                 userSettings->removeValue("track_" + String(i) + "_path");

@@ -56,7 +56,7 @@ private:
     TextButton loadButton{"Load Track"};
     juce::FileChooser fileChooser{"Select an audio file...", 
                                   juce::File::getSpecialLocation(juce::File::userMusicDirectory),
-                                  "*.mp3;*.wav;*.m4a;*.aac;*.flac"};
+                                  "*.mp3;*.wav;"};
     
     struct TrackInfo {
         std::string title;
