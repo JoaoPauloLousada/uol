@@ -25,3 +25,14 @@ Also I found these tutorials explaining how layout UI using FlexBox:
 - https://juce.com/tutorials/tutorial_flex_box_grid/
 - https://www.youtube.com/watch?v=RzfUS_xnUnw
 
+
+# Investigate and implement ONE new feature inspired by a real DJ program (R4)
+I have investigated two DJ applications:
+- DJ Music Mixer - DJ Mix Studio (https://cafebazaar.ir/app/dj.music.mixer.sound.effects?l=en)
+![DJ Music Mixer](djmusicmixer.png)
+- Cross DJ (https://www.mixvibes.com/cross-dj)
+![Cross dj](crossdj.png)
+
+Both apps have similar UI. One feature they have in common is the crossfader, a slider that controls
+the volume of both decks at the same time, which you can use to create smooth transitions from one deck to the other. I created the MixerComponent.h and MixerComponent.cpp that contains the UI logic for displaying the crossfader, this component receives a callback function that is invoked whenever the value of the crossfader changes. The MainComponent is initialising the MixerComponent and passing the callback function into that, this function is responsible for receiving the updated value of the crossfader and adjust the volumes of each deck accordingly. Additionally I added a master fader
+as well, so we can increase or decrease the volume of the application as a whole and its implementation also relies on a callback function, similar to what I described for the crossfader.
