@@ -20,29 +20,57 @@
 class DeckGUI    : public Component,
                    public Button::Listener, 
                    public Slider::Listener, 
-                   public FileDragAndDropTarget, 
                    public Timer
 {
 public:
+    /**
+     * Constructor: Initializes the deck GUI with audio player and format management components
+     * @param player Pointer to the DJAudioPlayer that handles audio playback
+     * @param formatManagerToUse Reference to audio format manager for loading different audio formats
+     * @param cacheToUse Reference to thumbnail cache for waveform generation
+     */
     DeckGUI(DJAudioPlayer* player, 
            AudioFormatManager & 	formatManagerToUse,
            AudioThumbnailCache & 	cacheToUse );
+    
+    /**
+     * Destructor: Cleans up resources when the DeckGUI is destroyed
+     */
     ~DeckGUI();
 
+    /**
+     * Renders the deck GUI components to the screen
+     * @param g Graphics context used for drawing the component
+     */
     void paint (Graphics&) override;
+    
+    /**
+     * Handles layout and positioning of child components when the deck is resized
+     */
     void resized() override;
 
-     /** implement Button::Listener */
+    /**
+     * Responds to button click events (play, pause, stop buttons)
+     * @param button Pointer to the button that was clicked
+     */
     void buttonClicked (Button *) override;
 
-    /** implement Slider::Listener */
+    /**
+     * Responds to slider value changes (volume, speed, position sliders)
+     * @param slider Pointer to the slider whose value changed
+     */
     void sliderValueChanged (Slider *slider) override;
 
-    bool isInterestedInFileDrag (const StringArray &files) override;
-    void filesDropped (const StringArray &files, int x, int y) override; 
-
+    /**
+     * Called periodically by timer to update the position slider and waveform display
+     * Updates the GUI to reflect current playback position
+     */
     void timerCallback() override; 
-    
+
+    /**
+     * Loads an audio track into the deck for playback
+     * @param audioFile Reference to the audio file to be loaded
+     */
     void loadTrack(const juce::File& audioFile);
 
 private:
@@ -60,7 +88,7 @@ private:
 
     DJAudioPlayer* player; 
     
-    bool isUpdatingPosition; // Flag to prevent recursion when updating position slider
+    bool isUpdatingPosition;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };
