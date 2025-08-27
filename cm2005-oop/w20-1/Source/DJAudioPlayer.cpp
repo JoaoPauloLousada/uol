@@ -15,6 +15,7 @@ DJAudioPlayer::DJAudioPlayer(AudioFormatManager& _formatManager)
 {
 
 }
+
 DJAudioPlayer::~DJAudioPlayer()
 {
 
@@ -25,11 +26,13 @@ void DJAudioPlayer::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
     resampleSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
 }
+
 void DJAudioPlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
     resampleSource.getNextAudioBlock(bufferToFill);
 
 }
+
 void DJAudioPlayer::releaseResources()
 {
     transportSource.releaseResources();
@@ -47,6 +50,7 @@ true));
         readerSource.reset (newSource.release());          
     }
 }
+
 void DJAudioPlayer::setGain(double gain)
 {
     if (gain < 0 || gain > 1.0)
@@ -58,6 +62,7 @@ void DJAudioPlayer::setGain(double gain)
     }
    
 }
+
 void DJAudioPlayer::setSpeed(double ratio)
 {
   if (ratio < 0 || ratio > 100.0)
@@ -68,6 +73,7 @@ void DJAudioPlayer::setSpeed(double ratio)
         resampleSource.setResamplingRatio(ratio);
     }
 }
+
 void DJAudioPlayer::setPosition(double posInSecs)
 {
     transportSource.setPosition(posInSecs);
@@ -90,6 +96,7 @@ void DJAudioPlayer::start()
 {
     transportSource.start();
 }
+
 void DJAudioPlayer::stop()
 {
   transportSource.stop();
