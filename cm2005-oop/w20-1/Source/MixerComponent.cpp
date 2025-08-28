@@ -11,6 +11,11 @@
 
 #include "MixerComponent.h"
 
+/**
+ * This class was written by me without assistance based on the code provided in the module,
+ * the juce documentation and tutorials about how to use the juce library.
+ */
+
 //==============================================================================
 MixerComponent::MixerComponent()
 {
@@ -28,11 +33,12 @@ MixerComponent::MixerComponent()
     masterVolume.setValue(0.7);
     masterVolume.addListener(this);
     
-    // Setup labels
+    // Setup crossfader label
     addAndMakeVisible(crossfaderLabel);
     crossfaderLabel.setText("Crossfader", dontSendNotification);
     crossfaderLabel.setJustificationType(Justification::centred);
     
+    // Setup master volume label
     addAndMakeVisible(masterVolumeLabel);
     masterVolumeLabel.setText("Master", dontSendNotification);
     masterVolumeLabel.setJustificationType(Justification::centred);
@@ -58,7 +64,7 @@ void MixerComponent::paint (Graphics& g)
 void MixerComponent::resized()
 {
     auto area = getLocalBounds();
-    area.removeFromTop(30); // Space for title
+    area.removeFromTop(30);
     
     auto crossfaderArea = area.removeFromTop(area.getHeight() / 2);
     crossfaderLabel.setBounds(crossfaderArea.removeFromTop(20));
@@ -72,7 +78,6 @@ void MixerComponent::sliderValueChanged (Slider *slider)
 {
     if (slider == &crossfader)
     {
-        // Handle crossfader change - notify MainComponent via callback
         if (crossfaderCallback)
         {
             crossfaderCallback(crossfader.getValue());
@@ -80,7 +85,6 @@ void MixerComponent::sliderValueChanged (Slider *slider)
     }
     else if (slider == &masterVolume)
     {
-        // Handle master volume change - notify MainComponent via callback
         if (masterVolumeCallback)
         {
             masterVolumeCallback(masterVolume.getValue());
