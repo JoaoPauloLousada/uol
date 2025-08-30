@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    This file was auto-generated!
-
-    It contains the basic startup code for a JUCE application.
+    Main.cpp
+    Created: 10 Aug 2025 8:28:23am
+    Author:  joao
 
   ==============================================================================
 */
