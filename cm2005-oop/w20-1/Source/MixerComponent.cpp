@@ -8,116 +8,101 @@
   ==============================================================================
 */
 
-
 #include "MixerComponent.h"
 
 /**
- * This class was written by me without assistance based on the code provided in the module,
- * the juce documentation and tutorials about how to use the juce library.
+ * This class was written by me without assistance based on the code provided in
+ * the module, the juce documentation and tutorials about how to use the juce
+ * library.
  */
 
 //==============================================================================
-MixerComponent::MixerComponent()
-{
-    // Setup crossfader
-    addAndMakeVisible(crossfader);
-    crossfader.setSliderStyle(Slider::LinearHorizontal);
-    crossfader.setRange(0.0, 1.0, 0.01);
-    crossfader.setValue(0.5); // Center position
-    crossfader.addListener(this);
-    
-    // Setup master volume
-    addAndMakeVisible(masterVolume);
-    masterVolume.setSliderStyle(Slider::LinearVertical);
-    masterVolume.setRange(0.0, 1.0, 0.01);
-    masterVolume.setValue(0.7);
-    masterVolume.addListener(this);
-    
-    // Setup crossfader label
-    addAndMakeVisible(crossfaderLabel);
-    crossfaderLabel.setText("Crossfader", dontSendNotification);
-    crossfaderLabel.setJustificationType(Justification::centred);
-    
-    // Setup master volume label
-    addAndMakeVisible(masterVolumeLabel);
-    masterVolumeLabel.setText("Master", dontSendNotification);
-    masterVolumeLabel.setJustificationType(Justification::centred);
+MixerComponent::MixerComponent() {
+  // Setup crossfader
+  addAndMakeVisible(crossfader);
+  crossfader.setSliderStyle(Slider::LinearHorizontal);
+  crossfader.setRange(0.0, 1.0, 0.01);
+  crossfader.setValue(0.5); // Center position
+  crossfader.addListener(this);
+
+  // Setup master volume
+  addAndMakeVisible(masterVolume);
+  masterVolume.setSliderStyle(Slider::LinearVertical);
+  masterVolume.setRange(0.0, 1.0, 0.01);
+  masterVolume.setValue(0.7);
+  masterVolume.addListener(this);
+
+  // Setup crossfader label
+  addAndMakeVisible(crossfaderLabel);
+  crossfaderLabel.setText("Crossfader", dontSendNotification);
+  crossfaderLabel.setJustificationType(Justification::centred);
+
+  // Setup master volume label
+  addAndMakeVisible(masterVolumeLabel);
+  masterVolumeLabel.setText("Master", dontSendNotification);
+  masterVolumeLabel.setJustificationType(Justification::centred);
 }
 
-MixerComponent::~MixerComponent()
-{
+MixerComponent::~MixerComponent() {}
+
+void MixerComponent::paint(Graphics &g) {
+  g.fillAll(Colours::darkgrey);
+
+  g.setColour(Colours::white);
+  g.drawRect(getLocalBounds(), 2);
+
+  g.setColour(Colours::lightgrey);
+  g.setFont(16.0f);
+  g.drawText("MIXER", getLocalBounds().removeFromTop(30),
+             Justification::centred, true);
 }
 
-void MixerComponent::paint (Graphics& g)
-{
-    g.fillAll (Colours::darkgrey);
-    
-    g.setColour (Colours::white);
-    g.drawRect (getLocalBounds(), 2);
-    
-    g.setColour (Colours::lightgrey);
-    g.setFont (16.0f);
-    g.drawText ("MIXER", getLocalBounds().removeFromTop(30),
-                Justification::centred, true);
+void MixerComponent::resized() {
+  auto area = getLocalBounds();
+  area.removeFromTop(30);
+
+  auto crossfaderArea = area.removeFromTop(area.getHeight() / 2);
+  crossfaderLabel.setBounds(crossfaderArea.removeFromTop(20));
+  crossfader.setBounds(crossfaderArea.reduced(10));
+
+  masterVolumeLabel.setBounds(area.removeFromTop(20));
+  masterVolume.setBounds(area.reduced(20, 10));
 }
 
-void MixerComponent::resized()
-{
-    auto area = getLocalBounds();
-    area.removeFromTop(30);
-    
-    auto crossfaderArea = area.removeFromTop(area.getHeight() / 2);
-    crossfaderLabel.setBounds(crossfaderArea.removeFromTop(20));
-    crossfader.setBounds(crossfaderArea.reduced(10));
-    
-    masterVolumeLabel.setBounds(area.removeFromTop(20));
-    masterVolume.setBounds(area.reduced(20, 10));
-}
-
-void MixerComponent::sliderValueChanged (Slider *slider)
-{
-    if (slider == &crossfader)
-    {
-        if (crossfaderCallback)
-        {
-            crossfaderCallback(crossfader.getValue());
-        }
+void MixerComponent::sliderValueChanged(Slider *slider) {
+  if (slider == &crossfader) {
+    if (crossfaderCallback) {
+      crossfaderCallback(crossfader.getValue());
     }
-    else if (slider == &masterVolume)
-    {
-        if (masterVolumeCallback)
-        {
-            masterVolumeCallback(masterVolume.getValue());
-        }
+  } else if (slider == &masterVolume) {
+    if (masterVolumeCallback) {
+      masterVolumeCallback(masterVolume.getValue());
     }
+  }
 }
 
-void MixerComponent::setCrossfaderValue(double value)
-{
-    crossfader.setValue(value, dontSendNotification);
+void MixerComponent::setCrossfaderValue(double value) {
+  crossfader.setValue(value, dontSendNotification);
 }
 
-double MixerComponent::getCrossfaderValue() const
-{
-    return crossfader.getValue();
+double MixerComponent::getCrossfaderValue() const {
+  return crossfader.getValue();
 }
 
-void MixerComponent::setMasterVolume(double volume)
-{
-    masterVolume.setValue(volume, dontSendNotification);
+void MixerComponent::setMasterVolume(double volume) {
+  masterVolume.setValue(volume, dontSendNotification);
 }
 
-double MixerComponent::getMasterVolume() const
-{
-    return masterVolume.getValue();
+double MixerComponent::getMasterVolume() const {
+  return masterVolume.getValue();
 }
 
-void MixerComponent::setCrossfaderCallback(std::function<void(double)> callback)
-{
-    crossfaderCallback = callback;
+void MixerComponent::setCrossfaderCallback(
+    std::function<void(double)> callback) {
+  crossfaderCallback = callback;
 }
 
-void MixerComponent::setMasterVolumeCallback(std::function<void(double)> callback)
-{
-    masterVolumeCallback = callback;
+void MixerComponent::setMasterVolumeCallback(
+    std::function<void(double)> callback) {
+  masterVolumeCallback = callback;
 }

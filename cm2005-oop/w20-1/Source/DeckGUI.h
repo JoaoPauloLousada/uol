@@ -16,79 +16,79 @@
 
 //==============================================================================
 /*
-*/
-class DeckGUI    : public Component,
-                   public Button::Listener, 
-                   public Slider::Listener, 
-                   public Timer
-{
+ */
+class DeckGUI : public Component,
+                public Button::Listener,
+                public Slider::Listener,
+                public Timer {
 public:
-    /**
-     * Constructor: Initializes the deck GUI with audio player and format management components
-     * @param player Pointer to the DJAudioPlayer that handles audio playback
-     * @param formatManagerToUse Reference to audio format manager for loading different audio formats
-     * @param cacheToUse Reference to thumbnail cache for waveform generation
-     */
-    DeckGUI(DJAudioPlayer* player, 
-           AudioFormatManager & 	formatManagerToUse,
-           AudioThumbnailCache & 	cacheToUse );
-    
-    /**
-     * Destructor: Cleans up resources when the DeckGUI is destroyed
-     */
-    ~DeckGUI();
+  /**
+   * Constructor: Initializes the deck GUI with audio player and format
+   * management components
+   * @param player Pointer to the DJAudioPlayer that handles audio playback
+   * @param formatManagerToUse Reference to audio format manager for loading
+   * different audio formats
+   * @param cacheToUse Reference to thumbnail cache for waveform generation
+   */
+  DeckGUI(DJAudioPlayer *player, AudioFormatManager &formatManagerToUse,
+          AudioThumbnailCache &cacheToUse);
 
-    /**
-     * Renders the deck GUI components to the screen
-     * @param g Graphics context used for drawing the component
-     */
-    void paint (Graphics&) override;
-    
-    /**
-     * Handles layout and positioning of child components when the deck is resized
-     */
-    void resized() override;
+  /**
+   * Destructor: Cleans up resources when the DeckGUI is destroyed
+   */
+  ~DeckGUI();
 
-    /**
-     * Responds to button click events (play, pause, stop buttons)
-     * @param button Pointer to the button that was clicked
-     */
-    void buttonClicked (Button *) override;
+  /**
+   * Renders the deck GUI components to the screen
+   * @param g Graphics context used for drawing the component
+   */
+  void paint(Graphics &) override;
 
-    /**
-     * Responds to slider value changes (volume, speed, position sliders)
-     * @param slider Pointer to the slider whose value changed
-     */
-    void sliderValueChanged (Slider *slider) override;
+  /**
+   * Handles layout and positioning of child components when the deck is resized
+   */
+  void resized() override;
 
-    /**
-     * Called periodically by timer to update the position slider and waveform display
-     * Updates the GUI to reflect current playback position
-     */
-    void timerCallback() override; 
+  /**
+   * Responds to button click events (play, pause, stop buttons)
+   * @param button Pointer to the button that was clicked
+   */
+  void buttonClicked(Button *) override;
 
-    /**
-     * Loads an audio track into the deck for playback
-     * @param audioFile Reference to the audio file to be loaded
-     */
-    void loadTrack(const juce::File& audioFile);
+  /**
+   * Responds to slider value changes (volume, speed, position sliders)
+   * @param slider Pointer to the slider whose value changed
+   */
+  void sliderValueChanged(Slider *slider) override;
+
+  /**
+   * Called periodically by timer to update the position slider and waveform
+   * display Updates the GUI to reflect current playback position
+   */
+  void timerCallback() override;
+
+  /**
+   * Loads an audio track into the deck for playback
+   * @param audioFile Reference to the audio file to be loaded
+   */
+  void loadTrack(const juce::File &audioFile);
 
 private:
-    juce::FileChooser fChooser{"Select a file..."};
+  juce::FileChooser fChooser{"Select a file..."};
 
-    TextButton playButton{"PLAY"};
-    TextButton pauseButton{"PAUSE"};
-    TextButton stopButton{"STOP"};
-  
-    Slider volSlider; 
-    Slider speedSlider;
-    Slider posSlider;
+  TextButton playButton{"PLAY"};
+  TextButton pauseButton{"PAUSE"};
+  TextButton stopButton{"STOP"};
 
-    WaveformDisplay waveformDisplay;
+  Slider volSlider;
+  Slider speedSlider;
+  Slider posSlider;
 
-    DJAudioPlayer* player; 
-    
-    bool isUpdatingPosition;
+  WaveformDisplay waveformDisplay;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
+  DJAudioPlayer *player;
+
+  bool isUpdatingPosition;
+
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DeckGUI)
 };
