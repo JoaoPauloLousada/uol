@@ -1,8 +1,8 @@
 const { Ticket } = require("../tickets/ticket");
 
 class Events {
-    constructor(eventId, title, description, eventDate, publishedDate, createdDate, updatedDate, status, tickets) {
-        this.id = event_id;
+    constructor(eventId, title, description, eventDate, publishedDate, createdDate, updatedDate, status, ticketsFull, ticketsConcession) {
+        this.id = eventId;
         this.title = title;
         this.description = description;
         this.eventDate = eventDate;
@@ -10,7 +10,10 @@ class Events {
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
         this.status = status;
-        this.tickets = tickets;
+        this.tickets = {
+            full: ticketsFull,
+            concession: ticketsConcession
+        };
     }
 }
 

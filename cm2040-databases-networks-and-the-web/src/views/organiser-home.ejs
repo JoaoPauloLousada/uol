@@ -16,7 +16,7 @@
         <p><%= viewModel.siteSettings.siteDescription %></p>
         <hr />
         <h2>Published Events</h2>
-        <form action="<%= viewModel.event.actions.create.url %>" method="post">
+        <form action="<%= viewModel.event.actions.create.url %>" method="get">
             <button type="submit">Create New Event</button>
         </form>
         <ul>

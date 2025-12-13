@@ -8,7 +8,7 @@
  */
 
 const { z } = require('zod');
-const Password = require('./password');
+const { Password } = require('./password');
 
 /**
  * RegisterOrganiserParams

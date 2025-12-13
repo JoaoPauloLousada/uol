@@ -35,18 +35,15 @@ class GetPublishedEvents {
             if (!ticketsByEventId.has(ticket.eventId)) {
                 ticketsByEventId.set(ticket.eventId, []);
             }
-            ticketsByEventId.get(ticket.eventId).push({
-                ticket_id: ticket.id,
-                ticket_type: ticket.type,
-                quantity: ticket.quantity,
-                price: ticket.price
-            });
+            ticketsByEventId.get(ticket.eventId).push(ticket);
         }
 
         // Join tickets to events
         return events.map(event => {
-            const tickets = ticketsByEventId.get(event.event_id) || [];
-            return new Events(event.event_id, event.title, event.description, event.event_date, event.published_date, event.created_date, event.updated_date, event.status, tickets);
+            const eventTickets = ticketsByEventId.get(event.event_id) || [];
+            const ticketsFull = eventTickets.find(t => t.ticketType === 'full') || null;
+            const ticketsConcession = eventTickets.find(t => t.ticketType === 'concession') || null;
+            return new Events(event.event_id, event.title, event.description, event.event_date, event.published_date, event.created_date, event.updated_date, event.status, ticketsFull, ticketsConcession);
         });
     }
 }

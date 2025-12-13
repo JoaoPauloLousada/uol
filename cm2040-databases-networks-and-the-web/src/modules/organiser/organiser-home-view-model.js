@@ -33,7 +33,7 @@ class OrganiserHomeViewModel {
     event = {
         actions: {
             create: {
-                url: '/organiser/event/create',
+                url: '/organiser/event/new',
             },
             publish: {
                 url: '/organiser/event/publish',

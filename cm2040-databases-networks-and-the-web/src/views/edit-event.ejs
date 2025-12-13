@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Organiser Edit Event Page</title>
+</head>
+<body>
+    <h1>Organiser Edit Event Page</h1>
+    <% if (viewModel.error) { %>
+        <p style="color: red;"><%= viewModel.error.message %></p>
+    <% } else { %>
+        <% if (viewModel.event.createdDate) { %>
+            <p>Event created: <%= viewModel.event.createdDate %></p>
+        <% } %>
+        
+        <form action="/organiser/event/<%= viewModel.event.id %>/edit" method="post">
+            <div>
+                <label for="title">Event Title:</label>
+                <input type="text" id="title" name="title" value="<%= viewModel.event.title || '' %>" required />
+            </div>
+            
+            <div>
+                <label for="description">Event Description:</label>
+                <textarea id="description" name="description" rows="4" cols="50"><%= viewModel.event.description || '' %></textarea>
+            </div>
+            
+            <div>
+                <label for="eventDate">Event Date:</label>
+                <input type="date" id="eventDate" name="eventDate" value="<%= viewModel.event.eventDate || '' %>" required />
+            </div>
+            
+            <h3>Full-Price Tickets</h3>
+            <div>
+                <label for="fullQuantity">Quantity:</label>
+                <input type="number" id="fullQuantity" name="fullQuantity" value="<%= viewModel.event.tickets.full ? viewModel.event.tickets.full.quantity : 0 %>" min="0" required />
+            </div>
+            
+            <div>
+                <label for="fullPrice">Price:</label>
+                <input type="number" id="fullPrice" name="fullPrice" value="<%= viewModel.event.tickets.full ? viewModel.event.tickets.full.price : 0 %>" min="0" step="0.01" required />
+            </div>
+            
+            <h3>Concession-Priced Tickets</h3>
+            <div>
+                <label for="concessionQuantity">Quantity:</label>
+                <input type="number" id="concessionQuantity" name="concessionQuantity" value="<%= viewModel.event.tickets.concession ? viewModel.event.tickets.concession.quantity : 0 %>" min="0" required />
+            </div>
+            
+            <div>
+                <label for="concessionPrice">Price:</label>
+                <input type="number" id="concessionPrice" name="concessionPrice" value="<%= viewModel.event.tickets.concession ? viewModel.event.tickets.concession.price : 0 %>" min="0" step="0.01" required />
+            </div>
+            
+            <div>
+                <button type="submit">Submit Changes</button>
+            </div>
+        </form>
+        
+        <div>
+            <a href="/organiser">Back to Organiser Home Page</a>
+        </div>
+    <% } %>
+</body>
+</html>
+
