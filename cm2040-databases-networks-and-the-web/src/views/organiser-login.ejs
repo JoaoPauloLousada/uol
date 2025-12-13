@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <title>Organiser Login</title>
+</head>
+<body>
+    <h1>Organiser Login</h1>
+    <% if (viewModel.error) { %>
+        <p style="color: red;"><%= viewModel.error.message %></p>
+    <% } %>
+    <form action="/auth/organiser/login" method="post">
+        <p>Email: <input id="email" type="email" name="email" required /></p>
+        <p>Password: <input id="password" type="password" name="password" required /></p>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>

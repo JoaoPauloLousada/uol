@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <title>Organiser Home</title>
+</head>
+<body>
+    <h1>Organiser Home</h1>
+    <% if (viewModel.error) { %>
+        <p style="color: red;"><%= viewModel.error.message %></p>
+    <% } else { %>
+        <h2>Site Settings</h2>
+        <p><%= viewModel.siteSettings.siteName %></p>
+        <p><%= viewModel.siteSettings.siteDescription %></p>
+        <hr />
+        <h2>Published Events</h2>
+        <form action="<%= viewModel.event.actions.create.url %>" method="post">
+            <button type="submit">Create New Event</button>
+        </form>
+        <ul>
+            <% viewModel.event.published.list.forEach(event => { %>
+                <li><%= event.title %></li>
+            <% }); %>
+        </ul>
+        <hr />
+        <h2>Draft Events</h2>
+        <ul>
+            <% viewModel.event.draft.list.forEach(event => { %>
+                <li><%= event.title %></li>
+            <% }); %>
+        </ul>
+        <hr />
+        <form action="/auth/organiser/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    <% } %>
+</body>
+</html>
