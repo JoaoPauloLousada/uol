@@ -133,10 +133,11 @@ CREATE TABLE IF NOT EXISTS bookings (
 - `GET /organiser/settings` - Site settings page (requires authentication)
 - `POST /organiser/settings` - Update site settings (requires authentication)
 - `GET /organiser/event/new` - Create new event (requires authentication)
-- `GET /organiser/event/:id/edit` - Edit event page (requires authentication)
-- `POST /organiser/event/:id/edit` - Save event changes (requires authentication)
-- `POST /organiser/event/:id/publish` - Publish event (requires authentication)
-- `POST /organiser/event/:id/delete` - Delete event (requires authentication)
+- `GET /organiser/event/edit/:id` - Edit event page (requires authentication)
+- `POST /organiser/event/edit/:id` - Save event changes (requires authentication)
+- `POST /organiser/event/publish/:id` - Publish event (requires authentication)
+- `POST /organiser/event/unpublish/:id` - Unpublish event (requires authentication)
+- `POST /organiser/event/delete/:id` - Delete event (requires authentication)
 
 #### 3. `routes/attendee.js` - Attendee Routes
 - `GET /attendee` - Attendee home page (public, but login available)

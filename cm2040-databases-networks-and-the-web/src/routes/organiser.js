@@ -9,6 +9,9 @@ const { GetDraftEvents } = require("../modules/events/get-draft-events");
 const { CreateEvent } = require("../modules/events/create-event");
 const { GetEventById } = require("../modules/events/get-event-by-id");
 const { UpdateEvent } = require("../modules/events/update-event");
+const { PublishEvent } = require("../modules/events/publish-event");
+const { UnpublishEvent } = require("../modules/events/unpublish-event");
+const { DeleteEvent } = require("../modules/events/delete-event");
 const router = express.Router();
 
 router.get('/', requireOrganiserAuth, async (req, res) => {
@@ -41,7 +44,7 @@ router.get('/event/new', requireOrganiserAuth, async (req, res) => {
     try {
         const createEvent = new CreateEvent();
         const eventId = await createEvent.execute();
-        res.redirect(`/organiser/event/${eventId}/edit`);
+        res.redirect(`/organiser/event/edit/${eventId}`);
     } catch (error) {
         console.error('Error creating new event:', error);
         // Redirect back to organiser home on error
@@ -50,11 +53,11 @@ router.get('/event/new', requireOrganiserAuth, async (req, res) => {
 });
 
 /**
- * GET /organiser/event/:id/edit
+ * GET /organiser/event/edit/:id
  * Edit event page (requires authentication)
  * Displays the edit form for an event with its current data
  */
-router.get('/event/:id/edit', requireOrganiserAuth, async (req, res) => {
+router.get('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
         if (isNaN(eventId)) {
@@ -82,11 +85,11 @@ router.get('/event/:id/edit', requireOrganiserAuth, async (req, res) => {
 });
 
 /**
- * POST /organiser/event/:id/edit
+ * POST /organiser/event/edit/:id
  * Save event changes (requires authentication)
  * Updates event details and ticket information, then redirects to organiser home
  */
-router.post('/event/:id/edit', requireOrganiserAuth, async (req, res) => {
+router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
         if (isNaN(eventId)) {
@@ -143,6 +146,81 @@ router.post('/event/:id/edit', requireOrganiserAuth, async (req, res) => {
             // If we can't render the edit page, redirect to organiser home
             res.redirect('/organiser');
         }
+    }
+});
+
+/**
+ * POST /organiser/event/publish/:id
+ * Publish event (requires authentication)
+ * Changes event status from 'draft' to 'published' and sets published_date
+ */
+router.post('/event/publish/:id', requireOrganiserAuth, async (req, res) => {
+    try {
+        const eventId = parseInt(req.params.id);
+        if (isNaN(eventId)) {
+            return res.redirect('/organiser');
+        }
+
+        // Publish the event
+        const publishEvent = new PublishEvent(eventId);
+        await publishEvent.execute();
+
+        // Redirect to organiser home page on success
+        res.redirect('/organiser');
+    } catch (error) {
+        console.error('Error publishing event:', error);
+        // Redirect back to organiser home on error
+        res.redirect('/organiser');
+    }
+});
+
+/**
+ * POST /organiser/event/unpublish/:id
+ * Unpublish event (requires authentication)
+ * Changes event status from 'published' to 'draft'
+ */
+router.post('/event/unpublish/:id', requireOrganiserAuth, async (req, res) => {
+    try {
+        const eventId = parseInt(req.params.id);
+        if (isNaN(eventId)) {
+            return res.redirect('/organiser');
+        }
+
+        // Unpublish the event
+        const unpublishEvent = new UnpublishEvent(eventId);
+        await unpublishEvent.execute();
+
+        // Redirect to organiser home page on success
+        res.redirect('/organiser');
+    } catch (error) {
+        console.error('Error unpublishing event:', error);
+        // Redirect back to organiser home on error
+        res.redirect('/organiser');
+    }
+});
+
+/**
+ * POST /organiser/event/delete/:id
+ * Delete event (requires authentication)
+ * Deletes an event and all associated tickets and bookings
+ */
+router.post('/event/delete/:id', requireOrganiserAuth, async (req, res) => {
+    try {
+        const eventId = parseInt(req.params.id);
+        if (isNaN(eventId)) {
+            return res.redirect('/organiser');
+        }
+
+        // Delete the event (and related records)
+        const deleteEvent = new DeleteEvent(eventId);
+        await deleteEvent.execute();
+
+        // Redirect to organiser home page on success
+        res.redirect('/organiser');
+    } catch (error) {
+        console.error('Error deleting event:', error);
+        // Redirect back to organiser home on error
+        res.redirect('/organiser');
     }
 });
 

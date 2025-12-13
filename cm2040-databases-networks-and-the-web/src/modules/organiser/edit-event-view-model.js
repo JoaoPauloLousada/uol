@@ -5,6 +5,11 @@
 
 class EditEventViewModel {
     error = null;
+    actions = {
+        edit: {
+            url: '/organiser/event/edit/',
+        },
+    };
     event = {
         id: null,
         title: '',
@@ -23,7 +28,7 @@ class EditEventViewModel {
                 price: 0
             }
         }
-    }
+    };
 }
 
 module.exports.EditEventViewModel = EditEventViewModel;

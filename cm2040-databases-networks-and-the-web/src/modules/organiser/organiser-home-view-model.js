@@ -35,11 +35,17 @@ class OrganiserHomeViewModel {
             create: {
                 url: '/organiser/event/new',
             },
+            edit: {
+                url: '/organiser/event/edit/',
+            },
             publish: {
-                url: '/organiser/event/publish',
+                url: '/organiser/event/publish/',
+            },
+            unpublish: {
+                url: '/organiser/event/unpublish/',
             },
             delete: {
-                url: '/organiser/event/delete',
+                url: '/organiser/event/delete/',
             }
         },
         published: {

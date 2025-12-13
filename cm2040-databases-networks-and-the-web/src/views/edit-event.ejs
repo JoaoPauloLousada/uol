@@ -15,7 +15,7 @@
             <p>Event created: <%= viewModel.event.createdDate %></p>
         <% } %>
         
-        <form action="/organiser/event/<%= viewModel.event.id %>/edit" method="post">
+        <form action="<%= viewModel.actions.edit.url %><%= viewModel.event.id %>" method="post">
             <div>
                 <label for="title">Event Title:</label>
                 <input type="text" id="title" name="title" value="<%= viewModel.event.title || '' %>" required />
