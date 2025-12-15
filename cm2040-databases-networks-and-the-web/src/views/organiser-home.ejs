@@ -38,6 +38,19 @@
                        <%= event.description %>
                    </p>
                    <p>
+                       <strong>Tickets:</strong><br/>
+                       <% if (event.tickets.full && event.tickets.full.quantity > 0) { %>
+                           Full Price: <%= event.tickets.full.quantity %> tickets at £<%= event.tickets.full.price.toFixed(2) %><br/>
+                       <% } else { %>
+                           Full Price: No tickets available<br/>
+                       <% } %>
+                       <% if (event.tickets.concession && event.tickets.concession.quantity > 0) { %>
+                           Concession: <%= event.tickets.concession.quantity %> tickets at £<%= event.tickets.concession.price.toFixed(2) %>
+                       <% } else { %>
+                           Concession: No tickets available
+                       <% } %>
+                   </p>
+                   <p>
                        Created at: <%= event.createdDate %><br/>
                        Last Modified at: <%= event.updatedDate %><br/>
                        Published at: <%= event.publishedDate %>
@@ -64,6 +77,19 @@
                    </p> 
                    <p>
                        <%= event.description %>
+                   </p>
+                   <p>
+                       <strong>Tickets:</strong><br/>
+                       <% if (event.tickets.full && event.tickets.full.quantity > 0) { %>
+                           Full Price: <%= event.tickets.full.quantity %> tickets at £<%= event.tickets.full.price.toFixed(2) %><br/>
+                       <% } else { %>
+                           Full Price: No tickets available<br/>
+                       <% } %>
+                       <% if (event.tickets.concession && event.tickets.concession.quantity > 0) { %>
+                           Concession: <%= event.tickets.concession.quantity %> tickets at £<%= event.tickets.concession.price.toFixed(2) %>
+                       <% } else { %>
+                           Concession: No tickets available
+                       <% } %>
                    </p>
                    <p>
                        Created at: <%= event.createdDate %><br/>
