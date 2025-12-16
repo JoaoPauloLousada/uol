@@ -117,27 +117,27 @@ CREATE TABLE IF NOT EXISTS bookings (
 ### Route Files to Create
 
 #### 1. `routes/auth.js` - Authentication Routes
-- `GET /auth/organiser/login` - Organiser login page
-- `POST /auth/organiser/login` - Process organiser login
-- `GET /auth/organiser/logout` - Organiser logout
+- `GET /auth/organiser/login` - Organiser login page - ok
+- `POST /auth/organiser/login` - Process organiser login - ok
+- `GET /auth/organiser/logout` - Organiser logout -ok 
 <!-- - `GET /auth/organiser/register` - Organiser registration page -->
-- `POST /auth/organiser/register` - Process organiser registration
+<!-- - `POST /auth/organiser/register` - Process organiser registration -->
 - `GET /auth/attendee/login` - Attendee login page
 - `POST /auth/attendee/login` - Process attendee login
 - `GET /auth/attendee/logout` - Attendee logout
 - `GET /auth/attendee/register` - Attendee registration page
 - `POST /auth/attendee/register` - Process attendee registration
 
-#### 2. `routes/organiser.js` - Organiser Routes (Protected)
-- `GET /organiser` - Organiser home page (requires authentication)
-- `GET /organiser/settings` - Site settings page (requires authentication)
-- `POST /organiser/settings` - Update site settings (requires authentication)
-- `GET /organiser/event/new` - Create new event (requires authentication)
-- `GET /organiser/event/edit/:id` - Edit event page (requires authentication)
-- `POST /organiser/event/edit/:id` - Save event changes (requires authentication)
-- `POST /organiser/event/publish/:id` - Publish event (requires authentication)
-- `POST /organiser/event/unpublish/:id` - Unpublish event (requires authentication)
-- `POST /organiser/event/delete/:id` - Delete event (requires authentication)
+#### 2. `routes/organiser.js` - Organiser Routes (Protected) - ok
+- `GET /organiser` - Organiser home page (requires authentication) - ok 
+- `GET /organiser/settings` - Site settings page (requires authentication) - ok 
+- `POST /organiser/settings` - Update site settings (requires authentication) - ok
+- `GET /organiser/event/new` - Create new event (requires authentication) - ok
+- `GET /organiser/event/edit/:id` - Edit event page (requires authentication) - ok
+- `POST /organiser/event/edit/:id` - Save event changes (requires authentication) - ok
+- `POST /organiser/event/publish/:id` - Publish event (requires authentication) - ok
+- `POST /organiser/event/unpublish/:id` - Unpublish event (requires authentication) - ok
+- `POST /organiser/event/delete/:id` - Delete event (requires authentication) - ok
 
 #### 3. `routes/attendee.js` - Attendee Routes
 - `GET /attendee` - Attendee home page (public, but login available)

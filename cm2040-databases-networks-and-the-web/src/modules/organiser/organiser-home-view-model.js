@@ -46,6 +46,9 @@ class OrganiserHomeViewModel {
             },
             delete: {
                 url: '/organiser/event/delete/',
+            },
+            view: {
+                url: '/attendee/event/',
             }
         },
         published: {

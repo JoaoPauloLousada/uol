@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Attendee Home Page</title>
+</head>
+<body>
+    <h1>Attendee Home Page</h1>
+    <% if (viewModel.error) { %>
+        <p style="color: red;"><%= viewModel.error.message %></p>
+    <% } else { %>
+        <h2>Site Information</h2>
+        <p><strong>Site Name:</strong> <%= viewModel.siteSettings.siteName %></p>
+        <p><strong>Site Description:</strong> <%= viewModel.siteSettings.siteDescription %></p>
+        
+        <hr />
+        
+        <h2>Published Events</h2>
+        <% if (viewModel.events.length === 0) { %>
+            <p>No published events available.</p>
+        <% } else { %>
+            <ul>
+                <% viewModel.events.forEach(event => { %>
+                    <li>
+                        <h3><a href="/attendee/event/<%= event.id %>"><%= event.title %></a></h3>
+                        <p><strong>Date:</strong> <%= event.eventDate %></p>
+                        <% if (event.description) { %>
+                            <p><%= event.description %></p>
+                        <% } %>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } %>
+    <% } %>
+</body>
+</html>
+

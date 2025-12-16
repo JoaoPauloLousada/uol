@@ -49,6 +49,9 @@ app.use('/auth', authRoutes);
 const { organiserRoutes } = require('./routes/organiser');
 app.use('/organiser', organiserRoutes);
 
+const { attendeeRoutes } = require('./routes/attendee');
+app.use('/attendee', attendeeRoutes);
+
 
 // Make the web application listen for HTTP requests
 app.listen(port, () => {

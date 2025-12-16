@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Attendee Event Page</title>
+</head>
+<body>
+    <h1>Attendee Event Page</h1>
+    <% if (viewModel.error) { %>
+        <p style="color: red;"><%= viewModel.error.message %></p>
+    <% } else if (viewModel.event) { %>
+        <h2><%= viewModel.event.title %></h2>
+        
+        <p><strong>Description:</strong> <%= viewModel.event.description || 'No description available' %></p>
+        <p><strong>Date:</strong> <%= viewModel.event.eventDate %></p>
+        
+        <h3>Ticket Information</h3>
+        <p>
+            <strong>Full Price Tickets:</strong><br/>
+            Price: £<%= viewModel.availableTickets.full.price.toFixed(2) %><br/>
+            Available: <%= viewModel.availableTickets.full.available %> out of <%= viewModel.availableTickets.full.total %>
+        </p>
+        
+        <% if (viewModel.availableTickets.concession.total > 0) { %>
+            <p>
+                <strong>Concession Tickets:</strong><br/>
+                Price: £<%= viewModel.availableTickets.concession.price.toFixed(2) %><br/>
+                Available: <%= viewModel.availableTickets.concession.available %> out of <%= viewModel.availableTickets.concession.total %>
+            </p>
+        <% } %>
+        
+        <hr />
+        
+        <% if (!viewModel.attendee.username) { %>
+            <!-- Not authenticated - show login prompt -->
+            <p>Please <a href="/auth/attendee/login">login</a> to book tickets for this event.</p>
+        <% } else { %>
+            <!-- Authenticated - show booking form -->
+            <p>Logged in as: <strong><%= viewModel.attendee.username %></strong></p>
+            
+            <form action="/attendee/event/<%= viewModel.event.id %>/book" method="post">
+                <h3>Book Tickets</h3>
+                
+                <% if (viewModel.availableTickets.full.available > 0) { %>
+                    <div>
+                        <label for="fullTickets">Full Price Tickets:</label>
+                        <input type="number" id="fullTickets" name="fullTickets" min="0" max="<%= viewModel.availableTickets.full.available %>" value="0" />
+                        <span>(£<%= viewModel.availableTickets.full.price.toFixed(2) %> each, <%= viewModel.availableTickets.full.available %> available)</span>
+                    </div>
+                <% } else { %>
+                    <p>Full Price Tickets: Sold out</p>
+                <% } %>
+                
+                <% if (viewModel.attendee.isSpecial && viewModel.availableTickets.concession.available > 0) { %>
+                    <div>
+                        <label for="concessionTickets">Concession Tickets:</label>
+                        <input type="number" id="concessionTickets" name="concessionTickets" min="0" max="<%= viewModel.availableTickets.concession.available %>" value="0" />
+                        <span>(£<%= viewModel.availableTickets.concession.price.toFixed(2) %> each, <%= viewModel.availableTickets.concession.available %> available)</span>
+                    </div>
+                <% } else if (viewModel.attendee.isSpecial && viewModel.availableTickets.concession.available === 0) { %>
+                    <p>Concession Tickets: Sold out</p>
+                <% } %>
+                
+                <div>
+                    <button type="submit">Book Tickets</button>
+                </div>
+            </form>
+        <% } %>
+        
+        <hr />
+        
+        <div>
+            <a href="/attendee">Back to Attendee Home Page</a>
+        </div>
+    <% } else { %>
+        <p>Event not found.</p>
+        <div>
+            <a href="/attendee">Back to Attendee Home Page</a>
+        </div>
+    <% } %>
+</body>
+</html>
+

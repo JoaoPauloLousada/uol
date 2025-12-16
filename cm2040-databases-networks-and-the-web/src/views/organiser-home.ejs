@@ -14,6 +14,7 @@
         <h2>Site Settings</h2>
         <p><%= viewModel.siteSettings.siteName %></p>
         <p><%= viewModel.siteSettings.siteDescription %></p>
+        <a href="/organiser/site-settings">Edit Site Settings</a>
         <hr />
         <h2>Published Events</h2>
         <form action="<%= viewModel.event.actions.create.url %>" method="get">
@@ -55,6 +56,7 @@
                        Last Modified at: <%= event.updatedDate %><br/>
                        Published at: <%= event.publishedDate %>
                    </p>
+                   <a href="<%= viewModel.event.actions.view.url %><%= event.id %>">View Event Page</a>
                 </li>
             <% }); %>
         </ul>

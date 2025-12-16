@@ -10,8 +10,10 @@ const { CreateEvent } = require("../modules/events/create-event");
 const { GetEventById } = require("../modules/events/get-event-by-id");
 const { UpdateEvent } = require("../modules/events/update-event");
 const { PublishEvent } = require("../modules/events/publish-event");
+const { SiteSettingsViewModel } = require("../modules/site-settings/site-settings-view-model");
 const { UnpublishEvent } = require("../modules/events/unpublish-event");
 const { DeleteEvent } = require("../modules/events/delete-event");
+const { UpdateSiteSettings } = require("../modules/site-settings/update-site-settings");
 const router = express.Router();
 
 router.get('/', requireOrganiserAuth, async (req, res) => {
@@ -221,6 +223,34 @@ router.post('/event/delete/:id', requireOrganiserAuth, async (req, res) => {
         console.error('Error deleting event:', error);
         // Redirect back to organiser home on error
         res.redirect('/organiser');
+    }
+});
+
+router.get('/site-settings', requireOrganiserAuth, async (req, res) => {
+    const viewModel = new SiteSettingsViewModel();
+    try {
+        const getSiteSettings = new GetSiteSettings();
+        const siteSettings = await getSiteSettings.execute();
+        viewModel.siteSettings = siteSettings;
+        res.render('site-settings.ejs', { viewModel: viewModel });
+    } catch (error) {
+        viewModel.error = new Error('Internal Server Error: ' + error.message);
+        console.error('Error getting site settings:', error);
+        res.render('site-settings.ejs', { viewModel: viewModel });
+    }
+});
+
+router.post('/site-settings', requireOrganiserAuth, async (req, res) => {
+    try {
+        const siteName = req.body.siteName || '';
+        const siteDescription = req.body.siteDescription || '';
+        const updateSiteSettings = new UpdateSiteSettings(siteName, siteDescription);
+        await updateSiteSettings.execute();
+        res.redirect('/organiser');
+    } catch (error) {
+        const viewModel = new SiteSettingsViewModel();
+        viewModel.error = new Error('Internal Server Error: ' + error.message);
+        res.render('site-settings.ejs', { viewModel: viewModel });
     }
 });
 
