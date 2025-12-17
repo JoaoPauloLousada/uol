@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/main.css" />
-    <title>Attendee Login</title>
+    <title>Attendee Signup</title>
 </head>
 <body>
-    <h1>Attendee Login</h1>
+    <h1>Attendee Signup</h1>
     <% if (viewModel.error) { %>
         <p style="color: red;"><%= viewModel.error.message %></p>
     <% } %>
-    <form action="/auth/attendee/login" method="post">
+    <form action="/auth/attendee/signup" method="post">
+        <p>Username: <input id="username" type="text" name="username" required /></p>
         <p>Email: <input id="email" type="email" name="email" required /></p>
         <p>Password: <input id="password" type="password" name="password" required /></p>
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
     </form>
-    <p><a href="/auth/attendee/signup">Don't have an account? Sign up here</a></p>
+    <p><a href="/auth/attendee/login">Already have an account? Login here</a></p>
 </body>
 </html>
 

@@ -11,6 +11,7 @@ const { GetSiteSettings } = require("../modules/site-settings/get-site-settings"
 const { GetPublishedEvents } = require("../modules/events/get-published-events");
 const { AttendeeEventViewModel } = require("../modules/attendee/attendee-event-view-model");
 const { AttendeeHomeViewModel } = require("../modules/attendee/attendee-home-view-model");
+const { GetAttendeeById } = require("../modules/attendee/get-attendee-by-id");
 const router = express.Router();
 
 /**
@@ -22,6 +23,14 @@ router.get('/', async (req, res) => {
     try {
         const viewModel = new AttendeeHomeViewModel();
 
+        // Get attendee by ID
+        const getAttendeeById = new GetAttendeeById(req.session?.attendeeId);
+        const attendee = await getAttendeeById.execute();
+        viewModel.attendee = {
+            username: attendee?.username ?? null,
+            isSpecial: attendee?.is_special ?? false
+        };
+
         // Get site settings
         const getSiteSettings = new GetSiteSettings();
         const siteSettings = await getSiteSettings.execute();
@@ -31,7 +40,6 @@ router.get('/', async (req, res) => {
         const getPublishedEvents = new GetPublishedEvents();
         const publishedEvents = await getPublishedEvents.execute();
         viewModel.events = publishedEvents;
-        console.log({ viewModel: JSON.stringify(viewModel, null, 2) });
 
         res.render('attendee-home.ejs', { viewModel: viewModel });
     } catch (error) {
@@ -48,15 +56,28 @@ router.get('/', async (req, res) => {
  * Displays event information and booking form if authenticated
  */
 router.get('/event/:id', async (req, res) => {
+    console.log('get /attendee/event/:id', req.session?.attendeeId);
     try {
         const eventId = parseInt(req.params.id);
         if (isNaN(eventId)) {
             return res.status(400).send('Invalid event ID');
         }
 
+        // Create view model
+        const viewModel = new AttendeeEventViewModel();
+
+        // Get attendee by ID
+        const getAttendeeById = new GetAttendeeById(req.session?.attendeeId);
+        const attendee = await getAttendeeById.execute();
+        viewModel.attendee = {
+            username: attendee?.username ?? null,
+            isSpecial: attendee?.is_special ?? false
+        };
+
         // Get event by ID
         const getEventById = new GetEventById(eventId);
         const event = await getEventById.execute();
+        viewModel.event = event;
 
         // Only show published events
         if (!event || event.status !== 'published') {
@@ -68,17 +89,8 @@ router.get('/event/:id', async (req, res) => {
         // Get site settings
         const getSiteSettings = new GetSiteSettings();
         const siteSettings = await getSiteSettings.execute();
-
-        // Create view model
-        const viewModel = new AttendeeEventViewModel();
-        viewModel.event = event;
         viewModel.siteSettings = siteSettings;
 
-        // Mocked values for attendee (will be replaced with actual session data later)
-        viewModel.attendee = {
-            username: null, // Will check req.session.attendeeId later
-            isSpecial: false // Will check attendee.is_special flag later
-        };
 
         // Mocked values for available tickets (will be replaced with actual calculation later)
         viewModel.availableTickets = {

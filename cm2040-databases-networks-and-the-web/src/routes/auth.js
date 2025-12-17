@@ -9,6 +9,8 @@ const { OrganiserLogin } = require("../modules/auth/organiser-login");
 const { OrganiserLoginViewModel } = require("../modules/auth/organiser-login-view-model");
 const { AttendeeLogin } = require("../modules/auth/attendee-login");
 const { AttendeeLoginViewModel } = require("../modules/auth/attendee-login-view-model");
+const { RegisterAttendee, RegisterAttendeeParams } = require("../modules/auth/register-attendee");
+const { AttendeeSignupViewModel } = require("../modules/auth/attendee-signup-view-model");
 const { NotFoundError } = require("../modules/errors/not-found");
 const { InternalServerError } = require("../modules/errors/internal");
 const router = express.Router();
@@ -90,10 +92,16 @@ router.get('/attendee/signup', (req, res) => {
 });
 
 router.post('/attendee/signup', async (req, res, next) => {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
     try {
-        const signup = new AttendeeSignup(email, password);
-        const attendee = await signup.execute();
+        // Validate and create params
+        const params = new RegisterAttendeeParams(username, email, password);
+
+        // Register the attendee
+        const registerAttendee = new RegisterAttendee();
+        const attendee = await registerAttendee.execute(params);
+
+        // Set session and redirect
         req.session.attendeeId = attendee.id;
         res.redirect('/attendee');
         return next();
@@ -102,6 +110,12 @@ router.post('/attendee/signup', async (req, res, next) => {
         if (error instanceof InternalServerError) {
             viewModel.error = new Error(error.message);
             res.status(500).render('attendee-signup.ejs', { viewModel });
+            return next();
+        }
+        // Handle validation errors (from Zod)
+        if (error.message) {
+            viewModel.error = new Error(error.message);
+            res.status(400).render('attendee-signup.ejs', { viewModel });
             return next();
         }
         console.error('Error signing up:', error);

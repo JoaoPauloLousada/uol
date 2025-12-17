@@ -8,6 +8,9 @@
 </head>
 <body>
     <h1>Attendee Home Page</h1>
+    <% if (viewModel.attendee.username) { %>
+        <h2>Welcome, <%= viewModel.attendee.username %></h2>
+    <% } %>
     <% if (viewModel.error) { %>
         <p style="color: red;"><%= viewModel.error.message %></p>
     <% } else { %>

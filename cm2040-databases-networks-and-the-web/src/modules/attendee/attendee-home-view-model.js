@@ -9,6 +9,10 @@ class AttendeeHomeViewModel {
     error = null;
     siteSettings = new SiteSettings(0, '', '');
     events = []; // Array of Events objects
+    attendee = {
+        username: null,
+        isSpecial: false
+    };
 }
 
 module.exports.AttendeeHomeViewModel = AttendeeHomeViewModel;
