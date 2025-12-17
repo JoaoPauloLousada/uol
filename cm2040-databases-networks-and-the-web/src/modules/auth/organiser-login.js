@@ -1,5 +1,6 @@
 const { GetOrganiserByEmail } = require('../organiser/get-organiser-by-email');
 const { Password } = require('./password');
+const { NotFoundError } = require('../errors/not-found');
 
 class OrganiserLogin {
     constructor(email, password) {
