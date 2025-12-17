@@ -12,22 +12,42 @@ class GetTicketsByEventIdList {
     async execute() {
         const placeholders = this.eventIdList.map(() => '?').join(',');
 
-        // Second query: Get all tickets for these events
-        const tickets = await new Promise((resolve, reject) => {
-            const TICKETS_QUERY = `
-                SELECT ticket_id, event_id, ticket_type, quantity, price 
-                FROM tickets 
-                WHERE event_id IN (${placeholders})
+        const tickets_data = await new Promise((resolve, reject) => {
+            const QUERY = `
+                SELECT
+                    t.ticket_id,
+                    t.event_id,
+                    t.ticket_type,
+                    t.quantity,
+                    t.price,
+                    COALESCE(b.booked_quantity, 0) AS booked_quantity
+                FROM tickets t
+                LEFT JOIN (
+                    SELECT ticket_id, SUM(quantity) AS booked_quantity
+                    FROM bookings
+                    GROUP BY ticket_id
+                ) b ON t.ticket_id = b.ticket_id
+                WHERE t.event_id IN (${placeholders})
             `;
-            global.db.all(TICKETS_QUERY, this.eventIdList, function (err, rows) {
+            global.db.all(QUERY, this.eventIdList, function (err, rows) {
                 if (err) {
                     return reject(err);
                 } else {
-                    const _tickets = rows.map(row => new Ticket(row.ticket_id, row.event_id, row.ticket_type, row.quantity, row.price));
-                    return resolve(_tickets);
+                    return resolve(rows);
                 }
             });
         });
+
+        const tickets = tickets_data.map(
+            ticket => new Ticket(
+                ticket.ticket_id,
+                ticket.event_id,
+                ticket.ticket_type,
+                ticket.quantity,
+                ticket.price,
+                ticket.booked_quantity
+            )
+        );
 
         return tickets;
     }

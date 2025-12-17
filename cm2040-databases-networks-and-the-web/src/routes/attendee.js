@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
         const getPublishedEvents = new GetPublishedEvents();
         const publishedEvents = await getPublishedEvents.execute();
         viewModel.events = publishedEvents;
+        console.log({ viewModel: JSON.stringify(viewModel, null, 2) });
 
         res.render('attendee-home.ejs', { viewModel: viewModel });
     } catch (error) {
@@ -103,19 +104,21 @@ router.get('/event/:id', async (req, res) => {
 });
 
 /**
- * POST /attendee/event/:id/book
+ * POST /attendee/event/book/:id
  * Create booking (requires authentication)
  * Creates a booking for the authenticated attendee
  */
-router.post('/event/:id/book', async (req, res) => {
+router.post('/event/book/:event_id', async (req, res) => {
     try {
-        const eventId = parseInt(req.params.id);
+        const eventId = parseInt(req.params.event_id);
         if (isNaN(eventId)) {
             return res.status(400).send('Invalid event ID');
         }
 
-        // TODO: Implement booking creation
-        res.send(`Booking creation for event ID: ${eventId} - Coming soon`);
+        // Create booking
+        const createBooking = new CreateBooking(eventId, req.session.attendeeId, ticketId, quantity);
+        const bookingId = await createBooking.execute();
+        res.redirect(`/attendee/event/${eventId}`);
     } catch (error) {
         console.error('Error creating booking:', error);
         res.status(500).send('Internal Server Error');

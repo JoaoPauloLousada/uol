@@ -29,6 +29,29 @@
                         <% if (event.description) { %>
                             <p><%= event.description %></p>
                         <% } %>
+                        
+                        <h4>Tickets:</h4>
+                        <ul>
+                            <% if (event.tickets.full) { %>
+                                <li>
+                                    <strong>Full:</strong> 
+                                    Price: £<%= event.tickets.full.price.toFixed(2) %>, 
+                                    Total Quantity: <%= event.tickets.full.quantity %>, 
+                                    Available: <%= event.tickets.full.availableQuantity %>
+                                </li>
+                            <% } %>
+                            <% if (event.tickets.concession) { %>
+                                <li>
+                                    <strong>Concession:</strong> 
+                                    Price: £<%= event.tickets.concession.price.toFixed(2) %>, 
+                                    Total Quantity: <%= event.tickets.concession.quantity %>, 
+                                    Available: <%= event.tickets.concession.availableQuantity %>
+                                </li>
+                            <% } %>
+                            <% if (!event.tickets.full && !event.tickets.concession) { %>
+                                <li>No tickets available</li>
+                            <% } %>
+                        </ul>
                     </li>
                 <% }); %>
             </ul>

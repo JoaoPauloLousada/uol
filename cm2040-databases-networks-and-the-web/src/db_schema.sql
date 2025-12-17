@@ -72,11 +72,12 @@ CREATE TABLE IF NOT EXISTS bookings (
     booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
     event_id INTEGER NOT NULL,
     attendee_id INTEGER NOT NULL,
-    full_tickets INTEGER DEFAULT 0,
-    concession_tickets INTEGER DEFAULT 0,
+    ticket_id INTEGER NOT NULL,
+    quantity INTEGER DEFAULT 0,
     booking_date TEXT NOT NULL,
     FOREIGN KEY (event_id) REFERENCES events(event_id),
-    FOREIGN KEY (attendee_id) REFERENCES attendees(attendee_id)
+    FOREIGN KEY (attendee_id) REFERENCES attendees(attendee_id),
+    FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id)
 );
 
 
