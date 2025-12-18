@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Event Manager - Home</title>
+</head>
+<body>
+    <% if (error) { %>
+        <p style="color: red;">Error loading site information: <%= error.message %></p>
+    <% } %>
+    
+    <% if (siteSettings) { %>
+        <h1><%= siteSettings.siteName %></h1>
+        <h2><%= siteSettings.siteDescription %></h2>
+    <% } else { %>
+        <h1>Event Manager</h1>
+        <h2>Welcome to the Event Management System</h2>
+    <% } %>
+    
+    <div>
+        <h3>Organiser Section</h3>
+        <% if (isOrganiserAuthenticated) { %>
+            <p><a href="/organiser">Go to Organiser Home Page</a></p>
+        <% } else { %>
+            <p><a href="/auth/organiser/login">Organiser Login</a></p>
+        <% } %>
+    </div>
+    
+    <hr />
+    
+    <div>
+        <h3>Attendee Section</h3>
+        <p><a href="/attendee">Go to Attendee Home Page</a></p>
+        <% if (!isAttendeeAuthenticated) { %>
+            <p><a href="/auth/attendee/login">Attendee Login</a> | <a href="/auth/attendee/signup">Attendee Sign Up</a></p>
+        <% } %>
+    </div>
+</body>
+</html>
+

@@ -34,14 +34,10 @@ global.db = new sqlite3.Database('./database.db', function (err) {
     }
 });
 
-// Handle requests to the home page 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-});
 
-// Add all the route handlers in usersRoutes to the app under the path /users
-const usersRoutes = require('./routes/users');
-app.use('/users', usersRoutes);
+// Add home routes
+const { homeRoutes } = require('./routes/home');
+app.use('/', homeRoutes);
 
 const { authRoutes } = require('./routes/auth');
 app.use('/auth', authRoutes);
