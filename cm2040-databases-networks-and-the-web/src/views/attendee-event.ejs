@@ -40,7 +40,7 @@
             <!-- Authenticated - show booking form -->
             <p>Logged in as: <strong><%= viewModel.attendee.username %></strong></p>
             
-            <form action="/attendee/event/<%= viewModel.event.id %>/book" method="post">
+            <form action="/attendee/event/book/<%= viewModel.event.id %>" method="post">
                 <h3>Book Tickets</h3>
                 
                 <% if (viewModel.availableTickets.full.available > 0) { %>

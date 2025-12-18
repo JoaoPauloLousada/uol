@@ -10,6 +10,12 @@
     <h1>Attendee Home Page</h1>
     <% if (viewModel.attendee.username) { %>
         <h2>Welcome, <%= viewModel.attendee.username %></h2>
+        <p><a href="/attendee/my-bookings">View My Bookings</a></p>
+        <form action="/auth/attendee/logout" method="post" style="display: inline;">
+            <button type="submit">Logout</button>
+        </form>
+    <% } else { %>
+        <p><a href="/auth/attendee/login">Login</a> | <a href="/auth/attendee/signup">Sign Up</a></p>
     <% } %>
     <% if (viewModel.error) { %>
         <p style="color: red;"><%= viewModel.error.message %></p>

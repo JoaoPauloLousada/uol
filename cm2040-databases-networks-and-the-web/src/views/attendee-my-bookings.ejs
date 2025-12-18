@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>My Bookings</title>
+</head>
+<body>
+    <h1>My Bookings</h1>
+    
+    <% if (viewModel.error) { %>
+        <p style="color: red;"><%= viewModel.error.message %></p>
+    <% } else { %>
+        <% if (!viewModel.bookings || viewModel.bookings.length === 0) { %>
+            <p>You have no bookings yet.</p>
+            <p><a href="/attendee">Browse Events</a></p>
+        <% } else { %>
+            <p>You have <%= viewModel.bookings.length %> booking(s).</p>
+            
+            <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background-color: #f0f0f0;">
+                        <th>Booking ID</th>
+                        <th>Event</th>
+                        <th>Event Date</th>
+                        <th>Ticket Type</th>
+                        <th>Quantity</th>
+                        <th>Price per Ticket</th>
+                        <th>Total Price</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% viewModel.bookings.forEach(booking => { %>
+                        <tr>
+                            <td><%= booking.bookingId %></td>
+                            <td>
+                                <strong><%= booking.event.title %></strong>
+                                <% if (booking.event.description) { %>
+                                    <br/><small><%= booking.event.description %></small>
+                                <% } %>
+                            </td>
+                            <td><%= booking.event.eventDate %></td>
+                            <td><%= booking.ticket.ticketType.charAt(0).toUpperCase() + booking.ticket.ticketType.slice(1) %></td>
+                            <td><%= booking.quantity %></td>
+                            <td>£<%= booking.ticket.price.toFixed(2) %></td>
+                            <td><strong>£<%= (booking.ticket.price * booking.quantity).toFixed(2) %></strong></td>
+                            <td><%= new Date(booking.bookingDate).toLocaleString() %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    <% } %>
+    
+    <hr />
+    
+    <div style="margin-top: 20px;">
+        <a href="/attendee">Back to Attendee Home Page</a>
+    </div>
+</body>
+</html>
+

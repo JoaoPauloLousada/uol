@@ -12,6 +12,8 @@ const { GetPublishedEvents } = require("../modules/events/get-published-events")
 const { AttendeeEventViewModel } = require("../modules/attendee/attendee-event-view-model");
 const { AttendeeHomeViewModel } = require("../modules/attendee/attendee-home-view-model");
 const { GetAttendeeById } = require("../modules/attendee/get-attendee-by-id");
+const { GetBookingsByAttendeeId } = require("../modules/booking/get-bookings-by-attendee-id");
+const { CreateBooking } = require("../modules/booking/create-booking");
 const router = express.Router();
 
 /**
@@ -92,16 +94,16 @@ router.get('/event/:id', async (req, res) => {
         viewModel.siteSettings = siteSettings;
 
 
-        // Mocked values for available tickets (will be replaced with actual calculation later)
+        // Calculate available tickets using actual booked quantities
         viewModel.availableTickets = {
             full: {
                 total: event.tickets.full ? event.tickets.full.quantity : 0,
-                available: event.tickets.full ? event.tickets.full.quantity : 0, // Mocked: assume all available
+                available: event.tickets.full ? event.tickets.full.availableQuantity : 0,
                 price: event.tickets.full ? event.tickets.full.price : 0
             },
             concession: {
                 total: event.tickets.concession ? event.tickets.concession.quantity : 0,
-                available: event.tickets.concession ? event.tickets.concession.quantity : 0, // Mocked: assume all available
+                available: event.tickets.concession ? event.tickets.concession.availableQuantity : 0,
                 price: event.tickets.concession ? event.tickets.concession.price : 0
             }
         };
@@ -122,18 +124,68 @@ router.get('/event/:id', async (req, res) => {
  */
 router.post('/event/book/:event_id', async (req, res) => {
     try {
+        // Check authentication
+        if (!req.session.attendeeId) {
+            return res.redirect('/auth/attendee/login');
+        }
+
         const eventId = parseInt(req.params.event_id);
         if (isNaN(eventId)) {
             return res.status(400).send('Invalid event ID');
         }
 
-        // Create booking
-        const createBooking = new CreateBooking(eventId, req.session.attendeeId, ticketId, quantity);
-        const bookingId = await createBooking.execute();
-        res.redirect(`/attendee/event/${eventId}`);
+        // Get event to access ticket IDs
+        const getEventById = new GetEventById(eventId);
+        const event = await getEventById.execute();
+
+        if (!event || event.status !== 'published') {
+            return res.status(404).send('Event not found or not published');
+        }
+
+        // Extract quantities from request body
+        const fullTicketsQuantity = parseInt(req.body.fullTickets) || 0;
+        const concessionTicketsQuantity = parseInt(req.body.concessionTickets) || 0;
+
+        // Validate that at least one ticket type has quantity > 0
+        if (fullTicketsQuantity <= 0 && concessionTicketsQuantity <= 0) {
+            return res.status(400).send('Please select at least one ticket');
+        }
+
+        // Create bookings for full tickets if quantity > 0
+        if (fullTicketsQuantity > 0) {
+            if (!event.tickets.full) {
+                return res.status(400).send('Full tickets not available for this event');
+            }
+            const createFullBooking = new CreateBooking(eventId, req.session.attendeeId, event.tickets.full.id, fullTicketsQuantity);
+            await createFullBooking.execute();
+        }
+
+        // Create bookings for concession tickets if quantity > 0
+        if (concessionTicketsQuantity > 0) {
+            if (!event.tickets.concession) {
+                return res.status(400).send('Concession tickets not available for this event');
+            }
+            const createConcessionBooking = new CreateBooking(eventId, req.session.attendeeId, event.tickets.concession.id, concessionTicketsQuantity);
+            await createConcessionBooking.execute();
+        }
+
+        res.redirect('/attendee/my-bookings');
     } catch (error) {
         console.error('Error creating booking:', error);
         res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/my-bookings', async (req, res) => {
+    try {
+        if (!req.session.attendeeId) {
+            return res.redirect('/auth/attendee/login');
+        }
+        const getBookingsByAttendeeId = new GetBookingsByAttendeeId(req.session.attendeeId);
+        const bookings = await getBookingsByAttendeeId.execute();
+        res.render('attendee-my-bookings.ejs', { viewModel: { bookings: bookings } });
+    } catch (error) {
+        console.error('Error loading my bookings:', error);
     }
 });
 
