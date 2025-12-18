@@ -40,3 +40,4 @@ class GetOrganiserByEmail {
 }
 
 module.exports.GetOrganiserByEmail = GetOrganiserByEmail;
+

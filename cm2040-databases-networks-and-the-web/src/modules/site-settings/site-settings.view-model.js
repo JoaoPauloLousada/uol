@@ -1,5 +1,5 @@
 /**
- * site-settings-view-model.js
+ * site-settings.view-model.js
  * View model for the site settings page
  */
 

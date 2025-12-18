@@ -1,5 +1,5 @@
 /**
- * publish-event.js
+ * publish-event.action.js
  * Module for publishing an event
  * 
  * Purpose: Change event status from 'draft' to 'published' and set published_date

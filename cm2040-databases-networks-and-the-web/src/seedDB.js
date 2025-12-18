@@ -7,7 +7,7 @@
  */
 
 const sqlite3 = require('sqlite3').verbose();
-const { RegisterOrganiser, RegisterOrganiserParams } = require('./modules/auth/register_organiser');
+const { RegisterOrganiser, RegisterOrganiserParams } = require('./modules/auth/register-organiser.action');
 
 // Database connection
 const dbPath = './database.db';

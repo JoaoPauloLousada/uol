@@ -61,3 +61,4 @@ class OrganiserHomeViewModel {
 }
 
 module.exports.OrganiserHomeViewModel = OrganiserHomeViewModel;
+

@@ -1,4 +1,4 @@
-const { GetAttendeeByEmail } = require('../attendee/get-attendee-by-email');
+const { GetAttendeeByEmail } = require('../attendee/get-attendee-by-email.action');
 const { Password } = require('./password');
 const { NotFoundError } = require('../errors/not-found');
 

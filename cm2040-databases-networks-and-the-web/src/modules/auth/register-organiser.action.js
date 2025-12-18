@@ -1,5 +1,5 @@
 /**
- * register_organiser.js
+ * register-organiser.action.js
  * Module for registering a new organiser
  * 
  * Purpose: Hash password and insert new organiser into database
@@ -97,3 +97,4 @@ class RegisterOrganiser {
 
 module.exports.RegisterOrganiser = RegisterOrganiser;
 module.exports.RegisterOrganiserParams = RegisterOrganiserParams;
+

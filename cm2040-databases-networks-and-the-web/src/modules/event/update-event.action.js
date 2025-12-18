@@ -1,5 +1,5 @@
 /**
- * update-event.js
+ * update-event.action.js
  * Module for updating an existing event and its tickets
  * 
  * Purpose: Update event details and ticket information in the database

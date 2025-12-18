@@ -1,4 +1,4 @@
-const { GetOrganiserByEmail } = require('../organiser/get-organiser-by-email');
+const { GetOrganiserByEmail } = require('../organiser/get-organiser-by-email.action');
 const { Password } = require('./password');
 const { NotFoundError } = require('../errors/not-found');
 
@@ -20,3 +20,4 @@ class OrganiserLogin {
 }
 
 module.exports.OrganiserLogin = OrganiserLogin;
+

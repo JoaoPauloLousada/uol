@@ -1,5 +1,5 @@
 /**
- * attendee-event-view-model.js
+ * attendee-event.view-model.js
  * View model for the attendee event page
  */
 
@@ -7,7 +7,7 @@ const { SiteSettings } = require("../site-settings/site-settings");
 
 class AttendeeEventViewModel {
     error = null;
-    event = null; // Events object
+    event = null; // Event object
     siteSettings = new SiteSettings(0, '', '');
     attendee = {
         username: null,

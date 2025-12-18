@@ -1,5 +1,5 @@
 /**
- * unpublish-event.js
+ * unpublish-event.action.js
  * Module for unpublishing an event
  * 
  * Purpose: Change event status from 'published' to 'draft'

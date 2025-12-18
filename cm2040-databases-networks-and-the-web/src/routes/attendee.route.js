@@ -1,19 +1,19 @@
 /**
- * attendee.js
+ * attendee.route.js
  * Routes for attendee pages
  * 
  * Public routes for viewing events and booking tickets
  */
 
 const express = require("express");
-const { GetEventById } = require("../modules/events/get-event-by-id");
-const { GetSiteSettings } = require("../modules/site-settings/get-site-settings");
-const { GetPublishedEvents } = require("../modules/events/get-published-events");
-const { AttendeeEventViewModel } = require("../modules/attendee/attendee-event-view-model");
-const { AttendeeHomeViewModel } = require("../modules/attendee/attendee-home-view-model");
-const { GetAttendeeById } = require("../modules/attendee/get-attendee-by-id");
-const { GetBookingsByAttendeeId } = require("../modules/booking/get-bookings-by-attendee-id");
-const { CreateBooking } = require("../modules/booking/create-booking");
+const { GetEventById } = require("../modules/event/get-event-by-id.action");
+const { GetSiteSettings } = require("../modules/site-settings/get-site-settings.action");
+const { GetPublishedEvents } = require("../modules/event/get-published-events.action");
+const { AttendeeEventViewModel } = require("../modules/attendee/attendee-event.view-model");
+const { AttendeeHomeViewModel } = require("../modules/attendee/attendee-home.view-model");
+const { GetAttendeeById } = require("../modules/attendee/get-attendee-by-id.action");
+const { GetBookingsByAttendeeId } = require("../modules/booking/get-bookings-by-attendee-id.action");
+const { CreateBooking } = require("../modules/booking/create-booking.action");
 const router = express.Router();
 
 /**

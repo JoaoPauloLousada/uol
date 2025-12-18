@@ -1,14 +1,14 @@
 /**
- * get-event-by-id.js
+ * get-event-by-id.action.js
  * Module for getting a single event by ID with tickets
  * 
  * Purpose: Retrieve a single event from the database by event_id
  * Inputs: eventId (number)
- * Outputs: Events object with tickets array
+ * Outputs: Event object with tickets array
  */
 
-const { Events } = require("./events");
-const { GetTicketsByEventIdList } = require("../tickets/get-tickets-by-event-id-list");
+const { Event } = require("./event");
+const { GetTicketsByEventIdList } = require("../tickets/get-tickets-by-event-id-list.action");
 const { Ticket } = require("../tickets/ticket");
 
 class GetEventById {
@@ -18,7 +18,7 @@ class GetEventById {
 
     /**
      * Execute the query to get the event by ID
-     * @returns {Promise<Events|null>} - Promise that resolves to the event or null if not found
+     * @returns {Promise<Event|null>} - Promise that resolves to the event or null if not found
      */
     async execute() {
         try {
@@ -51,8 +51,8 @@ class GetEventById {
             const ticketsFull = tickets.find(t => t.ticketType === 'full') || null;
             const ticketsConcession = tickets.find(t => t.ticketType === 'concession') || null;
 
-            // Return Events object with Ticket instances
-            return new Events(
+            // Return Event object with Ticket instances
+            return new Event(
                 event.event_id,
                 event.title,
                 event.description,

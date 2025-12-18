@@ -6,7 +6,7 @@
  */
 
 const express = require("express");
-const { GetSiteSettings } = require("../modules/site-settings/get-site-settings");
+const { GetSiteSettings } = require("../modules/site-settings/get-site-settings.action");
 const router = express.Router();
 
 /**

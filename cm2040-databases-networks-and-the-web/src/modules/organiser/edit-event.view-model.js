@@ -1,5 +1,5 @@
 /**
- * edit-event-view-model.js
+ * edit-event.view-model.js
  * View model for the edit event page
  */
 

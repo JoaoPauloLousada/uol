@@ -1,5 +1,5 @@
 /**
- * get-bookings-by-attendee-id.js
+ * get-bookings-by-attendee-id.action.js
  * Module for getting all bookings for a specific attendee
  * 
  * Purpose: Retrieve all bookings made by an attendee with event and ticket details

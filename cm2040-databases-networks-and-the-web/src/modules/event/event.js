@@ -1,6 +1,6 @@
 const { Ticket } = require("../tickets/ticket");
 
-class Events {
+class Event {
     constructor(eventId, title, description, eventDate, publishedDate, createdDate, updatedDate, status, ticketsFull, ticketsConcession) {
         this.id = eventId;
         this.title = title;
@@ -17,4 +17,5 @@ class Events {
     }
 }
 
-module.exports.Events = Events;
+module.exports.Event = Event;
+

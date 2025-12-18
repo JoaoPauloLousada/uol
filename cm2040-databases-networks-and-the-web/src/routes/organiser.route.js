@@ -1,19 +1,24 @@
 
+/**
+ * organiser.route.js
+ * Routes for organiser pages (protected)
+ */
+
 const express = require("express");
 const { requireOrganiserAuth } = require("../middleware/require-organiser-auth");
-const { OrganiserHomeViewModel } = require("../modules/organiser/organiser-home-view-model");
-const { EditEventViewModel } = require("../modules/organiser/edit-event-view-model");
-const { GetSiteSettings } = require("../modules/site-settings/get-site-settings");
-const { GetPublishedEvents } = require("../modules/events/get-published-events");
-const { GetDraftEvents } = require("../modules/events/get-draft-events");
-const { CreateEvent } = require("../modules/events/create-event");
-const { GetEventById } = require("../modules/events/get-event-by-id");
-const { UpdateEvent } = require("../modules/events/update-event");
-const { PublishEvent } = require("../modules/events/publish-event");
-const { SiteSettingsViewModel } = require("../modules/site-settings/site-settings-view-model");
-const { UnpublishEvent } = require("../modules/events/unpublish-event");
-const { DeleteEvent } = require("../modules/events/delete-event");
-const { UpdateSiteSettings } = require("../modules/site-settings/update-site-settings");
+const { OrganiserHomeViewModel } = require("../modules/organiser/organiser-home.view-model");
+const { EditEventViewModel } = require("../modules/organiser/edit-event.view-model");
+const { GetSiteSettings } = require("../modules/site-settings/get-site-settings.action");
+const { GetPublishedEvents } = require("../modules/event/get-published-events.action");
+const { GetDraftEvents } = require("../modules/event/get-draft-events.action");
+const { CreateEvent } = require("../modules/event/create-event.action");
+const { GetEventById } = require("../modules/event/get-event-by-id.action");
+const { UpdateEvent } = require("../modules/event/update-event.action");
+const { PublishEvent } = require("../modules/event/publish-event.action");
+const { SiteSettingsViewModel } = require("../modules/site-settings/site-settings.view-model");
+const { UnpublishEvent } = require("../modules/event/unpublish-event.action");
+const { DeleteEvent } = require("../modules/event/delete-event.action");
+const { UpdateSiteSettings } = require("../modules/site-settings/update-site-settings.action");
 const router = express.Router();
 
 router.get('/', requireOrganiserAuth, async (req, res) => {
@@ -255,3 +260,4 @@ router.post('/site-settings', requireOrganiserAuth, async (req, res) => {
 });
 
 module.exports.organiserRoutes = router;
+

@@ -1,5 +1,5 @@
 /**
- * update-site-settings.js
+ * update-site-settings.action.js
  * Module for updating site settings
  * 
  * Purpose: Update site name and description in the database
@@ -7,7 +7,7 @@
  * Outputs: Promise that resolves when update is complete
  */
 
-const { GetSiteSettings } = require("./get-site-settings");
+const { GetSiteSettings } = require("./get-site-settings.action");
 
 class UpdateSiteSettings {
     constructor(siteName, siteDescription) {

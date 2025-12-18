@@ -24,3 +24,4 @@ class CreateBooking {
 }
 
 module.exports.CreateBooking = CreateBooking;
+

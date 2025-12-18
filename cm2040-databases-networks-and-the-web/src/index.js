@@ -36,16 +36,16 @@ global.db = new sqlite3.Database('./database.db', function (err) {
 
 
 // Add home routes
-const { homeRoutes } = require('./routes/home');
+const { homeRoutes } = require('./routes/home.route');
 app.use('/', homeRoutes);
 
-const { authRoutes } = require('./routes/auth');
+const { authRoutes } = require('./routes/auth.route');
 app.use('/auth', authRoutes);
 
-const { organiserRoutes } = require('./routes/organiser');
+const { organiserRoutes } = require('./routes/organiser.route');
 app.use('/organiser', organiserRoutes);
 
-const { attendeeRoutes } = require('./routes/attendee');
+const { attendeeRoutes } = require('./routes/attendee.route');
 app.use('/attendee', attendeeRoutes);
 
 

@@ -54,3 +54,4 @@ class GetTicketsByEventIdList {
 }
 
 module.exports.GetTicketsByEventIdList = GetTicketsByEventIdList;
+

@@ -1,5 +1,5 @@
 /**
- * register-attendee.js
+ * register-attendee.action.js
  * Module for registering a new attendee
  * 
  * Purpose: Hash password and insert new attendee into database

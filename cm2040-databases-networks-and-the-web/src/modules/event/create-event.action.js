@@ -1,5 +1,5 @@
 /**
- * create-event.js
+ * create-event.action.js
  * Module for creating a new draft event
  * 
  * Purpose: Create a new draft event in the database

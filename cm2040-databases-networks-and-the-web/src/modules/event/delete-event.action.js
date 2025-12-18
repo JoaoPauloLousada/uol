@@ -1,5 +1,5 @@
 /**
- * delete-event.js
+ * delete-event.action.js
  * Module for deleting an event and its related records
  * 
  * Purpose: Delete an event and all associated tickets and bookings

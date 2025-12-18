@@ -1,16 +1,16 @@
 
 /**
- * auth.js
+ * auth.route.js
  * Routes for authentication
  */
 
 const express = require("express");
-const { OrganiserLogin } = require("../modules/auth/organiser-login");
-const { OrganiserLoginViewModel } = require("../modules/auth/organiser-login-view-model");
-const { AttendeeLogin } = require("../modules/auth/attendee-login");
-const { AttendeeLoginViewModel } = require("../modules/auth/attendee-login-view-model");
-const { RegisterAttendee, RegisterAttendeeParams } = require("../modules/auth/register-attendee");
-const { AttendeeSignupViewModel } = require("../modules/auth/attendee-signup-view-model");
+const { OrganiserLogin } = require("../modules/auth/organiser-login.action");
+const { OrganiserLoginViewModel } = require("../modules/auth/organiser-login.view-model");
+const { AttendeeLogin } = require("../modules/auth/attendee-login.action");
+const { AttendeeLoginViewModel } = require("../modules/auth/attendee-login.view-model");
+const { RegisterAttendee, RegisterAttendeeParams } = require("../modules/auth/register-attendee.action");
+const { AttendeeSignupViewModel } = require("../modules/auth/attendee-signup.view-model");
 const { NotFoundError } = require("../modules/errors/not-found");
 const { InternalServerError } = require("../modules/errors/internal");
 const router = express.Router();
@@ -126,3 +126,4 @@ router.post('/attendee/signup', async (req, res, next) => {
 });
 
 module.exports.authRoutes = router;
+

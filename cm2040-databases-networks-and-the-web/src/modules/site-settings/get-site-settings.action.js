@@ -21,3 +21,4 @@ class GetSiteSettings {
 }
 
 module.exports.GetSiteSettings = GetSiteSettings;
+
