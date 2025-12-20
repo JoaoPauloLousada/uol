@@ -3,20 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
     <title>Site Settings</title>
 </head>
-<body>
-    <a href="/organiser">Back to Organiser Home</a>
-    <h1>Site Settings Page</h1>
-    <% if (viewModel.error) { %>
-        <p style="color: red;"><%= viewModel.error.message %></p>
-    <% } else { %>
-    <form action="/organiser/site-settings" method="post">
-        <p>Site Name: <input id="siteName" type="text" name="siteName" value="<%= viewModel.siteSettings.siteName %>" required /></p>
-        <p>Site Description: <input id="siteDescription" type="text" name="siteDescription" value="<%= viewModel.siteSettings.siteDescription %>" required /></p>
-            <button type="submit">Save</button>
-        </form>
-    <% } %>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="card-title mb-0 h4">Site Settings Page</h1>
+                    </div>
+                    <div class="card-body">
+                        <a href="/organiser" class="btn btn-outline-secondary mb-3">Back to Organiser Home</a>
+                        
+                        <% if (viewModel.error) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> <%= viewModel.error.message %>
+                            </div>
+                        <% } else { %>
+                            <form action="/organiser/site-settings" method="post">
+                                <div class="mb-3">
+                                    <label for="siteName" class="form-label">Site Name</label>
+                                    <input type="text" class="form-control" id="siteName" name="siteName" value="<%= viewModel.siteSettings.siteName %>" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="siteDescription" class="form-label">Site Description</label>
+                                    <input type="text" class="form-control" id="siteDescription" name="siteDescription" value="<%= viewModel.siteSettings.siteDescription %>" required />
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

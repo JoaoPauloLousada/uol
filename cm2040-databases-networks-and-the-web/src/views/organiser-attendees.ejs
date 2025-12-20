@@ -3,56 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/main.css" />
     <title>Manage Attendees</title>
 </head>
-<body>
-    <h1>Manage Attendees</h1>
-    <a href="/organiser">Back to Organiser Home</a>
-    
-    <% if (viewModel.error) { %>
-        <p style="color: red;"><%= viewModel.error.message %></p>
-    <% } else { %>
-        <% if (viewModel.attendees.length === 0) { %>
-            <p>No attendees found.</p>
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-5 text-primary">Manage Attendees</h1>
+            <a href="/organiser" class="btn btn-outline-secondary">Back to Organiser Home</a>
+        </div>
+        
+        <% if (viewModel.error) { %>
+            <div class="alert alert-danger" role="alert">
+                <strong>Error:</strong> <%= viewModel.error.message %>
+            </div>
         <% } else { %>
-            <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Special Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% viewModel.attendees.forEach(attendee => { %>
-                        <tr>
-                            <td><%= attendee.username %></td>
-                            <td><%= attendee.email %></td>
-                            <td>
-                                <% if (attendee.is_special === 1) { %>
-                                    <strong style="color: green;">Yes</strong> (Can book concession tickets)
-                                <% } else { %>
-                                    <span style="color: gray;">No</span>
-                                <% } %>
-                            </td>
-                            <td>
-                                <form action="/organiser/attendees/toggle-special/<%= attendee.id %>" method="post" style="display: inline;">
-                                    <input type="hidden" name="isSpecial" value="<%= attendee.is_special === 1 ? 'false' : 'true' %>" />
-                                    <% if (attendee.is_special === 1) { %>
-                                        <button type="submit" onclick="return confirm('Remove special status for <%= attendee.username %>?')">Remove Special Status</button>
-                                    <% } else { %>
-                                        <button type="submit" onclick="return confirm('Grant special status to <%= attendee.username %>? This will allow them to book concession tickets.')">Mark as Special</button>
-                                    <% } %>
-                                </form>
-                            </td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h2 class="card-title mb-0 h5">Attendee List</h2>
+                </div>
+                <div class="card-body">
+                    <% if (viewModel.attendees.length === 0) { %>
+                        <p class="text-muted">No attendees found.</p>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Special Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% viewModel.attendees.forEach(attendee => { %>
+                                        <tr>
+                                            <td><%= attendee.username %></td>
+                                            <td><%= attendee.email %></td>
+                                            <td>
+                                                <% if (attendee.is_special === 1) { %>
+                                                    <span class="badge bg-success">Yes (Can book concession tickets)</span>
+                                                <% } else { %>
+                                                    <span class="badge bg-secondary">No</span>
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <form action="/organiser/attendees/toggle-special/<%= attendee.id %>" method="post" class="d-inline">
+                                                    <input type="hidden" name="isSpecial" value="<%= attendee.is_special === 1 ? 'false' : 'true' %>" />
+                                                    <% if (attendee.is_special === 1) { %>
+                                                        <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Remove special status for <%= attendee.username %>?')">Remove Special Status</button>
+                                                    <% } else { %>
+                                                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Grant special status to <%= attendee.username %>? This will allow them to book concession tickets.')">Mark as Special</button>
+                                                    <% } %>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
         <% } %>
-    <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
-

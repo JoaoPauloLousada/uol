@@ -3,65 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/main.css" />
     <title>Organiser Edit Event Page</title>
 </head>
-<body>
-    <h1>Organiser Edit Event Page</h1>
-    <% if (viewModel.error) { %>
-        <p style="color: red;"><%= viewModel.error.message %></p>
-    <% } else { %>
-        <% if (viewModel.event.createdDate) { %>
-            <p>Event created: <%= viewModel.event.createdDate %></p>
-        <% } %>
-        
-        <form action="<%= viewModel.actions.edit.url %><%= viewModel.event.id %>" method="post">
-            <div>
-                <label for="title">Event Title:</label>
-                <input type="text" id="title" name="title" value="<%= viewModel.event.title || '' %>" required />
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="card-title mb-0 h4">Organiser Edit Event Page</h1>
+                    </div>
+                    <div class="card-body">
+                        <% if (viewModel.error) { %>
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Error:</strong> <%= viewModel.error.message %>
+                            </div>
+                        <% } else { %>
+                            <% if (viewModel.event.createdDate) { %>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Event created:</strong> <%= viewModel.event.createdDate %>
+                                </div>
+                            <% } %>
+                            
+                            <form action="<%= viewModel.actions.edit.url %><%= viewModel.event.id %>" method="post">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Event Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="<%= viewModel.event.title || '' %>" required />
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Event Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4" required><%= viewModel.event.description || '' %></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="eventDate" class="form-label">Event Date</label>
+                                    <input type="date" class="form-control" id="eventDate" name="eventDate" value="<%= viewModel.event.eventDate || '' %>" required />
+                                </div>
+                                
+                                <hr class="my-4">
+                                
+                                <h3 class="h5 mb-3">Full-Price Tickets</h3>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="fullQuantity" class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" id="fullQuantity" name="fullQuantity" value="<%= viewModel.event.tickets.full ? viewModel.event.tickets.full.quantity : 0 %>" min="0" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="fullPrice" class="form-label">Price (£)</label>
+                                        <input type="number" class="form-control" id="fullPrice" name="fullPrice" value="<%= viewModel.event.tickets.full ? viewModel.event.tickets.full.price : 0 %>" min="0" step="0.01" required />
+                                    </div>
+                                </div>
+                                
+                                <h3 class="h5 mb-3">Concession-Priced Tickets</h3>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label for="concessionQuantity" class="form-label">Quantity</label>
+                                        <input type="number" class="form-control" id="concessionQuantity" name="concessionQuantity" value="<%= viewModel.event.tickets.concession ? viewModel.event.tickets.concession.quantity : 0 %>" min="0" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="concessionPrice" class="form-label">Price (£)</label>
+                                        <input type="number" class="form-control" id="concessionPrice" name="concessionPrice" value="<%= viewModel.event.tickets.concession ? viewModel.event.tickets.concession.price : 0 %>" min="0" step="0.01" required />
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a href="/organiser" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">Submit Changes</button>
+                                </div>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
             </div>
-            
-            <div>
-                <label for="description">Event Description:</label>
-                <textarea id="description" name="description" rows="4" cols="50"><%= viewModel.event.description || '' %></textarea>
-            </div>
-            
-            <div>
-                <label for="eventDate">Event Date:</label>
-                <input type="date" id="eventDate" name="eventDate" value="<%= viewModel.event.eventDate || '' %>" required />
-            </div>
-            
-            <h3>Full-Price Tickets</h3>
-            <div>
-                <label for="fullQuantity">Quantity:</label>
-                <input type="number" id="fullQuantity" name="fullQuantity" value="<%= viewModel.event.tickets.full ? viewModel.event.tickets.full.quantity : 0 %>" min="0" required />
-            </div>
-            
-            <div>
-                <label for="fullPrice">Price:</label>
-                <input type="number" id="fullPrice" name="fullPrice" value="<%= viewModel.event.tickets.full ? viewModel.event.tickets.full.price : 0 %>" min="0" step="0.01" required />
-            </div>
-            
-            <h3>Concession-Priced Tickets</h3>
-            <div>
-                <label for="concessionQuantity">Quantity:</label>
-                <input type="number" id="concessionQuantity" name="concessionQuantity" value="<%= viewModel.event.tickets.concession ? viewModel.event.tickets.concession.quantity : 0 %>" min="0" required />
-            </div>
-            
-            <div>
-                <label for="concessionPrice">Price:</label>
-                <input type="number" id="concessionPrice" name="concessionPrice" value="<%= viewModel.event.tickets.concession ? viewModel.event.tickets.concession.price : 0 %>" min="0" step="0.01" required />
-            </div>
-            
-            <div>
-                <button type="submit">Submit Changes</button>
-            </div>
-        </form>
-        
-        <div>
-            <a href="/organiser">Back to Organiser Home Page</a>
         </div>
-    <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
-

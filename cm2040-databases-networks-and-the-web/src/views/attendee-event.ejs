@@ -3,83 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/main.css" />
     <title>Attendee Event Page</title>
 </head>
-<body>
-    <h1>Attendee Event Page</h1>
-    <% if (viewModel.error) { %>
-        <p style="color: red;"><%= viewModel.error.message %></p>
-    <% } else if (viewModel.event) { %>
-        <h2><%= viewModel.event.title %></h2>
-        
-        <p><strong>Description:</strong> <%= viewModel.event.description || 'No description available' %></p>
-        <p><strong>Date:</strong> <%= viewModel.event.eventDate %></p>
-        
-        <h3>Ticket Information</h3>
-        <p>
-            <strong>Full Price Tickets:</strong><br/>
-            Price: £<%= viewModel.availableTickets.full.price.toFixed(2) %><br/>
-            Available: <%= viewModel.availableTickets.full.available %> out of <%= viewModel.availableTickets.full.total %>
-        </p>
-        
-        <% if (viewModel.availableTickets.concession.total > 0) { %>
-            <p>
-                <strong>Concession Tickets:</strong><br/>
-                Price: £<%= viewModel.availableTickets.concession.price.toFixed(2) %><br/>
-                Available: <%= viewModel.availableTickets.concession.available %> out of <%= viewModel.availableTickets.concession.total %>
-            </p>
-        <% } %>
-        
-        <hr />
-        
-        <% if (!viewModel.attendee.username) { %>
-            <!-- Not authenticated - show login prompt -->
-            <p>Please <a href="/auth/attendee/login">login</a> to book tickets for this event.</p>
-        <% } else { %>
-            <!-- Authenticated - show booking form -->
-            <p>Logged in as: <strong><%= viewModel.attendee.username %></strong></p>
-            
-            <form action="/attendee/event/book/<%= viewModel.event.id %>" method="post">
-                <h3>Book Tickets</h3>
-                
-                <% if (viewModel.availableTickets.full.available > 0) { %>
-                    <div>
-                        <label for="fullTickets">Full Price Tickets:</label>
-                        <input type="number" id="fullTickets" name="fullTickets" min="0" max="<%= viewModel.availableTickets.full.available %>" value="0" />
-                        <span>(£<%= viewModel.availableTickets.full.price.toFixed(2) %> each, <%= viewModel.availableTickets.full.available %> available)</span>
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <% if (viewModel.error) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error:</strong> <%= viewModel.error.message %>
+                    </div>
+                    <a href="/attendee" class="btn btn-outline-secondary">Back to Attendee Home Page</a>
+                <% } else if (viewModel.event) { %>
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h1 class="card-title mb-0 h4"><%= viewModel.event.title %></h1>
+                        </div>
+                        <div class="card-body">
+                            <p class="lead"><strong>Description:</strong> <%= viewModel.event.description || 'No description available' %></p>
+                            <p class="mb-4"><strong>Date:</strong> <span class="badge bg-info"><%= viewModel.event.eventDate %></span></p>
+                            
+                            <h3 class="h5 mb-3">Ticket Information</h3>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="card border-primary">
+                                        <div class="card-body">
+                                            <h4 class="h6 text-primary">Full Price Tickets</h4>
+                                            <p class="mb-1"><strong>Price:</strong> £<%= viewModel.availableTickets.full.price.toFixed(2) %></p>
+                                            <p class="mb-0"><strong>Available:</strong> <%= viewModel.availableTickets.full.available %> out of <%= viewModel.availableTickets.full.total %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% if (viewModel.availableTickets.concession.total > 0) { %>
+                                    <div class="col-md-6">
+                                        <div class="card border-warning">
+                                            <div class="card-body">
+                                                <h4 class="h6 text-warning">Concession Tickets</h4>
+                                                <p class="mb-1"><strong>Price:</strong> £<%= viewModel.availableTickets.concession.price.toFixed(2) %></p>
+                                                <p class="mb-0"><strong>Available:</strong> <%= viewModel.availableTickets.concession.available %> out of <%= viewModel.availableTickets.concession.total %></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                            
+                            <hr class="my-4">
+                            
+                            <% if (!viewModel.attendee.username) { %>
+                                <div class="alert alert-info" role="alert">
+                                    Please <a href="/auth/attendee/login" class="alert-link">login</a> to book tickets for this event.
+                                </div>
+                            <% } else { %>
+                                <div class="card border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h3 class="card-title mb-0 h5">Book Tickets</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-3">Logged in as: <strong><%= viewModel.attendee.username %></strong></p>
+                                        
+                                        <form action="/attendee/event/book/<%= viewModel.event.id %>" method="post">
+                                            <% if (viewModel.availableTickets.full.available > 0) { %>
+                                                <div class="mb-3">
+                                                    <label for="fullTickets" class="form-label">Full Price Tickets</label>
+                                                    <input type="number" class="form-control" id="fullTickets" name="fullTickets" min="0" max="<%= viewModel.availableTickets.full.available %>" value="0" />
+                                                    <small class="form-text text-muted">£<%= viewModel.availableTickets.full.price.toFixed(2) %> each, <%= viewModel.availableTickets.full.available %> available</small>
+                                                </div>
+                                            <% } else { %>
+                                                <div class="alert alert-warning" role="alert">
+                                                    Full Price Tickets: Sold out
+                                                </div>
+                                            <% } %>
+                                            
+                                            <% if (viewModel.attendee.isSpecial && viewModel.availableTickets.concession.available > 0) { %>
+                                                <div class="mb-3">
+                                                    <label for="concessionTickets" class="form-label">Concession Tickets</label>
+                                                    <input type="number" class="form-control" id="concessionTickets" name="concessionTickets" min="0" max="<%= viewModel.availableTickets.concession.available %>" value="0" />
+                                                    <small class="form-text text-muted">£<%= viewModel.availableTickets.concession.price.toFixed(2) %> each, <%= viewModel.availableTickets.concession.available %> available</small>
+                                                </div>
+                                            <% } else if (viewModel.attendee.isSpecial && viewModel.availableTickets.concession.available === 0) { %>
+                                                <div class="alert alert-warning" role="alert">
+                                                    Concession Tickets: Sold out
+                                                </div>
+                                            <% } %>
+                                            
+                                            <button type="submit" class="btn btn-success">Book Tickets</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <% } %>
+                            
+                            <div class="mt-4">
+                                <a href="/attendee" class="btn btn-outline-secondary">Back to Attendee Home Page</a>
+                            </div>
+                        </div>
                     </div>
                 <% } else { %>
-                    <p>Full Price Tickets: Sold out</p>
-                <% } %>
-                
-                <% if (viewModel.attendee.isSpecial && viewModel.availableTickets.concession.available > 0) { %>
-                    <div>
-                        <label for="concessionTickets">Concession Tickets:</label>
-                        <input type="number" id="concessionTickets" name="concessionTickets" min="0" max="<%= viewModel.availableTickets.concession.available %>" value="0" />
-                        <span>(£<%= viewModel.availableTickets.concession.price.toFixed(2) %> each, <%= viewModel.availableTickets.concession.available %> available)</span>
+                    <div class="alert alert-warning" role="alert">
+                        Event not found.
                     </div>
-                <% } else if (viewModel.attendee.isSpecial && viewModel.availableTickets.concession.available === 0) { %>
-                    <p>Concession Tickets: Sold out</p>
+                    <a href="/attendee" class="btn btn-outline-secondary">Back to Attendee Home Page</a>
                 <% } %>
-                
-                <div>
-                    <button type="submit">Book Tickets</button>
-                </div>
-            </form>
-        <% } %>
-        
-        <hr />
-        
-        <div>
-            <a href="/attendee">Back to Attendee Home Page</a>
+            </div>
         </div>
-    <% } else { %>
-        <p>Event not found.</p>
-        <div>
-            <a href="/attendee">Back to Attendee Home Page</a>
-        </div>
-    <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
-

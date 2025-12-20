@@ -3,110 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
     <title>Organiser Home</title>
 </head>
-<body>
-    <h1>Organiser Home Page</h1>
-    <% if (viewModel.error) { %>
-        <p style="color: red;"><%= viewModel.error.message %></p>
-    <% } else { %>
-        <h2>Site Settings</h2>
-        <p><%= viewModel.siteSettings.siteName %></p>
-        <p><%= viewModel.siteSettings.siteDescription %></p>
-        <a href="/organiser/site-settings">Edit Site Settings</a>
-        <hr />
-        <h2>Attendee Management</h2>
-        <p><a href="/organiser/attendees">Manage Attendees</a></p>
-        <hr />
-        <h2>Published Events</h2>
-        <form action="<%= viewModel.event.actions.create.url %>" method="get">
-            <button type="submit">Create New Event</button>
-        </form>
-        <ul>
-            <% viewModel.event.published.list.forEach(event => { %>
-                <li>
-                    <p>
-                        <%= event.title %>
-                        <form action="<%= viewModel.event.actions.unpublish.url %><%= event.id %>" method="post" style="display: inline;">
-                            <button type="submit" onclick="return confirm('Are you sure you want to unpublish this event?')">Unpublish</button>
-                        </form>
-                        <a href="<%= viewModel.event.actions.edit.url %><%= event.id %>">
-                            <button type="button">Edit</button>
-                        </a>
-                        <form action="<%= viewModel.event.actions.delete.url %><%= event.id %>" method="post" style="display: inline;">
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>
-                        </form>
-                    </p>
-                   <p>
-                       <%= event.description %>
-                   </p>
-                   <p>
-                       <strong>Tickets:</strong><br/>
-                       <% if (event.tickets.full && event.tickets.full.quantity > 0) { %>
-                           Full Price: <%= event.tickets.full.quantity %> tickets at £<%= event.tickets.full.price.toFixed(2) %><br/>
-                       <% } else { %>
-                           Full Price: No tickets available<br/>
-                       <% } %>
-                       <% if (event.tickets.concession && event.tickets.concession.quantity > 0) { %>
-                           Concession: <%= event.tickets.concession.quantity %> tickets at £<%= event.tickets.concession.price.toFixed(2) %>
-                       <% } else { %>
-                           Concession: No tickets available
-                       <% } %>
-                   </p>
-                   <p>
-                       Created at: <%= event.createdDate %><br/>
-                       Last Modified at: <%= event.updatedDate %><br/>
-                       Published at: <%= event.publishedDate %>
-                   </p>
-                   <a href="<%= viewModel.event.actions.view.url %><%= event.id %>">View Event Page</a>
-                </li>
-            <% }); %>
-        </ul>
-        <hr />
-        <h2>Draft Events</h2>
-        <ul>
-            <% viewModel.event.draft.list.forEach(event => { %>
-                <li>
-                   <p>
-                       <%= event.title %>
-                       <form action="<%= viewModel.event.actions.publish.url %><%= event.id %>" method="post" style="display: inline;">
-                           <button type="submit" onclick="return confirm('Are you sure you want to publish this event?')">Publish</button>
-                       </form>
-                       <a href="<%= viewModel.event.actions.edit.url %><%= event.id %>">
-                           <button type="button">Edit</button>
-                       </a>
-                       <form action="<%= viewModel.event.actions.delete.url %><%= event.id %>" method="post" style="display: inline;">
-                           <button type="submit" onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>
-                       </form>
-                   </p> 
-                   <p>
-                       <%= event.description %>
-                   </p>
-                   <p>
-                       <strong>Tickets:</strong><br/>
-                       <% if (event.tickets.full && event.tickets.full.quantity > 0) { %>
-                           Full Price: <%= event.tickets.full.quantity %> tickets at £<%= event.tickets.full.price.toFixed(2) %><br/>
-                       <% } else { %>
-                           Full Price: No tickets available<br/>
-                       <% } %>
-                       <% if (event.tickets.concession && event.tickets.concession.quantity > 0) { %>
-                           Concession: <%= event.tickets.concession.quantity %> tickets at £<%= event.tickets.concession.price.toFixed(2) %>
-                       <% } else { %>
-                           Concession: No tickets available
-                       <% } %>
-                   </p>
-                   <p>
-                       Created at: <%= event.createdDate %><br/>
-                       Last Modified at: <%= event.updatedDate %>
-                   </p>
-                </li>
-            <% }); %>
-        </ul>
-        <hr />
-        <form action="/auth/organiser/logout" method="post">
-            <button type="submit">Logout</button>
-        </form>
-    <% } %>
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-5 text-primary">Organiser Home Page</h1>
+            <form action="/auth/organiser/logout" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger">Logout</button>
+            </form>
+        </div>
+
+        <% if (viewModel.error) { %>
+            <div class="alert alert-danger" role="alert">
+                <strong>Error:</strong> <%= viewModel.error.message %>
+            </div>
+        <% } else { %>
+            <!-- Site Settings Card -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0 h5">Site Settings</h2>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2"><strong>Site Name:</strong> <%= viewModel.siteSettings.siteName %></p>
+                    <p class="mb-3"><strong>Description:</strong> <%= viewModel.siteSettings.siteDescription %></p>
+                    <a href="/organiser/site-settings" class="btn btn-primary">Edit Site Settings</a>
+                </div>
+            </div>
+
+            <!-- Attendee Management Card -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h2 class="card-title mb-0 h5">Attendee Management</h2>
+                </div>
+                <div class="card-body">
+                    <a href="/organiser/attendees" class="btn btn-info">Manage Attendees</a>
+                </div>
+            </div>
+
+            <!-- Events Section Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h4 text-primary mb-0">Events</h2>
+                <form action="<%= viewModel.event.actions.create.url %>" method="get" class="d-inline">
+                    <button type="submit" class="btn btn-primary btn-sm">Create New Event</button>
+                </form>
+            </div>
+
+            <!-- Published and Draft Events Side by Side -->
+            <div class="row g-4 mb-4">
+                <!-- Published Events Column -->
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h2 class="card-title mb-0 h5">Published Events</h2>
+                        </div>
+                        <div class="card-body">
+                            <% if (viewModel.event.published.list.length === 0) { %>
+                                <p class="text-muted">No published events.</p>
+                            <% } else { %>
+                                <div class="d-flex flex-column gap-3">
+                                    <% viewModel.event.published.list.forEach(event => { %>
+                                        <div class="card border-success">
+                                            <div class="card-body">
+                                                <h3 class="h6 text-success mb-2"><%= event.title %></h3>
+                                                <p class="text-muted small mb-2"><%= event.description %></p>
+                                                
+                                                <div class="mb-2">
+                                                    <strong class="small">Tickets:</strong><br/>
+                                                    <% if (event.tickets.full && event.tickets.full.quantity > 0) { %>
+                                                        <span class="badge bg-primary small">Full: <%= event.tickets.full.quantity %> @ £<%= event.tickets.full.price.toFixed(2) %></span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-secondary small">Full: None</span>
+                                                    <% } %>
+                                                    <% if (event.tickets.concession && event.tickets.concession.quantity > 0) { %>
+                                                        <span class="badge bg-warning text-dark small ms-1">Concession: <%= event.tickets.concession.quantity %> @ £<%= event.tickets.concession.price.toFixed(2) %></span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-secondary small ms-1">Concession: None</span>
+                                                    <% } %>
+                                                </div>
+                                                
+                                                <div class="small text-muted mb-2">
+                                                    <div>Created: <%= event.createdDate %></div>
+                                                    <div>Modified: <%= event.updatedDate %></div>
+                                                    <div>Published: <%= event.publishedDate %></div>
+                                                </div>
+                                                
+                                                <div class="d-flex gap-2 flex-wrap" role="group">
+                                                    <a href="<%= viewModel.event.actions.view.url %><%= event.id %>" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center">View</a>
+                                                    <a href="<%= viewModel.event.actions.edit.url %><%= event.id %>" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center">Edit</a>
+                                                    <form action="<%= viewModel.event.actions.unpublish.url %><%= event.id %>" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-outline-warning d-inline-flex align-items-center" onclick="return confirm('Are you sure you want to unpublish this event?')">Unpublish</button>
+                                                    </form>
+                                                    <form action="<%= viewModel.event.actions.delete.url %><%= event.id %>" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center" onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Draft Events Column -->
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-warning text-dark">
+                            <h2 class="card-title mb-0 h5">Draft Events</h2>
+                        </div>
+                        <div class="card-body">
+                            <% if (viewModel.event.draft.list.length === 0) { %>
+                                <p class="text-muted">No draft events.</p>
+                            <% } else { %>
+                                <div class="d-flex flex-column gap-3">
+                                    <% viewModel.event.draft.list.forEach(event => { %>
+                                        <div class="card border-warning">
+                                            <div class="card-body">
+                                                <h3 class="h6 text-warning mb-2"><%= event.title %></h3>
+                                                <p class="text-muted small mb-2"><%= event.description %></p>
+                                                
+                                                <div class="mb-2">
+                                                    <strong class="small">Tickets:</strong><br/>
+                                                    <% if (event.tickets.full && event.tickets.full.quantity > 0) { %>
+                                                        <span class="badge bg-primary small">Full: <%= event.tickets.full.quantity %> @ £<%= event.tickets.full.price.toFixed(2) %></span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-secondary small">Full: None</span>
+                                                    <% } %>
+                                                    <% if (event.tickets.concession && event.tickets.concession.quantity > 0) { %>
+                                                        <span class="badge bg-warning text-dark small ms-1">Concession: <%= event.tickets.concession.quantity %> @ £<%= event.tickets.concession.price.toFixed(2) %></span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-secondary small ms-1">Concession: None</span>
+                                                    <% } %>
+                                                </div>
+                                                
+                                                <div class="small text-muted mb-2">
+                                                    <div>Created: <%= event.createdDate %></div>
+                                                    <div>Modified: <%= event.updatedDate %></div>
+                                                </div>
+                                                
+                                                <div class="d-flex gap-2 flex-wrap" role="group">
+                                                    <form action="<%= viewModel.event.actions.publish.url %><%= event.id %>" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-success d-inline-flex align-items-center" onclick="return confirm('Are you sure you want to publish this event?')">Publish</button>
+                                                    </form>
+                                                    <a href="<%= viewModel.event.actions.edit.url %><%= event.id %>" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center">Edit</a>
+                                                    <form action="<%= viewModel.event.actions.delete.url %><%= event.id %>" method="post" class="d-inline">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center" onclick="return confirm('Are you sure you want to delete this event?')">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -3,69 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/main.css" />
     <title>Attendee Home Page</title>
 </head>
-<body>
-    <h1>Attendee Home Page</h1>
-    <% if (viewModel.attendee.username) { %>
-        <h2>Welcome, <%= viewModel.attendee.username %></h2>
-        <p><a href="/attendee/my-bookings">View My Bookings</a></p>
-        <form action="/auth/attendee/logout" method="post" style="display: inline;">
-            <button type="submit">Logout</button>
-        </form>
-    <% } else { %>
-        <p><a href="/auth/attendee/login">Login</a> | <a href="/auth/attendee/signup">Sign Up</a></p>
-    <% } %>
-    <% if (viewModel.error) { %>
-        <p style="color: red;"><%= viewModel.error.message %></p>
-    <% } else { %>
-        <h2>Site Information</h2>
-        <p><strong>Site Name:</strong> <%= viewModel.siteSettings.siteName %></p>
-        <p><strong>Site Description:</strong> <%= viewModel.siteSettings.siteDescription %></p>
-        
-        <hr />
-        
-        <h2>Published Events</h2>
-        <% if (viewModel.events.length === 0) { %>
-            <p>No published events available.</p>
-        <% } else { %>
-            <ul>
-                <% viewModel.events.forEach(event => { %>
-                    <li>
-                        <h3><a href="/attendee/event/<%= event.id %>"><%= event.title %></a></h3>
-                        <p><strong>Date:</strong> <%= event.eventDate %></p>
-                        <% if (event.description) { %>
-                            <p><%= event.description %></p>
-                        <% } %>
-                        
-                        <h4>Tickets:</h4>
-                        <ul>
-                            <% if (event.tickets.full) { %>
-                                <li>
-                                    <strong>Full:</strong> 
-                                    Price: £<%= event.tickets.full.price.toFixed(2) %>, 
-                                    Total Quantity: <%= event.tickets.full.quantity %>, 
-                                    Available: <%= event.tickets.full.availableQuantity %>
-                                </li>
-                            <% } %>
-                            <% if (event.tickets.concession) { %>
-                                <li>
-                                    <strong>Concession:</strong> 
-                                    Price: £<%= event.tickets.concession.price.toFixed(2) %>, 
-                                    Total Quantity: <%= event.tickets.concession.quantity %>, 
-                                    Available: <%= event.tickets.concession.availableQuantity %>
-                                </li>
-                            <% } %>
-                            <% if (!event.tickets.full && !event.tickets.concession) { %>
-                                <li>No tickets available</li>
-                            <% } %>
-                        </ul>
-                    </li>
-                <% }); %>
-            </ul>
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-5 text-success">Attendee Home Page</h1>
+            <% if (viewModel.attendee.username) { %>
+                <div>
+                    <form action="/auth/attendee/logout" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger">Logout</button>
+                    </form>
+                </div>
+            <% } else { %>
+                <div class="d-flex gap-2">
+                    <a href="/auth/attendee/login" class="btn btn-outline-success">Login</a>
+                    <a href="/auth/attendee/signup" class="btn btn-success">Sign Up</a>
+                </div>
+            <% } %>
+        </div>
+
+        <% if (viewModel.attendee.username) { %>
+            <div class="alert alert-success" role="alert">
+                <h2 class="h5 mb-0">Welcome, <%= viewModel.attendee.username %>!</h2>
+            </div>
+            <div class="mb-4">
+                <a href="/attendee/my-bookings" class="btn btn-success">View My Bookings</a>
+            </div>
         <% } %>
-    <% } %>
+
+        <% if (viewModel.error) { %>
+            <div class="alert alert-danger" role="alert">
+                <strong>Error:</strong> <%= viewModel.error.message %>
+            </div>
+        <% } else { %>
+            <!-- Site Information Hero Section -->
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-body text-center py-5">
+                    <h2 class="display-4 text-primary mb-3"><%= viewModel.siteSettings.siteName %></h2>
+                    <h3 class="display-6 text-muted"><%= viewModel.siteSettings.siteDescription %></h3>
+                </div>
+            </div>
+
+            <!-- Published Events Card -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h2 class="card-title mb-0 h5">Published Events</h2>
+                </div>
+                <div class="card-body">
+                    <% if (viewModel.events.length === 0) { %>
+                        <p class="text-muted">No published events available.</p>
+                    <% } else { %>
+                        <div class="row g-3">
+                            <% viewModel.events.forEach(event => { %>
+                                <div class="col-md-6">
+                                    <div class="card h-100 border-success">
+                                        <div class="card-body">
+                                            <h3 class="h5">
+                                                <a href="/attendee/event/<%= event.id %>" class="text-success text-decoration-none"><%= event.title %></a>
+                                            </h3>
+                                            <p class="text-muted mb-2"><strong>Date:</strong> <span class="badge bg-info"><%= event.eventDate %></span></p>
+                                            <% if (event.description) { %>
+                                                <p class="mb-3"><%= event.description %></p>
+                                            <% } %>
+                                            
+                                            <h4 class="h6 mb-2">Tickets:</h4>
+                                            <ul class="list-unstyled mb-0">
+                                                <% if (event.tickets.full) { %>
+                                                    <li class="mb-1">
+                                                        <span class="badge bg-primary">Full:</span> 
+                                                        Price: £<%= event.tickets.full.price.toFixed(2) %>, 
+                                                        Total: <%= event.tickets.full.quantity %>, 
+                                                        Available: <%= event.tickets.full.availableQuantity %>
+                                                    </li>
+                                                <% } %>
+                                                <% if (event.tickets.concession) { %>
+                                                    <li class="mb-1">
+                                                        <span class="badge bg-warning text-dark">Concession:</span> 
+                                                        Price: £<%= event.tickets.concession.price.toFixed(2) %>, 
+                                                        Total: <%= event.tickets.concession.quantity %>, 
+                                                        Available: <%= event.tickets.concession.availableQuantity %>
+                                                    </li>
+                                                <% } %>
+                                                <% if (!event.tickets.full && !event.tickets.concession) { %>
+                                                    <li class="text-muted">No tickets available</li>
+                                                <% } %>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
-
