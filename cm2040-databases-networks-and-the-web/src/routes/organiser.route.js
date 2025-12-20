@@ -19,6 +19,9 @@ const { SiteSettingsViewModel } = require("../modules/site-settings/site-setting
 const { UnpublishEvent } = require("../modules/event/unpublish-event.action");
 const { DeleteEvent } = require("../modules/event/delete-event.action");
 const { UpdateSiteSettings } = require("../modules/site-settings/update-site-settings.action");
+const { GetAllAttendees } = require("../modules/attendee/get-all-attendees.action");
+const { UpdateAttendeeSpecialStatus } = require("../modules/attendee/update-attendee-special-status.action");
+const { OrganiserAttendeesViewModel } = require("../modules/organiser/organiser-attendees.view-model");
 const router = express.Router();
 
 router.get('/', requireOrganiserAuth, async (req, res) => {
@@ -256,6 +259,54 @@ router.post('/site-settings', requireOrganiserAuth, async (req, res) => {
         const viewModel = new SiteSettingsViewModel();
         viewModel.error = new Error('Internal Server Error: ' + error.message);
         res.render('site-settings.ejs', { viewModel: viewModel });
+    }
+});
+
+/**
+ * GET /organiser/attendees
+ * Manage attendees page (requires authentication)
+ * Displays list of all attendees with their special status
+ */
+router.get('/attendees', requireOrganiserAuth, async (req, res) => {
+    try {
+        const viewModel = new OrganiserAttendeesViewModel();
+        const getAllAttendees = new GetAllAttendees();
+        const attendees = await getAllAttendees.execute();
+        viewModel.attendees = attendees;
+        res.render('organiser-attendees.ejs', { viewModel: viewModel });
+    } catch (error) {
+        console.error('Error loading attendees:', error);
+        const viewModel = new OrganiserAttendeesViewModel();
+        viewModel.error = new Error('Internal Server Error: ' + error.message);
+        res.render('organiser-attendees.ejs', { viewModel: viewModel });
+    }
+});
+
+/**
+ * POST /organiser/attendees/toggle-special/:attendee_id
+ * Toggle attendee special status (requires authentication)
+ * Updates the is_special flag for an attendee
+ */
+router.post('/attendees/toggle-special/:attendee_id', requireOrganiserAuth, async (req, res) => {
+    try {
+        const attendeeId = parseInt(req.params.attendee_id);
+        if (isNaN(attendeeId)) {
+            return res.status(400).send('Invalid attendee ID');
+        }
+
+        // Get current special status from request body
+        const isSpecial = req.body.isSpecial === 'true' || req.body.isSpecial === '1';
+
+        // Update the attendee's special status
+        const updateAttendeeSpecialStatus = new UpdateAttendeeSpecialStatus(attendeeId, isSpecial);
+        await updateAttendeeSpecialStatus.execute();
+
+        // Redirect back to attendees page on success
+        res.redirect('/organiser/attendees');
+    } catch (error) {
+        console.error('Error updating attendee special status:', error);
+        // Redirect back to attendees page on error
+        res.redirect('/organiser/attendees');
     }
 });
 

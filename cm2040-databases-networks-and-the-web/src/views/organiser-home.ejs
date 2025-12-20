@@ -7,7 +7,7 @@
     <title>Organiser Home</title>
 </head>
 <body>
-    <h1>Organiser Home</h1>
+    <h1>Organiser Home Page</h1>
     <% if (viewModel.error) { %>
         <p style="color: red;"><%= viewModel.error.message %></p>
     <% } else { %>
@@ -15,6 +15,9 @@
         <p><%= viewModel.siteSettings.siteName %></p>
         <p><%= viewModel.siteSettings.siteDescription %></p>
         <a href="/organiser/site-settings">Edit Site Settings</a>
+        <hr />
+        <h2>Attendee Management</h2>
+        <p><a href="/organiser/attendees">Manage Attendees</a></p>
         <hr />
         <h2>Published Events</h2>
         <form action="<%= viewModel.event.actions.create.url %>" method="get">

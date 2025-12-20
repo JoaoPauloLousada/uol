@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Manage Attendees</title>
+</head>
+<body>
+    <h1>Manage Attendees</h1>
+    <a href="/organiser">Back to Organiser Home</a>
+    
+    <% if (viewModel.error) { %>
+        <p style="color: red;"><%= viewModel.error.message %></p>
+    <% } else { %>
+        <% if (viewModel.attendees.length === 0) { %>
+            <p>No attendees found.</p>
+        <% } else { %>
+            <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Special Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% viewModel.attendees.forEach(attendee => { %>
+                        <tr>
+                            <td><%= attendee.username %></td>
+                            <td><%= attendee.email %></td>
+                            <td>
+                                <% if (attendee.is_special === 1) { %>
+                                    <strong style="color: green;">Yes</strong> (Can book concession tickets)
+                                <% } else { %>
+                                    <span style="color: gray;">No</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <form action="/organiser/attendees/toggle-special/<%= attendee.id %>" method="post" style="display: inline;">
+                                    <input type="hidden" name="isSpecial" value="<%= attendee.is_special === 1 ? 'false' : 'true' %>" />
+                                    <% if (attendee.is_special === 1) { %>
+                                        <button type="submit" onclick="return confirm('Remove special status for <%= attendee.username %>?')">Remove Special Status</button>
+                                    <% } else { %>
+                                        <button type="submit" onclick="return confirm('Grant special status to <%= attendee.username %>? This will allow them to book concession tickets.')">Mark as Special</button>
+                                    <% } %>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    <% } %>
+</body>
+</html>
+

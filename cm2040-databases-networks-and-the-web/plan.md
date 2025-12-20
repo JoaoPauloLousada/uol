@@ -120,14 +120,14 @@ CREATE TABLE IF NOT EXISTS bookings (
 #### 1. `routes/auth.js` - Authentication Routes
 - `GET /auth/organiser/login` - Organiser login page - ok
 - `POST /auth/organiser/login` - Process organiser login - ok
-- `GET /auth/organiser/logout` - Organiser logout -ok 
+- `POST /auth/organiser/logout` - Organiser logout - ok
 <!-- - `GET /auth/organiser/register` - Organiser registration page -->
 <!-- - `POST /auth/organiser/register` - Process organiser registration -->
 - `GET /auth/attendee/login` - Attendee login page
 - `POST /auth/attendee/login` - Process attendee login
-- `GET /auth/attendee/logout` - Attendee logout
-- `GET /auth/attendee/register` - Attendee registration page
-- `POST /auth/attendee/register` - Process attendee registration
+- `POST /auth/attendee/logout` - Attendee logout
+- `GET /auth/attendee/signup` - Attendee registration page (implemented as /signup)
+- `POST /auth/attendee/signup` - Process attendee registration (implemented as /signup)
 
 #### 2. `routes/organiser.js` - Organiser Routes (Protected) - ok
 - `GET /organiser` - Organiser home page (requires authentication) - ok 
@@ -139,11 +139,13 @@ CREATE TABLE IF NOT EXISTS bookings (
 - `POST /organiser/event/publish/:id` - Publish event (requires authentication) - ok
 - `POST /organiser/event/unpublish/:id` - Unpublish event (requires authentication) - ok
 - `POST /organiser/event/delete/:id` - Delete event (requires authentication) - ok
+- `GET /organiser/attendees` - Manage attendees page (requires authentication)
+- `POST /organiser/attendees/:id/toggle-special` - Toggle attendee special status (requires authentication)
 
 #### 3. `routes/attendee.js` - Attendee Routes
 - `GET /attendee` - Attendee home page (public, but login available)
 - `GET /attendee/event/:id` - View event details (public)
-- `POST /attendee/event/:id/book` - Create booking (requires authentication)
+- `POST /attendee/event/book/:event_id` - Create booking (requires authentication)
 
 #### 4. Update `index.js`
 - Update the home route (`/`) to show links to organiser and attendee pages
@@ -165,8 +167,9 @@ CREATE TABLE IF NOT EXISTS bookings (
 6. **`views/organiser/home.ejs`** - Organiser dashboard
 7. **`views/organiser/settings.ejs`** - Site settings form
 8. **`views/organiser/edit-event.ejs`** - Event creation/editing form
-9. **`views/attendee/home.ejs`** - Attendee event listing
-10. **`views/attendee/event.ejs`** - Event details and booking form
+9. **`views/organiser/attendees.ejs`** - Manage attendees page
+10. **`views/attendee/home.ejs`** - Attendee event listing
+11. **`views/attendee/event.ejs`** - Event details and booking form
 
 ---
 
@@ -329,6 +332,74 @@ CREATE TABLE IF NOT EXISTS bookings (
   - Concession ticket option only visible if attendee is_special = 1
 - [ ] Validation: prevent non-special attendees from booking concession tickets
 - [ ] Back button to Attendee Home Page
+
+---
+
+## Phase 6.5: Organiser Attendee Management Feature
+
+### Feature Overview
+Allow organisers to manage attendee special status, enabling them to flag attendees as "special" so they can book concession tickets.
+
+### Database Requirements
+- ✅ **Already Implemented**: The `attendees` table already has `is_special` field (INTEGER DEFAULT 0)
+- No schema changes needed
+
+### Route Structure
+
+#### Additional Routes in `routes/organiser.js` - Organiser Routes (Protected)
+- `GET /organiser/attendees` - Display list of all attendees (requires authentication)
+- `POST /organiser/attendees/toggle-special/:attendee_id` - Toggle attendee special status (requires authentication)
+
+### Action Files to Create
+
+#### 1. `modules/attendee/get-all-attendees.action.js`
+- Purpose: Retrieve all attendees from the database
+- Inputs: None
+- Outputs: Array of Attendee objects
+- Query: `SELECT * FROM attendees ORDER BY username ASC`
+
+#### 2. `modules/attendee/update-attendee-special-status.action.js`
+- Purpose: Update an attendee's `is_special` flag
+- Inputs: `attendeeId` (number), `isSpecial` (boolean)
+- Outputs: Promise that resolves when update is complete
+- Query: `UPDATE attendees SET is_special = ?, updated_date = ? WHERE attendee_id = ?`
+
+### View Model to Create
+
+#### 1. `modules/organiser/organiser-attendees.view-model.js`
+- Properties:
+  - `error` (null or Error)
+  - `attendees` (Array of Attendee objects)
+
+### View File to Create
+
+#### 1. `views/organiser-attendees.ejs`
+- Heading: "Manage Attendees"
+- Display table/list of all attendees showing:
+  - Username
+  - Email
+  - Current special status (Yes/No or checkbox indicator)
+  - Toggle button/form to mark/unmark as special
+- Link back to Organiser Home Page
+- Protected route (requires authentication)
+
+### Implementation Checklist
+
+- [ ] Create `GetAllAttendees` action class
+- [ ] Create `UpdateAttendeeSpecialStatus` action class
+- [ ] Create `OrganiserAttendeesViewModel` class
+- [ ] Add `GET /organiser/attendees` route (protected)
+- [ ] Add `POST /organiser/attendees/:id/toggle-special` route (protected)
+- [ ] Create `organiser-attendees.ejs` view template
+- [ ] Add "Manage Attendees" link to organiser home page
+- [ ] Test toggle functionality
+- [ ] Verify special status affects concession ticket booking
+
+### Security Considerations
+- All routes must use `requireOrganiserAuth` middleware
+- Only authenticated organisers can manage attendee special status
+- Validate attendee ID exists before updating
+- Update `updated_date` timestamp when changing status
 
 ---
 
