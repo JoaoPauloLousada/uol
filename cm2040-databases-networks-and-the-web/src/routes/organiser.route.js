@@ -1,9 +1,3 @@
-
-/**
- * organiser.route.js
- * Routes for organiser pages (protected)
- */
-
 const express = require("express");
 const { requireOrganiserAuth } = require("../middleware/require-organiser-auth");
 const { OrganiserHomeViewModel } = require("../modules/organiser/organiser-home.view-model");
@@ -45,11 +39,6 @@ router.get('/', requireOrganiserAuth, async (req, res) => {
     }
 });
 
-/**
- * GET /organiser/event/new
- * Create new event (requires authentication)
- * Creates a new draft event and redirects to the edit page
- */
 router.get('/event/new', requireOrganiserAuth, async (req, res) => {
     try {
         const createEvent = new CreateEvent();
@@ -57,16 +46,10 @@ router.get('/event/new', requireOrganiserAuth, async (req, res) => {
         res.redirect(`/organiser/event/edit/${eventId}`);
     } catch (error) {
         console.error('Error creating new event:', error);
-        // Redirect back to organiser home on error
         res.redirect('/organiser');
     }
 });
 
-/**
- * GET /organiser/event/edit/:id
- * Edit event page (requires authentication)
- * Displays the edit form for an event with its current data
- */
 router.get('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -78,7 +61,6 @@ router.get('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
         const event = await getEventById.execute();
 
         if (!event) {
-            // Event not found, redirect to organiser home
             return res.redirect('/organiser');
         }
 
@@ -94,11 +76,6 @@ router.get('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     }
 });
 
-/**
- * POST /organiser/event/edit/:id
- * Save event changes (requires authentication)
- * Updates event details and ticket information, then redirects to organiser home
- */
 router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -106,7 +83,6 @@ router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
             return res.redirect('/organiser');
         }
 
-        // Extract form data
         const title = req.body.title || '';
         const description = req.body.description || '';
         const eventDate = req.body.eventDate || '';
@@ -115,9 +91,7 @@ router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
         const concessionQuantity = parseInt(req.body.concessionQuantity) || 0;
         const concessionPrice = parseFloat(req.body.concessionPrice) || 0;
 
-        // Validate required fields
         if (!title || !eventDate) {
-            // Redirect back to edit page with error
             const getEventById = new GetEventById(eventId);
             const event = await getEventById.execute();
             const viewModel = new EditEventViewModel();
@@ -126,7 +100,6 @@ router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
             return res.render('edit-event.ejs', { viewModel: viewModel });
         }
 
-        // Update the event
         const updateEvent = new UpdateEvent(
             eventId,
             title,
@@ -139,11 +112,9 @@ router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
         );
         await updateEvent.execute();
 
-        // Redirect to organiser home page on success
         res.redirect('/organiser');
     } catch (error) {
         console.error('Error updating event:', error);
-        // On error, redirect back to edit page with error
         try {
             const eventId = parseInt(req.params.id);
             const getEventById = new GetEventById(eventId);
@@ -153,17 +124,11 @@ router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
             viewModel.error = new Error('Failed to update event: ' + error.message);
             res.render('edit-event.ejs', { viewModel: viewModel });
         } catch (renderError) {
-            // If we can't render the edit page, redirect to organiser home
             res.redirect('/organiser');
         }
     }
 });
 
-/**
- * POST /organiser/event/publish/:id
- * Publish event (requires authentication)
- * Changes event status from 'draft' to 'published' and sets published_date
- */
 router.post('/event/publish/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -171,24 +136,16 @@ router.post('/event/publish/:id', requireOrganiserAuth, async (req, res) => {
             return res.redirect('/organiser');
         }
 
-        // Publish the event
         const publishEvent = new PublishEvent(eventId);
         await publishEvent.execute();
 
-        // Redirect to organiser home page on success
         res.redirect('/organiser');
     } catch (error) {
         console.error('Error publishing event:', error);
-        // Redirect back to organiser home on error
         res.redirect('/organiser');
     }
 });
 
-/**
- * POST /organiser/event/unpublish/:id
- * Unpublish event (requires authentication)
- * Changes event status from 'published' to 'draft'
- */
 router.post('/event/unpublish/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -196,24 +153,16 @@ router.post('/event/unpublish/:id', requireOrganiserAuth, async (req, res) => {
             return res.redirect('/organiser');
         }
 
-        // Unpublish the event
         const unpublishEvent = new UnpublishEvent(eventId);
         await unpublishEvent.execute();
 
-        // Redirect to organiser home page on success
         res.redirect('/organiser');
     } catch (error) {
         console.error('Error unpublishing event:', error);
-        // Redirect back to organiser home on error
         res.redirect('/organiser');
     }
 });
 
-/**
- * POST /organiser/event/delete/:id
- * Delete event (requires authentication)
- * Deletes an event and all associated tickets and bookings
- */
 router.post('/event/delete/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -221,15 +170,12 @@ router.post('/event/delete/:id', requireOrganiserAuth, async (req, res) => {
             return res.redirect('/organiser');
         }
 
-        // Delete the event (and related records)
         const deleteEvent = new DeleteEvent(eventId);
         await deleteEvent.execute();
 
-        // Redirect to organiser home page on success
         res.redirect('/organiser');
     } catch (error) {
         console.error('Error deleting event:', error);
-        // Redirect back to organiser home on error
         res.redirect('/organiser');
     }
 });
@@ -262,11 +208,6 @@ router.post('/site-settings', requireOrganiserAuth, async (req, res) => {
     }
 });
 
-/**
- * GET /organiser/attendees
- * Manage attendees page (requires authentication)
- * Displays list of all attendees with their special status
- */
 router.get('/attendees', requireOrganiserAuth, async (req, res) => {
     try {
         const viewModel = new OrganiserAttendeesViewModel();
@@ -282,11 +223,6 @@ router.get('/attendees', requireOrganiserAuth, async (req, res) => {
     }
 });
 
-/**
- * POST /organiser/attendees/toggle-special/:attendee_id
- * Toggle attendee special status (requires authentication)
- * Updates the is_special flag for an attendee
- */
 router.post('/attendees/toggle-special/:attendee_id', requireOrganiserAuth, async (req, res) => {
     try {
         const attendeeId = parseInt(req.params.attendee_id);
@@ -294,18 +230,14 @@ router.post('/attendees/toggle-special/:attendee_id', requireOrganiserAuth, asyn
             return res.status(400).send('Invalid attendee ID');
         }
 
-        // Get current special status from request body
         const isSpecial = req.body.isSpecial === 'true' || req.body.isSpecial === '1';
 
-        // Update the attendee's special status
         const updateAttendeeSpecialStatus = new UpdateAttendeeSpecialStatus(attendeeId, isSpecial);
         await updateAttendeeSpecialStatus.execute();
 
-        // Redirect back to attendees page on success
         res.redirect('/organiser/attendees');
     } catch (error) {
         console.error('Error updating attendee special status:', error);
-        // Redirect back to attendees page on error
         res.redirect('/organiser/attendees');
     }
 });

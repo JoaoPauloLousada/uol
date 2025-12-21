@@ -1,19 +1,6 @@
-/**
- * register-organiser.action.js
- * Module for registering a new organiser
- * 
- * Purpose: Hash password and insert new organiser into database
- * Inputs: username, email, password (plain text)
- * Outputs: callback with error or organiser_id
- */
-
 const { z } = require('zod');
 const { Password } = require('./password');
 
-/**
- * RegisterOrganiserParams
- * Class for validating organiser registration parameters using Zod
- */
 class RegisterOrganiserParams {
     constructor(username, email, password) {
         const validation = this.validate(username, email, password);
@@ -36,10 +23,6 @@ class RegisterOrganiserParams {
             .regex(/[!@#$%^&*]/, 'Password must contain at least one special character'),
     });
 
-    /**
-     * Validate the parameters
-     * @returns {object} - { success: boolean, data?: object, error?: object }
-     */
     validate(username, email, password) {
         try {
             const validatedData = RegisterOrganiserParams.schema.parse({
@@ -60,25 +43,14 @@ class RegisterOrganiserParams {
     }
 }
 
-/**
- * RegisterOrganiser
- * Class for registering a new organiser
- * Hashes the password and stores organiser data in the database
- */
 class RegisterOrganiser {
-    /**
-     * Execute the registration process
-     * @param {RegisterOrganiserParams} params - Parameters for registering a new organiser
-     */
     async execute(params) {
         try {
             const passwordHash = await Password.hash(params.password);
             const createdDate = new Date().toISOString();
             const updatedDate = createdDate;
-            // Define the query to insert organiser
             const query = "INSERT INTO organisers (username, email, password_hash, created_date, updated_date) VALUES (?, ?, ?, ?, ?)";
             const queryParameters = [params.username, params.email, passwordHash, createdDate, updatedDate];
-            // Execute the query and return a promise
             return new Promise((resolve, reject) => {
                 global.db.run(query, queryParameters, function (err) {
                     if (err) {

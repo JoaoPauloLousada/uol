@@ -1,10 +1,3 @@
-/**
- * attendee.route.js
- * Routes for attendee pages
- * 
- * Public routes for viewing events and booking tickets
- */
-
 const express = require("express");
 const { GetEventById } = require("../modules/event/get-event-by-id.action");
 const { GetSiteSettings } = require("../modules/site-settings/get-site-settings.action");
@@ -17,16 +10,10 @@ const { CreateBooking } = require("../modules/booking/create-booking.action");
 const { requireAttendeeAuth } = require("../middleware/require-attendee-auth");
 const router = express.Router();
 
-/**
- * GET /attendee
- * Attendee home page (public, but login available)
- * Lists all published events
- */
 router.get('/', async (req, res) => {
     try {
         const viewModel = new AttendeeHomeViewModel();
 
-        // Get attendee by ID
         const getAttendeeById = new GetAttendeeById(req.session?.attendeeId);
         const attendee = await getAttendeeById.execute();
         viewModel.attendee = {
@@ -34,12 +21,10 @@ router.get('/', async (req, res) => {
             isSpecial: attendee?.is_special ?? false
         };
 
-        // Get site settings
         const getSiteSettings = new GetSiteSettings();
         const siteSettings = await getSiteSettings.execute();
         viewModel.siteSettings = siteSettings;
 
-        // Get published events
         const getPublishedEvents = new GetPublishedEvents();
         const publishedEvents = await getPublishedEvents.execute();
         viewModel.events = publishedEvents;
@@ -53,11 +38,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/**
- * GET /attendee/event/:id
- * View event details (public)
- * Displays event information and booking form if authenticated
- */
 router.get('/event/:id', async (req, res) => {
     console.log('get /attendee/event/:id', req.session?.attendeeId);
     try {
@@ -66,10 +46,8 @@ router.get('/event/:id', async (req, res) => {
             return res.status(400).send('Invalid event ID');
         }
 
-        // Create view model
         const viewModel = new AttendeeEventViewModel();
 
-        // Get attendee by ID
         const getAttendeeById = new GetAttendeeById(req.session?.attendeeId);
         const attendee = await getAttendeeById.execute();
         viewModel.attendee = {
@@ -77,25 +55,21 @@ router.get('/event/:id', async (req, res) => {
             isSpecial: attendee?.is_special ?? false
         };
 
-        // Get event by ID
         const getEventById = new GetEventById(eventId);
         const event = await getEventById.execute();
         viewModel.event = event;
 
-        // Only show published events
         if (!event || event.status !== 'published') {
             const viewModel = new AttendeeEventViewModel();
             viewModel.error = new Error('Event not found or not published');
             return res.render('attendee-event.ejs', { viewModel: viewModel });
         }
 
-        // Get site settings
         const getSiteSettings = new GetSiteSettings();
         const siteSettings = await getSiteSettings.execute();
         viewModel.siteSettings = siteSettings;
 
 
-        // Calculate available tickets using actual booked quantities
         viewModel.availableTickets = {
             full: {
                 total: event.tickets.full ? event.tickets.full.quantity : 0,
@@ -118,14 +92,8 @@ router.get('/event/:id', async (req, res) => {
     }
 });
 
-/**
- * POST /attendee/event/book/:id
- * Create booking (requires authentication)
- * Creates a booking for the authenticated attendee
- */
 router.post('/event/book/:event_id', async (req, res) => {
     try {
-        // Check authentication
         if (!req.session.attendeeId) {
             return res.redirect('/auth/attendee/login');
         }
@@ -135,7 +103,6 @@ router.post('/event/book/:event_id', async (req, res) => {
             return res.status(400).send('Invalid event ID');
         }
 
-        // Get event to access ticket IDs
         const getEventById = new GetEventById(eventId);
         const event = await getEventById.execute();
 
@@ -143,7 +110,6 @@ router.post('/event/book/:event_id', async (req, res) => {
             return res.status(404).send('Event not found or not published');
         }
 
-        // Get attendee information to check special status
         const getAttendeeById = new GetAttendeeById(req.session.attendeeId);
         const attendee = await getAttendeeById.execute();
 
@@ -151,23 +117,19 @@ router.post('/event/book/:event_id', async (req, res) => {
             return res.status(401).send('Attendee not found');
         }
 
-        // Extract quantities from request body
         const fullTicketsQuantity = parseInt(req.body.fullTickets) || 0;
         const concessionTicketsQuantity = parseInt(req.body.concessionTickets) || 0;
 
-        // Validate that at least one ticket type has quantity > 0
         if (fullTicketsQuantity <= 0 && concessionTicketsQuantity <= 0) {
             return res.status(400).send('Please select at least one ticket');
         }
 
-        // Server-side validation: Only special attendees can book concession tickets
         if (concessionTicketsQuantity > 0) {
             if (!attendee.is_special || attendee.is_special !== 1) {
                 return res.status(403).send('Concession tickets are only available for special attendees');
             }
         }
 
-        // Create bookings for full tickets if quantity > 0
         if (fullTicketsQuantity > 0) {
             if (!event.tickets.full) {
                 return res.status(400).send('Full tickets not available for this event');
@@ -176,7 +138,6 @@ router.post('/event/book/:event_id', async (req, res) => {
             await createFullBooking.execute();
         }
 
-        // Create bookings for concession tickets if quantity > 0
         if (concessionTicketsQuantity > 0) {
             if (!event.tickets.concession) {
                 return res.status(400).send('Concession tickets not available for this event');

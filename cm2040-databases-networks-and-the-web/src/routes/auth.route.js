@@ -1,9 +1,3 @@
-
-/**
- * auth.route.js
- * Routes for authentication
- */
-
 const express = require("express");
 const { OrganiserLogin } = require("../modules/auth/organiser-login.action");
 const { OrganiserLoginViewModel } = require("../modules/auth/organiser-login.view-model");
@@ -94,14 +88,11 @@ router.get('/attendee/signup', (req, res) => {
 router.post('/attendee/signup', async (req, res, next) => {
     const { username, email, password } = req.body;
     try {
-        // Validate and create params
         const params = new RegisterAttendeeParams(username, email, password);
 
-        // Register the attendee
         const registerAttendee = new RegisterAttendee();
         const attendee = await registerAttendee.execute(params);
 
-        // Set session and redirect
         req.session.attendeeId = attendee.id;
         res.redirect('/attendee');
         return next();
@@ -113,7 +104,6 @@ router.post('/attendee/signup', async (req, res, next) => {
             res.status(500).render('attendee-signup.ejs', { viewModel });
             return next();
         }
-        // Handle validation errors (from Zod)
         if (error.message) {
             viewModel.error = new Error(error.message);
             res.status(400).render('attendee-signup.ejs', { viewModel });

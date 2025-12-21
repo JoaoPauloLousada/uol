@@ -6,10 +6,6 @@ class GetOrganiserByEmail {
         this.email = email;
     }
 
-    /**
-     * Execute the query to get the organiser by email
-     * @returns {Promise<Organiser>} - Promise that resolves to the organiser if found, otherwise throws a NotFoundError
-     */
     async execute() {
         const query = "SELECT * FROM organisers WHERE email = ? LIMIT 1";
         const queryParameters = [this.email];
@@ -18,7 +14,6 @@ class GetOrganiserByEmail {
                 if (err) {
                     return reject(err);
                 } else {
-                    // Parse row into Organiser instance, or return undefined if not found
                     if (row) {
                         const organiserInstance = new Organiser(
                             row.organiser_id,

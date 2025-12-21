@@ -1,21 +1,8 @@
-/**
- * register-attendee.action.js
- * Module for registering a new attendee
- * 
- * Purpose: Hash password and insert new attendee into database
- * Inputs: username, email, password (plain text)
- * Outputs: callback with error or attendee_id
- */
-
 const { z } = require('zod');
 const { Password } = require('./password');
 const { InternalServerError } = require('../errors/internal');
 const Attendee = require('../attendee/attendee');
 
-/**
- * RegisterAttendeeParams
- * Class for validating attendee registration parameters using Zod
- */
 class RegisterAttendeeParams {
     constructor(username, email, password) {
         this.validate(username, email, password);
@@ -38,10 +25,6 @@ class RegisterAttendeeParams {
             .regex(/[!@#$%^&*]/, 'Password must contain at least one special character'),
     });
 
-    /**
-     * Validate the parameters
-     * @returns {object} - { success: boolean, data?: object, error?: object }
-     */
     validate(username, email, password) {
         try {
             const validatedData = RegisterAttendeeParams.schema.parse({
@@ -62,33 +45,20 @@ class RegisterAttendeeParams {
     }
 }
 
-/**
- * RegisterAttendee
- * Class for registering a new attendee
- * Hashes the password and stores attendee data in the database
- */
 class RegisterAttendee {
-    /**
-     * Execute the registration process
-     * @param {RegisterAttendeeParams} params - Parameters for registering a new attendee
-     * @returns {Promise<Attendee>} - The created attendee instance
-     */
     async execute(params) {
         try {
             const passwordHash = await Password.hash(params.password);
             const createdDate = new Date().toISOString();
             const updatedDate = createdDate;
-            const isSpecial = 0; // Default to false
+            const isSpecial = 0;
 
-            // Define the query to insert attendee
             const query = "INSERT INTO attendees (username, email, password_hash, is_special, created_date, updated_date) VALUES (?, ?, ?, ?, ?, ?)";
             const queryParameters = [params.username, params.email, passwordHash, isSpecial, createdDate, updatedDate];
 
-            // Execute the query and return a promise
             return new Promise((resolve, reject) => {
                 global.db.run(query, queryParameters, function (err) {
                     if (err) {
-                        // Handle unique constraint violations
                         if (err.message.includes('UNIQUE constraint failed')) {
                             if (err.message.includes('username')) {
                                 return reject(new InternalServerError('Username already exists'));
@@ -99,7 +69,6 @@ class RegisterAttendee {
                         }
                         return reject(new InternalServerError('Error creating attendee account'));
                     } else {
-                        // Return the created attendee instance
                         const attendee = new Attendee(
                             this.lastID,
                             params.username,

@@ -21,7 +21,6 @@
                 <strong>Error:</strong> <%= viewModel.error.message %>
             </div>
         <% } else { %>
-            <!-- Site Settings Card -->
             <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h2 class="card-title mb-0 h5">Site Settings</h2>
@@ -33,7 +32,6 @@
                 </div>
             </div>
 
-            <!-- Attendee Management Card -->
             <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-info text-white">
                     <h2 class="card-title mb-0 h5">Attendee Management</h2>
@@ -43,7 +41,6 @@
                 </div>
             </div>
 
-            <!-- Events Section Header -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="h4 text-primary mb-0">Events</h2>
                 <form action="<%= viewModel.event.actions.create.url %>" method="get" class="d-inline">
@@ -51,9 +48,7 @@
                 </form>
             </div>
 
-            <!-- Published and Draft Events Side by Side -->
             <div class="row g-4 mb-4">
-                <!-- Published Events Column -->
                 <div class="col-md-6">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header bg-success text-white">
@@ -109,7 +104,6 @@
                     </div>
                 </div>
 
-                <!-- Draft Events Column -->
                 <div class="col-md-6">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header bg-warning text-dark">

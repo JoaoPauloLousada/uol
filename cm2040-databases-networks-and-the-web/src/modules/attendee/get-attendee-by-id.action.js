@@ -6,10 +6,6 @@ class GetAttendeeById {
         this.attendeeId = attendeeId;
     }
 
-    /**
-     * Execute the query to get the attendee by ID
-     * @returns {Promise<Attendee>} - Promise that resolves to the attendee if found, otherwise throws a NotFoundError
-     */
     async execute() {
         if (!this.attendeeId) {
             return null;
@@ -21,7 +17,6 @@ class GetAttendeeById {
                 if (err) {
                     return reject(err);
                 } else {
-                    // Parse row into Attendee instance, or return undefined if not found
                     if (row) {
                         const attendeeInstance = new Attendee(
                             row.attendee_id,

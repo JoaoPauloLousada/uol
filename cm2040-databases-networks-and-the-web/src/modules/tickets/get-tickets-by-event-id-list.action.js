@@ -5,10 +5,6 @@ class GetTicketsByEventIdList {
         this.eventIdList = eventIdList;
     }
 
-    /*
-     * Execute the query to get the tickets by event id list
-     * @returns {Promise<Ticket[]>} - Promise that resolves to the tickets by event id list
-     */
     async execute() {
         const placeholders = this.eventIdList.map(() => '?').join(',');
 

@@ -1,8 +1,3 @@
-/**
- * edit-event.view-model.js
- * View model for the edit event page
- */
-
 class EditEventViewModel {
     error = null;
     actions = {

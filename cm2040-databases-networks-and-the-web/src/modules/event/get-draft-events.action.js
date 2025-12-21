@@ -4,7 +4,6 @@ const { GetTicketsByEventIdList } = require("../tickets/get-tickets-by-event-id-
 
 class GetDraftEvents {
     async execute() {
-        // First query: Get all published events
         const events = await new Promise((resolve, reject) => {
             const PUBLISHED_EVENTS_QUERY = `
                 SELECT event_id, title, description, event_date, published_date, created_date, updated_date, status 
@@ -20,16 +19,13 @@ class GetDraftEvents {
             });
         });
 
-        // If no events, return empty array
         if (events.length === 0) {
             return [];
         }
 
-        // Extract event IDs for the tickets query
         const eventIds = events.map(event => event.event_id);
         const getTicketsByEventIdList = new GetTicketsByEventIdList(eventIds);
         const tickets = await getTicketsByEventIdList.execute();
-        // Group tickets by event_id
         const ticketsByEventId = new Map();
         for (const ticket of tickets) {
             if (!ticketsByEventId.has(ticket.eventId)) {
@@ -38,7 +34,6 @@ class GetDraftEvents {
             ticketsByEventId.get(ticket.eventId).push(ticket);
         }
 
-        // Join tickets to events
         return events.map(event => {
             const eventTickets = ticketsByEventId.get(event.event_id) || [];
             const ticketsFull = eventTickets.find(t => t.ticketType === 'full') || null;

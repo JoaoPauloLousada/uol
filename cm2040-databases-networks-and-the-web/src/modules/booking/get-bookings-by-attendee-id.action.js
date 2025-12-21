@@ -1,21 +1,8 @@
-/**
- * get-bookings-by-attendee-id.action.js
- * Module for getting all bookings for a specific attendee
- * 
- * Purpose: Retrieve all bookings made by an attendee with event and ticket details
- * Inputs: attendeeId (number)
- * Outputs: Array of booking objects with event and ticket information
- */
-
 class GetBookingsByAttendeeId {
     constructor(attendeeId) {
         this.attendeeId = attendeeId;
     }
 
-    /**
-     * Execute the query to get bookings by attendee ID
-     * @returns {Promise<Array>} - Promise that resolves to an array of booking objects
-     */
     async execute() {
         if (!this.attendeeId) {
             return [];
@@ -51,7 +38,6 @@ class GetBookingsByAttendeeId {
             });
         });
 
-        // Map rows to booking objects with structured data
         return bookings.map(booking => ({
             bookingId: booking.booking_id,
             eventId: booking.event_id,

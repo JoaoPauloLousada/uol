@@ -6,10 +6,6 @@ class GetAttendeeByEmail {
         this.email = email;
     }
 
-    /**
-     * Execute the query to get the attendee by email
-     * @returns {Promise<Attendee>} - Promise that resolves to the attendee if found, otherwise throws a NotFoundError
-     */
     async execute() {
         const query = "SELECT * FROM attendees WHERE email = ? LIMIT 1";
         const queryParameters = [this.email];
@@ -18,7 +14,6 @@ class GetAttendeeByEmail {
                 if (err) {
                     return reject(err);
                 } else {
-                    // Parse row into Attendee instance, or return undefined if not found
                     if (row) {
                         const attendeeInstance = new Attendee(
                             row.attendee_id,
