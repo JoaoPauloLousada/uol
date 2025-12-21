@@ -39,6 +39,9 @@ PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr) {
   addAndMakeVisible(loadButton);
   loadButton.addListener(this);
 
+  addAndMakeVisible(clearButton);
+  clearButton.addListener(this);
+
   loadPlaylist();
 }
 
@@ -56,7 +59,8 @@ void PlaylistComponent::resized() {
   auto area = getLocalBounds();
 
   auto buttonArea = area.removeFromTop(30);
-  loadButton.setBounds(buttonArea.reduced(5));
+  loadButton.setBounds(buttonArea.removeFromLeft(120).reduced(5));
+  clearButton.setBounds(buttonArea.removeFromLeft(120).reduced(5));
 
   tableComponent.setBounds(area);
 }
@@ -129,6 +133,11 @@ void PlaylistComponent::buttonClicked(Button *button) {
                                 addTrack(results[0]);
                               }
                             });
+    return;
+  }
+
+  if (button == &clearButton) {
+    clearTracks();
     return;
   }
 

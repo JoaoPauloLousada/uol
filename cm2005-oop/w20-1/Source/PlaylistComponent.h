@@ -138,6 +138,7 @@ public:
 private:
   TableListBox tableComponent;
   TextButton loadButton{"Load Track"};
+  TextButton clearButton{"Clear Playlist"};
   juce::FileChooser fileChooser{
       "Select an audio file...",
       juce::File::getSpecialLocation(juce::File::userMusicDirectory),

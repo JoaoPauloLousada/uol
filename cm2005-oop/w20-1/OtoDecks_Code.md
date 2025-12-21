@@ -1267,6 +1267,7 @@ public:
 private:
   TableListBox tableComponent;
   TextButton loadButton{"Load Track"};
+  TextButton clearButton{"Clear Playlist"};
   juce::FileChooser fileChooser{
       "Select an audio file...",
       juce::File::getSpecialLocation(juce::File::userMusicDirectory),
@@ -1284,6 +1285,7 @@ private:
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlaylistComponent)
 };
+
 ```
 
 # PlaylistComponent.cpp
@@ -1329,6 +1331,9 @@ PlaylistComponent::PlaylistComponent() : deckGUI1(nullptr), deckGUI2(nullptr) {
   addAndMakeVisible(loadButton);
   loadButton.addListener(this);
 
+  addAndMakeVisible(clearButton);
+  clearButton.addListener(this);
+
   loadPlaylist();
 }
 
@@ -1346,7 +1351,8 @@ void PlaylistComponent::resized() {
   auto area = getLocalBounds();
 
   auto buttonArea = area.removeFromTop(30);
-  loadButton.setBounds(buttonArea.reduced(5));
+  loadButton.setBounds(buttonArea.removeFromLeft(120).reduced(5));
+  clearButton.setBounds(buttonArea.removeFromLeft(120).reduced(5));
 
   tableComponent.setBounds(area);
 }
@@ -1419,6 +1425,11 @@ void PlaylistComponent::buttonClicked(Button *button) {
                                 addTrack(results[0]);
                               }
                             });
+    return;
+  }
+
+  if (button == &clearButton) {
+    clearTracks();
     return;
   }
 
@@ -1525,6 +1536,7 @@ void PlaylistComponent::loadPlaylist() {
     }
   }
 }
+
 ```
 
 # WaveformDisplay.h
