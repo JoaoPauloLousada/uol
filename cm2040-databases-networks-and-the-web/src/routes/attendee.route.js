@@ -14,6 +14,7 @@ const { AttendeeHomeViewModel } = require("../modules/attendee/attendee-home.vie
 const { GetAttendeeById } = require("../modules/attendee/get-attendee-by-id.action");
 const { GetBookingsByAttendeeId } = require("../modules/booking/get-bookings-by-attendee-id.action");
 const { CreateBooking } = require("../modules/booking/create-booking.action");
+const { requireAttendeeAuth } = require("../middleware/require-attendee-auth");
 const router = express.Router();
 
 /**
@@ -191,7 +192,7 @@ router.post('/event/book/:event_id', async (req, res) => {
     }
 });
 
-router.get('/my-bookings', async (req, res) => {
+router.get('/my-bookings', requireAttendeeAuth, async (req, res) => {
     try {
         if (!req.session.attendeeId) {
             return res.redirect('/auth/attendee/login');

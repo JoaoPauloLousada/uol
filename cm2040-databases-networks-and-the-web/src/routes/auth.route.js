@@ -106,6 +106,7 @@ router.post('/attendee/signup', async (req, res, next) => {
         res.redirect('/attendee');
         return next();
     } catch (error) {
+        console.error({ attendeeSignupError: error })
         const viewModel = new AttendeeSignupViewModel();
         if (error instanceof InternalServerError) {
             viewModel.error = new Error(error.message);

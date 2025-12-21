@@ -11,8 +11,6 @@
  * @param {Function} next - Express next middleware function
  */
 function requireOrganiserAuth(req, res, next) {
-    // TODO: Disabled for develop
-    return next();
     // Check if organiserId exists in session
     if (req.session && req.session.organiserId) {
         // Organiser is authenticated, proceed to next middleware/route
