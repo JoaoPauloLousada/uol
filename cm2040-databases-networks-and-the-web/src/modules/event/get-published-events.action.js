@@ -10,7 +10,7 @@ class GetPublishedEvents {
                 SELECT event_id, title, description, event_date, published_date, created_date, updated_date, status 
                 FROM events 
                 WHERE status = 'published'
-                ORDER BY event_date ASC
+                ORDER BY event_date DESC
             `;
             global.db.all(PUBLISHED_EVENTS_QUERY, function (err, rows) {
                 if (err) {
