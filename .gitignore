@@ -98,3 +98,6 @@ coverage/
 *.gcda
 *.gcno
 
+# Data files
+cm2005-oop/w10/opsd-weather_data-2020-09-16/weather_data.csv
+
