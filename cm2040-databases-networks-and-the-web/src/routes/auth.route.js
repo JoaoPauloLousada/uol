@@ -64,15 +64,15 @@ router.post('/organiser/login', async (req, res, next) => {
 });
 
 /**
- * Destroys the organiser session and redirects to login page.
+ * Destroys the organiser session and redirects to home page.
  *
  * @param {express.Request} req - Express request object containing session data
  * @param {express.Response} res - Express response object for redirecting
- * @returns {void} Redirects to organiser login page
+ * @returns {void} Redirects to home page
  */
 router.post('/organiser/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/auth/organiser/login');
+    res.redirect('/');
 });
 
 /**
@@ -122,15 +122,15 @@ router.post('/attendee/login', async (req, res, next) => {
 });
 
 /**
- * Destroys the attendee session and redirects to login page.
+ * Destroys the attendee session and redirects to home page.
  *
  * @param {express.Request} req - Express request object containing session data
  * @param {express.Response} res - Express response object for redirecting
- * @returns {void} Redirects to attendee login page
+ * @returns {void} Redirects to home page
  */
 router.post('/attendee/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/auth/attendee/login');
+    res.redirect('/');
 });
 
 /**
