@@ -1,62 +1,113 @@
-##  Coursework Template ##
-### CM2040 Database Networks and the Web ###
+# Event Management System
 
-#### Installation requirements ####
+A web application for managing events, tickets, and bookings. Supports two user roles: organisers (create/manage events) and attendees (browse/book tickets).
 
-* NodeJS 
-    - follow the install instructions at https://nodejs.org/en/
-    - we recommend using the latest LTS version
-* Sqlite3 
-    - follow the instructions at https://www.tutorialspoint.com/sqlite/sqlite_installation.htm 
-    - Note that the latest versions of the Mac OS and Linux come with SQLite pre-installed
+## Installation
 
-#### Using this template ####
+```bash
+npm install
+```
 
-This template sets you off in the right direction for your coursework. To get started:
+## Build & Run
 
-* Run ```npm install``` from the project directory to install all the node packages.
+**Build database:**
+```bash
+npm run build-db
+```
 
-* Run ```npm run build-db``` to create the database on Mac or Linux 
-or run ```npm run build-db-win``` to create the database on Windows
+**Start application:**
+```bash
+npm start
+```
 
-* Run ```npm run start``` to start serving the web app (Access via http://localhost:3000)
+The application runs on `http://localhost:3000`
 
-Test the app by browsing to the following routes:
+## seedDB.js
 
-* http://localhost:3000
-* http://localhost:3000/users/list-users
-* http://localhost:3000/users/add-user
+Creates an initial test organiser account for development:
+- **Username:** `organiser1`
+- **Email:** `organiser@example.com`
+- **Password:** `Password123!`
 
-You can also run: 
-```npm run clean-db``` to delete the database on Mac or Linux before rebuilding it for a fresh start
-```npm run clean-db-win``` to delete the database on Windows before rebuilding it for a fresh start
+Run manually: `node seedDB.js` (or automatically via `build-db` script)
 
-Please also read the document ```Working with this Template.pdf``` for further guidance.
+## Third-Party Libraries
 
-##### Creating database tables #####
+- **express** - Web framework
+- **ejs** - Template engine for views
+- **express-session** - Session management
+- **sqlite3** - SQLite database driver
+- **bcrypt** - Password hashing
+- **zod** - Schema validation
 
-* All database tables should created by modifying the db_schema.sql 
-* This allows us to review and recreate your database simply by running ```npm run build-db```
-* Do NOT create or alter database tables through other means
+## Architecture
 
+### File Naming Conventions
 
-#### Preparing for submission ####
+- **`.action.js`** - Business logic classes (database operations, validations)
+- **`.route.js`** - Express route handlers (HTTP endpoints)
+- **`.view-model.js`** - Data structures for view rendering
+- **`.js`** (no suffix) - Entity classes or utility classes
 
-Make a copy of your project folder.
-In your copy, delete the following files and folders:
-* node_modules
-* .git (the hidden folder with your git repository)
-* database.db (your database)
+### Project Structure
 
-Make sure that your ``package.json`` file includes all of the dependencies for your project. NB. you need to use the ```--save``` tag each time you use npm to install a dependency
+```
+src/
+├── modules/           # Business logic organized by domain
+│   ├── attendee/      # Attendee-related actions and view models
+│   ├── auth/          # Authentication actions
+│   ├── booking/       # Booking actions
+│   ├── event/         # Event management actions
+│   ├── organiser/     # Organiser-related actions and view models
+│   ├── site-settings/ # Site configuration
+│   └── tickets/       # Ticket entities
+├── routes/            # Express route definitions
+├── middleware/        # Authentication middleware
+├── views/             # EJS templates
+└── public/            # Static assets
+```
 
-Edit this README.md to explain any specific instructions for setting up or using your application that you want to bring to our attention:
+## Routes & Features
 
-* remove the existing contents that we have provided
-* include any settings that should be adjusted in configuration files
-* include a list of the additional libraries you are using
-* anything else we need to know in order to successfully run your app
+### Public Routes
+- `GET /` - Home page with routes for organiser and attendee section
 
+### Authentication (`/auth`)
+- `GET /auth/organiser/login` - Organiser login page
+- `POST /auth/organiser/login` - Organiser authentication
+- `POST /auth/organiser/logout` - Organiser logout
+- `GET /auth/attendee/login` - Attendee login page
+- `POST /auth/attendee/login` - Attendee authentication
+- `POST /auth/attendee/logout` - Attendee logout
+- `GET /auth/attendee/signup` - Attendee registration page
+- `POST /auth/attendee/signup` - Create attendee account
 
-NB. we will ONLY run ```npm install```, ```npm run build-db```, and ```npm run start``` . We will NOT install additional packages to run your code and will NOT run additional build scripts. Be careful with any additional node dependencies that you use.
+### Organiser Routes (`/organiser`) - Requires authentication
+- `GET /organiser` - Dashboard (published & draft events)
+- `GET /organiser/event/new` - Create new event
+- `GET /organiser/event/edit/:id` - Edit event page
+- `POST /organiser/event/edit/:id` - Update event
+- `POST /organiser/event/publish/:id` - Publish event
+- `POST /organiser/event/unpublish/:id` - Unpublish event
+- `POST /organiser/event/delete/:id` - Delete event
+- `GET /organiser/site-settings` - Site settings page
+- `POST /organiser/site-settings` - Update site settings
+- `GET /organiser/attendees` - Manage attendees
+- `POST /organiser/attendees/toggle-special/:attendee_id` - Toggle attendee special status
+
+### Attendee Routes (`/attendee`)
+- `GET /attendee` - Browse published events
+- `GET /attendee/event/:id` - View event details
+- `POST /attendee/event/book/:event_id` - Create booking
+- `GET /attendee/my-bookings` - View bookings (requires authentication)
+
+## Features
+
+- **Event Management:** Create, edit, publish/unpublish, and delete events
+- **Ticket Management:** Full and concession ticket types with pricing
+- **Booking System:** Attendees can book tickets for published events
+- **Special Attendees:** Organisers can grant special status (concession ticket access)
+- **Site Settings:** Customizable site name and description
+- **Session-based Authentication:** Separate login for organisers and attendees
+- **Password Security:** Bcrypt hashing with validation rules
 
