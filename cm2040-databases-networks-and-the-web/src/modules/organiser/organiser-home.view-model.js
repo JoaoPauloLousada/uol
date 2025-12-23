@@ -1,5 +1,19 @@
+/**
+ * OrganiserHomeViewModel
+ *
+ * View model for the organiser home page.
+ * Contains data structure for displaying published and draft events with action URLs.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const { SiteSettings } = require("../site-settings/site-settings");
 
+/**
+ * View model class for individual event display in organiser home.
+ *
+ * Provides data structure for rendering event information
+ * including ticket details and action URLs.
+ */
 class EventViewModel {
     id = '';
     title = '';
@@ -27,6 +41,12 @@ class EventViewModel {
     ]
 }
 
+/**
+ * View model class for organiser home page.
+ *
+ * Provides data structure containing site settings, event lists
+ * (published and draft), and action URLs for event management.
+ */
 class OrganiserHomeViewModel {
     error = null;
     siteSettings = new SiteSettings(0, 'site name', 'site description');

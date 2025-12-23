@@ -1,3 +1,18 @@
+/**
+ * EditEventViewModel
+ *
+ * View model for the organiser event edit page.
+ * Contains data structure for displaying and editing event information.
+ * 
+ * author: Joao Paulo Lousada
+ */
+
+/**
+ * View model class for organiser event edit page.
+ *
+ * Provides data structure containing event details, ticket information,
+ * and action URLs for rendering the event edit form.
+ */
 class EditEventViewModel {
     error = null;
     actions = {
