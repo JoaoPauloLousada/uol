@@ -1,6 +1,25 @@
+/**
+ * GetAllAttendees
+ *
+ * Action class for retrieving all attendees from the database.
+ * Returns a list of all attendees ordered by most recent first.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const Attendee = require('./attendee.js');
 
+/**
+ * Action class for retrieving all attendees.
+ *
+ * Executes a database query to fetch all attendees
+ * and returns them as Attendee entity instances.
+ */
 class GetAllAttendees {
+    /**
+     * Retrieves all attendees from the database.
+     *
+     * @returns {Promise<Attendee[]>} Array of Attendee instances, empty array if none found
+     */
     async execute() {
         const query = "SELECT * FROM attendees ORDER BY attendee_id DESC";
         const attendees = await new Promise((resolve, reject) => {
