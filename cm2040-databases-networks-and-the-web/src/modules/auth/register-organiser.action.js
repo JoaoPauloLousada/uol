@@ -1,7 +1,29 @@
+/**
+ * RegisterOrganiser
+ *
+ * Action classes for registering new organisers.
+ * Validates registration parameters and creates organiser accounts in the database.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const { z } = require('zod');
 const { Password } = require('./password');
 
+/**
+ * Parameter validation class for organiser registration.
+ *
+ * Validates and sanitizes registration parameters using Zod schema.
+ * Ensures username, email, and password meet security requirements.
+ */
 class RegisterOrganiserParams {
+    /**
+     * Creates a new RegisterOrganiserParams instance with validated data.
+     *
+     * @param {string} username - Username for the new organiser account
+     * @param {string} email - Email address for the new organiser account
+     * @param {string} password - Plain text password for the new organiser account
+     * @throws {Error} Throws error if validation fails with detailed error messages
+     */
     constructor(username, email, password) {
         const validation = this.validate(username, email, password);
     }
@@ -23,6 +45,15 @@ class RegisterOrganiserParams {
             .regex(/[!@#$%^&*]/, 'Password must contain at least one special character'),
     });
 
+    /**
+     * Validates registration parameters against the schema.
+     *
+     * @param {string} username - Username to validate
+     * @param {string} email - Email address to validate
+     * @param {string} password - Password to validate
+     * @throws {Error} Throws error with validation messages if validation fails
+     * @private
+     */
     validate(username, email, password) {
         try {
             const validatedData = RegisterOrganiserParams.schema.parse({
@@ -43,7 +74,19 @@ class RegisterOrganiserParams {
     }
 }
 
+/**
+ * Action class for registering new organisers.
+ *
+ * Creates a new organiser account in the database with hashed password.
+ */
 class RegisterOrganiser {
+    /**
+     * Registers a new organiser account in the database.
+     *
+     * @param {RegisterOrganiserParams} params - Validated registration parameters
+     * @returns {Promise<number>} ID of the newly created organiser
+     * @throws {Error} Throws error if database operation fails
+     */
     async execute(params) {
         try {
             const passwordHash = await Password.hash(params.password);

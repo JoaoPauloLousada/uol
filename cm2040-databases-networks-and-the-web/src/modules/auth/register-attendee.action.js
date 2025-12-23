@@ -1,9 +1,31 @@
+/**
+ * RegisterAttendee
+ *
+ * Action classes for registering new attendees.
+ * Validates registration parameters and creates attendee accounts in the database.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const { z } = require('zod');
 const { Password } = require('./password');
 const { InternalServerError } = require('../errors/internal');
 const Attendee = require('../attendee/attendee');
 
+/**
+ * Parameter validation class for attendee registration.
+ *
+ * Validates and sanitizes registration parameters using Zod schema.
+ * Ensures username, email, and password meet security requirements.
+ */
 class RegisterAttendeeParams {
+    /**
+     * Creates a new RegisterAttendeeParams instance with validated data.
+     *
+     * @param {string} username - Username for the new attendee account
+     * @param {string} email - Email address for the new attendee account
+     * @param {string} password - Plain text password for the new attendee account
+     * @throws {Error} Throws error if validation fails with detailed error messages
+     */
     constructor(username, email, password) {
         this.validate(username, email, password);
     }
@@ -25,6 +47,15 @@ class RegisterAttendeeParams {
             .regex(/[!@#$%^&*]/, 'Password must contain at least one special character'),
     });
 
+    /**
+     * Validates registration parameters against the schema.
+     *
+     * @param {string} username - Username to validate
+     * @param {string} email - Email address to validate
+     * @param {string} password - Password to validate
+     * @throws {Error} Throws error with validation messages if validation fails
+     * @private
+     */
     validate(username, email, password) {
         try {
             const validatedData = RegisterAttendeeParams.schema.parse({
@@ -45,7 +76,20 @@ class RegisterAttendeeParams {
     }
 }
 
+/**
+ * Action class for registering new attendees.
+ *
+ * Creates a new attendee account in the database with hashed password.
+ * Handles duplicate username and email validation.
+ */
 class RegisterAttendee {
+    /**
+     * Registers a new attendee account in the database.
+     *
+     * @param {RegisterAttendeeParams} params - Validated registration parameters
+     * @returns {Promise<Attendee>} Newly created Attendee instance
+     * @throws {InternalServerError} Throws error if username/email already exists or database operation fails
+     */
     async execute(params) {
         try {
             const passwordHash = await Password.hash(params.password);
