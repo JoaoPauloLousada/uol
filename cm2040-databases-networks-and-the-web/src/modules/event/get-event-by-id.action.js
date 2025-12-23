@@ -1,12 +1,37 @@
+/**
+ * GetEventById
+ *
+ * Action class for retrieving an event by its unique identifier.
+ * Fetches a single event with its associated ticket information.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const { Event } = require("./event");
 const { GetTicketsByEventIdList } = require("../tickets/get-tickets-by-event-id-list.action");
 const { Ticket } = require("../tickets/ticket");
 
+/**
+ * Action class for retrieving an event by ID.
+ *
+ * Executes a database query to fetch a specific event
+ * and includes its associated ticket information.
+ */
 class GetEventById {
+    /**
+     * Creates a new GetEventById action instance.
+     *
+     * @param {number} eventId - Unique identifier of the event to retrieve
+     */
     constructor(eventId) {
         this.eventId = eventId;
     }
 
+    /**
+     * Retrieves an event by its ID from the database.
+     *
+     * @returns {Promise<Event>} Event instance with associated ticket information
+     * @throws {Error} Throws error if event is not found or database operation fails
+     */
     async execute() {
         try {
             const event = await new Promise((resolve, reject) => {

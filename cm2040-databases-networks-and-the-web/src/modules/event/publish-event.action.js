@@ -1,8 +1,33 @@
+/**
+ * PublishEvent
+ *
+ * Action class for publishing events.
+ * Changes an event's status from draft to published.
+ * 
+ * author: Joao Paulo Lousada
+ */
+
+/**
+ * Action class for publishing events.
+ *
+ * Updates an event's status to published and sets the published date.
+ */
 class PublishEvent {
+    /**
+     * Creates a new PublishEvent action instance.
+     *
+     * @param {number} eventId - Unique identifier of the event to publish
+     */
     constructor(eventId) {
         this.eventId = eventId;
     }
 
+    /**
+     * Publishes an event by updating its status to published.
+     *
+     * @returns {Promise<void>} Resolves when event is successfully published
+     * @throws {Error} Throws error if event is not found or database operation fails
+     */
     async execute() {
         try {
             const publishedDate = new Date().toISOString();

@@ -1,4 +1,25 @@
+/**
+ * CreateEvent
+ *
+ * Action class for creating new events.
+ * Creates a draft event with default values and initializes ticket types.
+ * 
+ * author: Joao Paulo Lousada
+ */
+
+/**
+ * Action class for creating new events.
+ *
+ * Creates a new draft event in the database with default values
+ * and initializes both full and concession ticket types.
+ */
 class CreateEvent {
+    /**
+     * Creates a new draft event with default values and ticket types.
+     *
+     * @returns {Promise<number>} ID of the newly created event
+     * @throws {Error} Throws error if database operation fails
+     */
     async execute() {
         try {
             const title = 'New Event';

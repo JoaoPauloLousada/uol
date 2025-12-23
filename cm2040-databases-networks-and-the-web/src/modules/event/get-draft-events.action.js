@@ -1,8 +1,28 @@
+/**
+ * GetDraftEvents
+ *
+ * Action class for retrieving all draft events.
+ * Fetches events with draft status along with their ticket information.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const { Event } = require("./event");
 const { GetTicketsByEventIdList } = require("../tickets/get-tickets-by-event-id-list.action");
 
 
+/**
+ * Action class for retrieving draft events.
+ *
+ * Executes a database query to fetch all events with draft status
+ * and includes their associated ticket information.
+ */
 class GetDraftEvents {
+    /**
+     * Retrieves all draft events from the database.
+     *
+     * @returns {Promise<Event[]>} Array of Event instances with draft status, empty array if none found
+     * @throws {Error} Throws error if database operation fails
+     */
     async execute() {
         const events = await new Promise((resolve, reject) => {
             const PUBLISHED_EVENTS_QUERY = `

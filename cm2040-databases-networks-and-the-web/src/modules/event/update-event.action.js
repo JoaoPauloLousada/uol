@@ -1,4 +1,31 @@
+/**
+ * UpdateEvent
+ *
+ * Action class for updating events.
+ * Updates event details and manages ticket information for both ticket types.
+ * 
+ * author: Joao Paulo Lousada
+ */
+
+/**
+ * Action class for updating events.
+ *
+ * Updates event information and manages ticket quantities and prices
+ * for both full and concession ticket types.
+ */
 class UpdateEvent {
+    /**
+     * Creates a new UpdateEvent action instance.
+     *
+     * @param {number} eventId - Unique identifier of the event to update
+     * @param {string} title - New title for the event
+     * @param {string} description - New description for the event
+     * @param {string} eventDate - New date when the event will occur (ISO date string)
+     * @param {number} fullQuantity - Quantity of full tickets available
+     * @param {number} fullPrice - Price for full tickets
+     * @param {number} concessionQuantity - Quantity of concession tickets available
+     * @param {number} concessionPrice - Price for concession tickets
+     */
     constructor(eventId, title, description, eventDate, fullQuantity, fullPrice, concessionQuantity, concessionPrice) {
         this.eventId = eventId;
         this.title = title;
@@ -10,6 +37,12 @@ class UpdateEvent {
         this.concessionPrice = concessionPrice;
     }
 
+    /**
+     * Updates an event and its ticket information in the database.
+     *
+     * @returns {Promise<void>} Resolves when event and tickets are successfully updated
+     * @throws {Error} Throws error if database operation fails
+     */
     async execute() {
         try {
             const updatedDate = new Date().toISOString();
