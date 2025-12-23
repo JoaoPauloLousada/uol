@@ -1,8 +1,34 @@
+/**
+ * GetBookingsByAttendeeId
+ *
+ * Action class for retrieving bookings by attendee ID.
+ * Fetches all bookings for a specific attendee with associated event and ticket information.
+ * 
+ * author: Joao Paulo Lousada
+ */
+
+/**
+ * Action class for retrieving bookings by attendee ID.
+ *
+ * Executes a database query to fetch all bookings for an attendee,
+ * including related event and ticket details.
+ */
 class GetBookingsByAttendeeId {
+    /**
+     * Creates a new GetBookingsByAttendeeId action instance.
+     *
+     * @param {number|null} attendeeId - Unique identifier of the attendee to retrieve bookings for
+     */
     constructor(attendeeId) {
         this.attendeeId = attendeeId;
     }
 
+    /**
+     * Retrieves all bookings for the specified attendee from the database.
+     *
+     * @returns {Promise<Array<Object>>} Array of booking objects with event and ticket details, empty array if attendeeId is null or no bookings found
+     * @throws {Error} Throws error if database operation fails
+     */
     async execute() {
         if (!this.attendeeId) {
             return [];
