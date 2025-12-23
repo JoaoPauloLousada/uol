@@ -1,3 +1,12 @@
+/**
+ * AttendeeRoutes
+ *
+ * Defines HTTP routes for attendee-related operations.
+ * Handles attendee home page, event viewing, booking creation,
+ * and booking management functionality.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const express = require("express");
 const { GetEventById } = require("../modules/event/get-event-by-id.action");
 const { GetSiteSettings } = require("../modules/site-settings/get-site-settings.action");
@@ -10,6 +19,13 @@ const { CreateBooking } = require("../modules/booking/create-booking.action");
 const { requireAttendeeAuth } = require("../middleware/require-attendee-auth");
 const router = express.Router();
 
+/**
+ * Renders the attendee home page with published events and attendee information.
+ *
+ * @param {express.Request} req - Express request object containing session data
+ * @param {express.Response} res - Express response object for rendering the view
+ * @returns {Promise<void>} Sends the rendered attendee home page or error page
+ */
 router.get('/', async (req, res) => {
     try {
         const viewModel = new AttendeeHomeViewModel();
@@ -38,6 +54,13 @@ router.get('/', async (req, res) => {
     }
 });
 
+/**
+ * Renders the event details page for a specific published event.
+ *
+ * @param {express.Request} req - Express request object containing event ID in params and session data
+ * @param {express.Response} res - Express response object for rendering the view
+ * @returns {Promise<void>} Sends the rendered event details page or error page
+ */
 router.get('/event/:id', async (req, res) => {
     console.log('get /attendee/event/:id', req.session?.attendeeId);
     try {
@@ -92,6 +115,13 @@ router.get('/event/:id', async (req, res) => {
     }
 });
 
+/**
+ * Creates bookings for an event based on ticket quantities provided in the request body.
+ *
+ * @param {express.Request} req - Express request object containing event ID in params, ticket quantities in body, and session data
+ * @param {express.Response} res - Express response object for redirecting or sending error responses
+ * @returns {Promise<void>} Redirects to bookings page on success or sends error response
+ */
 router.post('/event/book/:event_id', async (req, res) => {
     try {
         if (!req.session.attendeeId) {
@@ -153,6 +183,13 @@ router.post('/event/book/:event_id', async (req, res) => {
     }
 });
 
+/**
+ * Renders the attendee's bookings page showing all bookings for the authenticated attendee.
+ *
+ * @param {express.Request} req - Express request object containing session data with attendee ID
+ * @param {express.Response} res - Express response object for rendering the view
+ * @returns {Promise<void>} Sends the rendered bookings page or redirects to login if not authenticated
+ */
 router.get('/my-bookings', requireAttendeeAuth, async (req, res) => {
     try {
         if (!req.session.attendeeId) {

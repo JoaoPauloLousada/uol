@@ -1,3 +1,12 @@
+/**
+ * OrganiserRoutes
+ *
+ * Defines HTTP routes for organiser-related operations.
+ * Handles event management, site settings, and attendee management functionality.
+ * All routes require organiser authentication.
+ * 
+ * author: Joao Paulo Lousada
+ */
 const express = require("express");
 const { requireOrganiserAuth } = require("../middleware/require-organiser-auth");
 const { OrganiserHomeViewModel } = require("../modules/organiser/organiser-home.view-model");
@@ -18,6 +27,13 @@ const { UpdateAttendeeSpecialStatus } = require("../modules/attendee/update-atte
 const { OrganiserAttendeesViewModel } = require("../modules/organiser/organiser-attendees.view-model");
 const router = express.Router();
 
+/**
+ * Renders the organiser home page with published and draft events.
+ *
+ * @param {express.Request} req - Express request object containing session data
+ * @param {express.Response} res - Express response object for rendering the view
+ * @returns {Promise<void>} Sends the rendered organiser home page or error page
+ */
 router.get('/', requireOrganiserAuth, async (req, res) => {
     try {
         const viewModel = new OrganiserHomeViewModel();
@@ -39,6 +55,13 @@ router.get('/', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Creates a new draft event and redirects to the edit page.
+ *
+ * @param {express.Request} req - Express request object
+ * @param {express.Response} res - Express response object for redirecting
+ * @returns {Promise<void>} Redirects to the event edit page or organiser home on error
+ */
 router.get('/event/new', requireOrganiserAuth, async (req, res) => {
     try {
         const createEvent = new CreateEvent();
@@ -50,6 +73,13 @@ router.get('/event/new', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Renders the event edit page for a specific event.
+ *
+ * @param {express.Request} req - Express request object containing event ID in params
+ * @param {express.Response} res - Express response object for rendering the view
+ * @returns {Promise<void>} Sends the rendered event edit page or redirects to organiser home
+ */
 router.get('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -76,6 +106,13 @@ router.get('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Updates an event with data from the request body.
+ *
+ * @param {express.Request} req - Express request object containing event ID in params and event data in body
+ * @param {express.Response} res - Express response object for redirecting or rendering error page
+ * @returns {Promise<void>} Redirects to organiser home on success or renders error page
+ */
 router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -129,6 +166,13 @@ router.post('/event/edit/:id', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Publishes an event, making it visible to attendees.
+ *
+ * @param {express.Request} req - Express request object containing event ID in params
+ * @param {express.Response} res - Express response object for redirecting
+ * @returns {Promise<void>} Redirects to organiser home page
+ */
 router.post('/event/publish/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -146,6 +190,13 @@ router.post('/event/publish/:id', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Unpublishes an event, making it no longer visible to attendees.
+ *
+ * @param {express.Request} req - Express request object containing event ID in params
+ * @param {express.Response} res - Express response object for redirecting
+ * @returns {Promise<void>} Redirects to organiser home page
+ */
 router.post('/event/unpublish/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -163,6 +214,13 @@ router.post('/event/unpublish/:id', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Deletes an event permanently.
+ *
+ * @param {express.Request} req - Express request object containing event ID in params
+ * @param {express.Response} res - Express response object for redirecting
+ * @returns {Promise<void>} Redirects to organiser home page
+ */
 router.post('/event/delete/:id', requireOrganiserAuth, async (req, res) => {
     try {
         const eventId = parseInt(req.params.id);
@@ -180,6 +238,13 @@ router.post('/event/delete/:id', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Renders the site settings page with current site settings.
+ *
+ * @param {express.Request} req - Express request object
+ * @param {express.Response} res - Express response object for rendering the view
+ * @returns {Promise<void>} Sends the rendered site settings page or error page
+ */
 router.get('/site-settings', requireOrganiserAuth, async (req, res) => {
     const viewModel = new SiteSettingsViewModel();
     try {
@@ -194,6 +259,13 @@ router.get('/site-settings', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Updates site settings with data from the request body.
+ *
+ * @param {express.Request} req - Express request object containing site settings data in body
+ * @param {express.Response} res - Express response object for redirecting or rendering error page
+ * @returns {Promise<void>} Redirects to organiser home on success or renders error page
+ */
 router.post('/site-settings', requireOrganiserAuth, async (req, res) => {
     try {
         const siteName = req.body.siteName || '';
@@ -208,6 +280,13 @@ router.post('/site-settings', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Renders the attendees management page with all attendees.
+ *
+ * @param {express.Request} req - Express request object
+ * @param {express.Response} res - Express response object for rendering the view
+ * @returns {Promise<void>} Sends the rendered attendees page or error page
+ */
 router.get('/attendees', requireOrganiserAuth, async (req, res) => {
     try {
         const viewModel = new OrganiserAttendeesViewModel();
@@ -223,6 +302,13 @@ router.get('/attendees', requireOrganiserAuth, async (req, res) => {
     }
 });
 
+/**
+ * Toggles the special status of an attendee.
+ *
+ * @param {express.Request} req - Express request object containing attendee ID in params and special status in body
+ * @param {express.Response} res - Express response object for redirecting or sending error response
+ * @returns {Promise<void>} Redirects to attendees page on success or sends error response
+ */
 router.post('/attendees/toggle-special/:attendee_id', requireOrganiserAuth, async (req, res) => {
     try {
         const attendeeId = parseInt(req.params.attendee_id);
