@@ -1,0 +1,100 @@
+# Compiled binaries and executables
+*.out
+*.exe
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+a.out
+merkelrex
+main
+IrisReader
+
+# Build directories
+build/
+Builds/
+bin/
+dist/
+out/
+
+# C++ build artifacts
+*.a
+*.lib
+*.dSYM/
+
+# Go build artifacts
+*.test
+*.prof
+vendor/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+!CMakeLists.txt
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserdata/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.backup
+*~
+
+# Archives
+*.zip
+# *.tar
+# *.tar.gz
+# *.rar
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Coverage reports
+coverage/
+*.gcov
+*.gcda
+*.gcno
+
