@@ -1,0 +1,144 @@
+{
+  "restaurant_info": {
+    "name": "Bella Italia",
+    "hours": "Monday-Sunday: 11:00 AM - 10:00 PM",
+    "address": "123 Italian Street, London, UK"
+  },
+  "menu": {
+    "pastas": [
+      {
+        "name": "Spaghetti Carbonara",
+        "price": 16.50,
+        "description": "Classic Roman pasta with eggs, pancetta, parmesan, and black pepper"
+      },
+      {
+        "name": "Penne Arrabbiata",
+        "price": 14.50,
+        "description": "Spicy tomato sauce with garlic, red chili, and fresh basil"
+      },
+      {
+        "name": "Fettuccine Alfredo",
+        "price": 17.50,
+        "description": "Rich creamy sauce with parmesan cheese and butter"
+      },
+      {
+        "name": "Lasagna alla Bolognese",
+        "price": 18.50,
+        "description": "Traditional layered pasta with meat sauce, béchamel, and mozzarella"
+      },
+      {
+        "name": "Ravioli Spinaci e Ricotta",
+        "price": 16.00,
+        "description": "Spinach and ricotta filled ravioli with sage butter sauce"
+      }
+    ],
+    "salads": [
+      {
+        "name": "Insalata Caprese",
+        "price": 14.50,
+        "description": "Fresh mozzarella, tomatoes, basil, and olive oil"
+      },
+      {
+        "name": "Caesar Salad",
+        "price": 15.00,
+        "description": "Romaine lettuce, parmesan, croutons, and Caesar dressing"
+      },
+      {
+        "name": "Insalata Mista",
+        "price": 13.50,
+        "description": "Mixed greens with cherry tomatoes, olives, and balsamic vinaigrette"
+      },
+      {
+        "name": "Arugula & Prosciutto Salad",
+        "price": 16.50,
+        "description": "Arugula, prosciutto, parmesan shavings, and lemon dressing"
+      }
+    ],
+    "drinks": [
+      {
+        "name": "Italian Red Wine",
+        "price": 8.50,
+        "description": "House red wine selection"
+      },
+      {
+        "name": "Italian White Wine",
+        "price": 8.50,
+        "description": "House white wine selection"
+      },
+      {
+        "name": "Espresso",
+        "price": 3.00,
+        "description": "Traditional Italian espresso"
+      },
+      {
+        "name": "Coca Cola",
+        "price": 3.50,
+        "description": "Soft drink"
+      },
+      {
+        "name": "Sparkling Water",
+        "price": 4.00,
+        "description": "San Pellegrino"
+      }
+    ]
+  },
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "hi",
+        "hello",
+        "hey",
+        "good (?:morning|afternoon|evening)",
+        "greetings",
+        "hi there",
+        "hello there"
+      ],
+      "responses": [
+        "Hello! Welcome to {restaurant_name}! How can I help you today?",
+        "Hi there! Welcome to {restaurant_name}! What would you like to order?",
+        "Welcome to {restaurant_name}! How can I assist you today?",
+        "Hello! Ready to order some delicious Italian food? What can I help you with?"
+      ]
+    },
+    {
+      "tag": "name_collection",
+      "patterns": [
+        "I'm (\\w+)",
+        "my name is (\\w+)",
+        "I am (\\w+)",
+        "call me (\\w+)",
+        "name is (\\w+)",
+        "this is (\\w+)"
+      ],
+      "responses": [
+        "Nice to meet you, {name}! What would you like to order?",
+        "Pleased to meet you, {name}! How can I help you today?",
+        "Hello {name}! Welcome to {restaurant_name}! What would you like to order?",
+        "Great to meet you, {name}! What can I get for you?"
+      ]
+    },
+    {
+      "tag": "menu_inquiry",
+      "patterns": [
+        "show (?:me )?(?:the )?menu",
+        "what (?:do you|can I) (?:have|order)",
+        "what's (?:on|in) (?:the )?menu",
+        "menu please",
+        "list (?:the )?items",
+        "what (?:are|is) (?:your|the) (?:options|dishes)",
+        "show (?:me )?(?:the )?food",
+        "what (?:do|does) (?:you|the restaurant) (?:serve|have)",
+        "display menu"
+      ],
+      "responses": [
+        "Here's our menu:\n{menu_list}\nWhat would you like to order?",
+        "Our menu includes:\n{menu_list}\nWhat catches your eye?",
+        "We have:\n{menu_list}\nWhat would you like?",
+        "Here's what we offer:\n{menu_list}\nWhat can I get for you?"
+      ]
+    }
+  ]
+}
+
+
