@@ -90,9 +90,7 @@
         "hello",
         "hey",
         "good (?:morning|afternoon|evening)",
-        "greetings",
-        "hi there",
-        "hello there"
+        "greeting"
       ],
       "responses": [
         "Hello! Welcome to {restaurant_name}! How can I help you today?",
@@ -104,12 +102,13 @@
     {
       "tag": "name_collection",
       "patterns": [
-        "I'm (\\w+)",
+        "i (\\w+)",
+        "i 'm (\\w+)",
         "my name is (\\w+)",
-        "I am (\\w+)",
-        "call me (\\w+)",
+        "i am (\\w+)",
+        "call (\\w+)",
         "name is (\\w+)",
-        "this is (\\w+)"
+        "name (\\w+)"
       ],
       "responses": [
         "Nice to meet you, {name}! What would you like to order?",
@@ -121,14 +120,15 @@
     {
       "tag": "menu_inquiry",
       "patterns": [
-        "show (?:me )?(?:the )?menu",
-        "what (?:do you|can I) (?:have|order)",
-        "what's (?:on|in) (?:the )?menu",
-        "menu please",
-        "list (?:the )?items",
-        "what (?:are|is) (?:your|the) (?:options|dishes)",
-        "show (?:me )?(?:the )?food",
-        "what (?:do|does) (?:you|the restaurant) (?:serve|have)",
+        "show me menu",
+        "show menu",
+        "what (?:have|order)",
+        "what menu",
+        "menu",
+        "list item",
+        "what (?:option|dish)",
+        "show me food",
+        "what (?:serve|have)",
         "display menu"
       ],
       "responses": [
