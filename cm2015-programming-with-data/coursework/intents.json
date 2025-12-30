@@ -8,26 +8,31 @@
     "pastas": [
       {
         "name": "Spaghetti Carbonara",
+        "sku": "SC",
         "price": 16.50,
         "description": "Classic Roman pasta with eggs, pancetta, parmesan, and black pepper"
       },
       {
         "name": "Penne Arrabbiata",
+        "sku": "PA",
         "price": 14.50,
         "description": "Spicy tomato sauce with garlic, red chili, and fresh basil"
       },
       {
         "name": "Fettuccine Alfredo",
+        "sku": "FA",
         "price": 17.50,
         "description": "Rich creamy sauce with parmesan cheese and butter"
       },
       {
         "name": "Lasagna alla Bolognese",
+        "sku": "LB",
         "price": 18.50,
         "description": "Traditional layered pasta with meat sauce, béchamel, and mozzarella"
       },
       {
         "name": "Ravioli Spinaci e Ricotta",
+        "sku": "RS",
         "price": 16.00,
         "description": "Spinach and ricotta filled ravioli with sage butter sauce"
       }
@@ -35,21 +40,25 @@
     "salads": [
       {
         "name": "Insalata Caprese",
+        "sku": "IC",
         "price": 14.50,
         "description": "Fresh mozzarella, tomatoes, basil, and olive oil"
       },
       {
         "name": "Caesar Salad",
+        "sku": "CS",
         "price": 15.00,
         "description": "Romaine lettuce, parmesan, croutons, and Caesar dressing"
       },
       {
         "name": "Insalata Mista",
+        "sku": "IM",
         "price": 13.50,
         "description": "Mixed greens with cherry tomatoes, olives, and balsamic vinaigrette"
       },
       {
         "name": "Arugula & Prosciutto Salad",
+        "sku": "AP",
         "price": 16.50,
         "description": "Arugula, prosciutto, parmesan shavings, and lemon dressing"
       }
@@ -57,26 +66,31 @@
     "drinks": [
       {
         "name": "Italian Red Wine",
+        "sku": "RW",
         "price": 8.50,
         "description": "House red wine selection"
       },
       {
         "name": "Italian White Wine",
+        "sku": "WW",
         "price": 8.50,
         "description": "House white wine selection"
       },
       {
         "name": "Espresso",
+        "sku": "ES",
         "price": 3.00,
         "description": "Traditional Italian espresso"
       },
       {
         "name": "Coca Cola",
+        "sku": "CC",
         "price": 3.50,
         "description": "Soft drink"
       },
       {
         "name": "Sparkling Water",
+        "sku": "SW",
         "price": 4.00,
         "description": "San Pellegrino"
       }
@@ -144,10 +158,58 @@
         "please show me menu"
       ],
       "responses": [
-        "Here's our menu:\n{menu_list}\nWhat would you like to order?",
-        "Our menu includes:\n{menu_list}\nWhat catches your eye?",
-        "We have:\n{menu_list}\nWhat would you like?",
-        "Here's what we offer:\n{menu_list}\nWhat can I get for you?"
+        "Here's our menu:\n{menu_list}\n\nTo order, please use the item SKU codes (e.g., 'order 2 SC' for 2 Spaghetti Carbonara). What would you like to order?",
+        "Our menu includes:\n{menu_list}\n\nPlease order using the SKU codes shown (e.g., 'add PA' for Penne Arrabbiata). What catches your eye?",
+        "We have:\n{menu_list}\n\nOrder by SKU code - just say 'order [quantity] [SKU]' (e.g., 'order 1 FA'). What would you like?",
+        "Here's what we offer:\n{menu_list}\n\nUse the SKU codes to order (e.g., 'order 2 SC'). What can I get for you?"
+      ]
+    },
+    {
+      "tag": "place_order",
+      "patterns": [
+        "order (\\d+) ([a-zA-Z]{2})",
+        "order ([a-zA-Z]{2})",
+        "i want (\\d+) ([a-zA-Z]{2})",
+        "i want ([a-zA-Z]{2})",
+        "add (\\d+) ([a-zA-Z]{2})",
+        "add ([a-zA-Z]{2})",
+        "i 'd like (\\d+) ([a-zA-Z]{2})",
+        "i 'd like ([a-zA-Z]{2})",
+        "get (\\d+) ([a-zA-Z]{2})",
+        "get ([a-zA-Z]{2})",
+        "give me (\\d+) ([a-zA-Z]{2})",
+        "give me ([a-zA-Z]{2})",
+        "i 'll have (\\d+) ([a-zA-Z]{2})",
+        "i 'll have ([a-zA-Z]{2})"
+      ],
+      "responses": [
+        "Added {quantity} {item_name} to your cart!",
+        "I've added {quantity} {item_name} to your order.",
+        "Great choice! {quantity} {item_name} added to your cart.",
+        "Perfect! I've added {quantity} {item_name} to your order."
+      ]
+    },
+    {
+      "tag": "view_cart",
+      "patterns": [
+        "show cart",
+        "view cart",
+        "my cart",
+        "what 's in my cart",
+        "what 's in cart",
+        "show my cart",
+        "display cart",
+        "cart",
+        "what do i have",
+        "what have i order",
+        "show order",
+        "my order"
+      ],
+      "responses": [
+        "{cart_display}\n\nWould you like to add anything else?",
+        "{cart_display}\n\nIs there anything else you'd like to order?",
+        "{cart_display}\n\nReady to checkout, or would you like to add more items?",
+        "{cart_display}\n\nAnything else I can help you with?"
       ]
     }
   ]
