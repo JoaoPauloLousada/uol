@@ -235,6 +235,34 @@
         "Order confirmed, {name}! We're preparing your order now. Your total is £{cart_total}. Thank you, and enjoy your meal!",
         "Great, {name}! Your order is confirmed and will be prepared now. Total: £{cart_total}. Thank you for ordering from {restaurant_name}!"
       ]
+    },
+    {
+      "tag": "restaurant_info",
+      "patterns": [
+        "show me restaurant info",
+        "show restaurant info",
+        "restaurant info",
+        "restaurant information",
+        "show me restaurant information",
+        "what are your hours",
+        "what are the hours",
+        "opening hours",
+        "what time are you open",
+        "when are you open",
+        "where are you located",
+        "what is your address",
+        "show me address",
+        "show address",
+        "location",
+        "show location",
+        "show me location"
+      ],
+      "responses": [
+        "Here's our restaurant information, {name}:\n\n{restaurant_name}\nHours: {restaurant_hours}\nAddress: {restaurant_address}",
+        "Sure, {name}! Here are our details:\n\n{restaurant_name}\nOpening Hours: {restaurant_hours}\nLocation: {restaurant_address}",
+        "Of course, {name}! Here's our restaurant info:\n\n{restaurant_name}\nHours: {restaurant_hours}\nAddress: {restaurant_address}",
+        "{name}, here's our restaurant information:\n\n{restaurant_name}\nWe're open: {restaurant_hours}\nFind us at: {restaurant_address}"
+      ]
     }
   ]
 }
