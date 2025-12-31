@@ -203,7 +203,7 @@
         "what do i have",
         "what have i order",
         "show order",
-        "my order"
+        "^my order$"
       ],
       "responses": [
         "{cart_display}\n\nWould you like to add anything else? Say 'confirm order' when you're ready to finish.",
