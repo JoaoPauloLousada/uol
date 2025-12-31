@@ -158,10 +158,10 @@
         "please show me menu"
       ],
       "responses": [
-        "Here's our menu:\n{menu_list}\n\nTo order, please use the item SKU codes (e.g., 'order 2 SC' for 2 Spaghetti Carbonara). What would you like to order?",
-        "Our menu includes:\n{menu_list}\n\nPlease order using the SKU codes shown (e.g., 'add PA' for Penne Arrabbiata). What catches your eye?",
-        "We have:\n{menu_list}\n\nOrder by SKU code - just say 'order [quantity] [SKU]' (e.g., 'order 1 FA'). What would you like?",
-        "Here's what we offer:\n{menu_list}\n\nUse the SKU codes to order (e.g., 'order 2 SC'). What can I get for you?"
+        "Here's our menu, {name}:\n{menu_list}\n\nTo order, please use the item SKU codes (e.g., 'order 2 SC' for 2 Spaghetti Carbonara). What would you like to order?",
+        "Our menu includes:\n{menu_list}\n\nPlease order using the SKU codes shown (e.g., 'add PA' for Penne Arrabbiata). What catches your eye, {name}?",
+        "We have:\n{menu_list}\n\nOrder by SKU code - just say 'order [quantity] [SKU]' (e.g., 'order 1 FA'). What would you like, {name}?",
+        "Here's what we offer, {name}:\n{menu_list}\n\nUse the SKU codes to order (e.g., 'order 2 SC'). What can I get for you?"
       ]
     },
     {
@@ -183,10 +183,10 @@
         "i 'll have ([a-zA-Z]{2})"
       ],
       "responses": [
-        "Added {quantity} {item_name} to your cart! When you're ready, say 'confirm order' to finish.",
-        "I've added {quantity} {item_name} to your order. Say 'confirm order' when you're ready to complete your order.",
-        "Great choice! {quantity} {item_name} added to your cart. To finish your order, just say 'confirm order'.",
-        "Perfect! I've added {quantity} {item_name} to your order. When you're done, say 'confirm order' to proceed."
+        "Added {quantity} {item_name} to your cart, {name}! When you're ready, say 'confirm order' to finish.",
+        "I've added {quantity} {item_name} to your order, {name}. Say 'confirm order' when you're ready to complete your order.",
+        "Great choice, {name}! {quantity} {item_name} added to your cart. To finish your order, just say 'confirm order'.",
+        "Perfect, {name}! I've added {quantity} {item_name} to your order. When you're done, say 'confirm order' to proceed."
       ]
     },
     {
@@ -206,10 +206,10 @@
         "^my order$"
       ],
       "responses": [
-        "{cart_display}\n\nWould you like to add anything else? Say 'confirm order' when you're ready to finish.",
-        "{cart_display}\n\nIs there anything else you'd like to order? To complete your order, say 'confirm order'.",
-        "{cart_display}\n\nReady to checkout? Say 'confirm order' to finish, or add more items if you'd like.",
-        "{cart_display}\n\nSay 'confirm order' when you're ready to complete your order, or let me know if you'd like to add anything else."
+        "{cart_display}\n\nWould you like to add anything else, {name}? Say 'confirm order' when you're ready to finish.",
+        "{cart_display}\n\nIs there anything else you'd like to order, {name}? To complete your order, say 'confirm order'.",
+        "{cart_display}\n\nReady to checkout, {name}? Say 'confirm order' to finish, or add more items if you'd like.",
+        "{cart_display}\n\nSay 'confirm order' when you're ready to complete your order, {name}, or let me know if you'd like to add anything else."
       ]
     },
     {
@@ -230,10 +230,10 @@
         "that 's it"
       ],
       "responses": [
-        "Thank you for your order! Your order will be prepared now. The total is £{cart_total}. We'll have it ready soon. Enjoy your meal!",
-        "Perfect! Your order has been confirmed and will be prepared now. Total: £{cart_total}. Thank you for choosing {restaurant_name}!",
-        "Order confirmed! We're preparing your order now. Your total is £{cart_total}. Thank you, and enjoy your meal!",
-        "Great! Your order is confirmed and will be prepared now. Total: £{cart_total}. Thank you for ordering from {restaurant_name}!"
+        "Thank you for your order, {name}! Your order will be prepared now. The total is £{cart_total}. We'll have it ready soon. Enjoy your meal!",
+        "Perfect, {name}! Your order has been confirmed and will be prepared now. Total: £{cart_total}. Thank you for choosing {restaurant_name}!",
+        "Order confirmed, {name}! We're preparing your order now. Your total is £{cart_total}. Thank you, and enjoy your meal!",
+        "Great, {name}! Your order is confirmed and will be prepared now. Total: £{cart_total}. Thank you for ordering from {restaurant_name}!"
       ]
     }
   ]
