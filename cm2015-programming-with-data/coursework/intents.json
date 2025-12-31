@@ -108,10 +108,10 @@
         "greetings"
       ],
       "responses": [
-        "Hello! Welcome to {restaurant_name}! How can I help you today?",
-        "Hi there! Welcome to {restaurant_name}! What would you like to order?",
-        "Welcome to {restaurant_name}! How can I assist you today?",
-        "Hello! Ready to order some delicious Italian food? What can I help you with?"
+        "Hello! Welcome to {restaurant_name}! How can I help you today?\n\nHere are some things you can ask me:\n  • Say 'show me menu' or 'what can I order' to see our menu\n  • Say 'order [quantity] [SKU]' to add items (e.g., 'order 2 SC')\n  • Say 'show cart' to view your order\n  • Say 'confirm order' when you're ready to checkout\n  • Say 'restaurant info' or 'what are your hours' for restaurant details\n  • Tell me your name (e.g., 'I'm John') for personalized service",
+        "Hi there! Welcome to {restaurant_name}! What would you like to order?\n\nHere are some things you can ask me:\n  • Say 'show me menu' or 'what can I order' to see our menu\n  • Say 'order [quantity] [SKU]' to add items (e.g., 'order 2 SC')\n  • Say 'show cart' to view your order\n  • Say 'confirm order' when you're ready to checkout\n  • Say 'restaurant info' or 'what are your hours' for restaurant details\n  • Tell me your name (e.g., 'I'm John') for personalized service",
+        "Welcome to {restaurant_name}! How can I assist you today?\n\nHere are some things you can ask me:\n  • Say 'show me menu' or 'what can I order' to see our menu\n  • Say 'order [quantity] [SKU]' to add items (e.g., 'order 2 SC')\n  • Say 'show cart' to view your order\n  • Say 'confirm order' when you're ready to checkout\n  • Say 'restaurant info' or 'what are your hours' for restaurant details\n  • Tell me your name (e.g., 'I'm John') for personalized service",
+        "Hello! Ready to order some delicious Italian food? What can I help you with?\n\nHere are some things you can ask me:\n  • Say 'show me menu' or 'what can I order' to see our menu\n  • Say 'order [quantity] [SKU]' to add items (e.g., 'order 2 SC')\n  • Say 'show cart' to view your order\n  • Say 'confirm order' when you're ready to checkout\n  • Say 'restaurant info' or 'what are your hours' for restaurant details\n  • Tell me your name (e.g., 'I'm John') for personalized service"
       ]
     },
     {
