@@ -183,10 +183,10 @@
         "i 'll have ([a-zA-Z]{2})"
       ],
       "responses": [
-        "Added {quantity} {item_name} to your cart!",
-        "I've added {quantity} {item_name} to your order.",
-        "Great choice! {quantity} {item_name} added to your cart.",
-        "Perfect! I've added {quantity} {item_name} to your order."
+        "Added {quantity} {item_name} to your cart! When you're ready, say 'confirm order' to finish.",
+        "I've added {quantity} {item_name} to your order. Say 'confirm order' when you're ready to complete your order.",
+        "Great choice! {quantity} {item_name} added to your cart. To finish your order, just say 'confirm order'.",
+        "Perfect! I've added {quantity} {item_name} to your order. When you're done, say 'confirm order' to proceed."
       ]
     },
     {
@@ -206,10 +206,34 @@
         "my order"
       ],
       "responses": [
-        "{cart_display}\n\nWould you like to add anything else?",
-        "{cart_display}\n\nIs there anything else you'd like to order?",
-        "{cart_display}\n\nReady to checkout, or would you like to add more items?",
-        "{cart_display}\n\nAnything else I can help you with?"
+        "{cart_display}\n\nWould you like to add anything else? Say 'confirm order' when you're ready to finish.",
+        "{cart_display}\n\nIs there anything else you'd like to order? To complete your order, say 'confirm order'.",
+        "{cart_display}\n\nReady to checkout? Say 'confirm order' to finish, or add more items if you'd like.",
+        "{cart_display}\n\nSay 'confirm order' when you're ready to complete your order, or let me know if you'd like to add anything else."
+      ]
+    },
+    {
+      "tag": "confirm_order",
+      "patterns": [
+        "confirm order",
+        "confirm my order",
+        "finish order",
+        "complete order",
+        "checkout",
+        "place order",
+        "finalize order",
+        "i 'm done",
+        "i 'm finished",
+        "ready to checkout",
+        "ready to order",
+        "that 's all",
+        "that 's it"
+      ],
+      "responses": [
+        "Thank you for your order! Your order will be prepared now. The total is £{cart_total}. We'll have it ready soon. Enjoy your meal!",
+        "Perfect! Your order has been confirmed and will be prepared now. Total: £{cart_total}. Thank you for choosing {restaurant_name}!",
+        "Order confirmed! We're preparing your order now. Your total is £{cart_total}. Thank you, and enjoy your meal!",
+        "Great! Your order is confirmed and will be prepared now. Total: £{cart_total}. Thank you for ordering from {restaurant_name}!"
       ]
     }
   ]
