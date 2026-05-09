@@ -1,0 +1,9 @@
+A small healthcare organisation wants to strengthen its cybersecurity. It is considering using one of these three frameworks or standards to help it do this: 
+
+the NIST cybersecurity framework
+
+ISO/IEC 2700
+
+the US Health Insurance Portability and Accountability Act (HIPAA). 
+
+Which of these frameworks or standards would you recommend as the most suitable for this organisation and why? Post your thoughts on the discussion forum and then read and respond to your peers’ posts, engaging critically and constructively with their reasoning. 

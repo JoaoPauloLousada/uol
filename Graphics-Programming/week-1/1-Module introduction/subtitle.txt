@@ -1,0 +1,75 @@
+Hi. I'm Theo. Welcome to graphics programming. Stay tuned for a
+fun introduction to computer graphics with
+a creative twist. In the next few sessions, we're going to be playing
+with simple physics engines. We're going to be looking into the building blocks of
+generative art and design, as well as procedural
+generation of graphics. We'll dive into image processing and make our own filters, and finally, we'll
+bring it all together by looking at the somewhat magical field of computer vision. We're going to be coding
+exciting visualizations using 3D primitives and
+we are going to be interviewing top experts
+in the field of graphics. First off, let me
+introduce myself. I studied psychology, in
+my undergraduate degree, but I soon developed a keen
+interest in computing. So I went on to study for a master's and a PhD
+in computer science specializing in
+computer vision and its application to
+3D face-recognition. After that, I was fortunate
+enough to discover the amazing world of
+creative computing and all these democratizing
+technologies for artists that started to emerge
+about 15 years ago. I began teaching
+creative computing and I setup a creative
+technology studio, where we use many of the techniques I will be
+teaching you in the course. Fractals to generate the tree
+structure in this video, noise to animate it procedurally, a physics engine to drive the interaction between
+objects in the scene, and finally, simple
+computer vision techniques, that we'll explore
+in this course, to detect where the
+performer is on stage, and feed that into
+their projection system to make it all interactive. Throughout this course, I
+will be live coding examples. You will benefit most from these if you also code in
+parallel with me, stopping the video
+when you need to in order to tweak or
+debug your code, and then continuing
+along with me. Don't worry if you lose
+track of where you are, try to stay focused and
+you can always download a worked version of
+all examples I'll show this week from
+the links provided. Before it's live coding example, a little square will appear here, showing you the name
+of the program, the worked version of this. So after you try
+live coding with me, you can always open up the worked version
+and examine that. Learning to program can only
+be achieved by writing code. So the more time you put into writing code, the
+better you'll become. I'm also providing many fun short unassessed
+programming exercises to help you get to grips
+with various concepts and to enjoying yourself with the
+skills you picked up in class. Then every week, you have to
+do an assessed assignment, which you submit it
+once for grading. We hope that with all these programming practice you'll get, you'll be a graphics
+hacker in no time. The tool we're going
+to use throughout the course is p5.js. That's great for teaching
+introductory graphics topics. It allows you to easily
+prototype things and get the quick
+return on investment. Whether you want
+to get into games, create generative art pieces, develop your own social
+photo-sharing app, or program autonomous systems
+using computer vision, the skills and concepts that you learned in this
+course will be transferable to other
+projects you work on irrespective of
+the technology used. P5.js is a framework that is
+free and open source and it is being actively developed by an ever-growing community
+of contributors. So if you go to the
+GitHub page of p5.js, this is where all the
+action is happening. If you scroll down, you'll
+see all the contributors have put in a little bit of work to make this project better. We won't be using
+the p5.js that is on GitHub or even on
+the p5.js website, please download the empty example we have provided for you. This ensures that we'll all
+be using the same version of the library and there will not be any compatibility issues. The same goes for
+all the libraries that we will be using later on. The way we're going to be using p5.js is via the Brackets editor, which you can download
+for free as well. Bracket is itself an
+open source project with code contributions from people from around the world. Now is the time to download and install Brackets if you
+haven't already done so. In the next video, I'm going to remind you how to write a quick p5.js sketch to make sure that we're all
+on the same page. Feel free to skip this
+part of the video if you already know
+how to set up p5.js, and use Brackets to
+write a simple sketch.

@@ -1,0 +1,73 @@
+Case Study: The Uber Data Breach (2022)
+=======================================
+
+1. Summary
+----------
+In September 2022, an 18-year-old hacker affiliated with the cybercriminal group
+Lapsus$ gained unauthorised access to Uber's internal systems. The attacker began
+by purchasing stolen employee credentials from a dark web marketplace. Because the
+account was protected by multi-factor authentication (MFA), credential theft alone
+was not enough. The hacker then contacted the employee directly via WhatsApp,
+impersonating an Uber IT staff member, while simultaneously flooding the employee's
+phone with MFA approval requests for over an hour — a technique known as MFA
+fatigue. Eventually the employee approved one of the prompts, granting the attacker
+full network access. Once inside, the hacker discovered hardcoded admin credentials
+in an internal network share, which provided elevated access to Uber's AWS
+environment, G-Suite, Slack, internal dashboards, and bug bounty reports. The
+attacker then announced the breach directly on Uber's Slack.
+
+2. Classification
+-----------------
+- Source: External threat — the attacker had no prior authorised access to Uber's
+  systems and acted as part of an external criminal group (Lapsus$).
+
+- Vector: Endpoint and network — the initial compromise targeted a single employee's
+  device/account (endpoint) via social engineering. Once inside, the attacker moved
+  laterally across the corporate network, accessing cloud services and internal tools.
+
+- Impact:
+  - Operational: Uber temporarily shut down Slack, internal tools, and codebases to
+    contain the breach, disrupting day-to-day operations.
+  - Reputational: The public announcement via the company's own Slack caused
+    significant embarrassment and renewed scrutiny of Uber's security posture.
+  - Financial: While no direct ransom was paid, Uber faced regulatory scrutiny and
+    remediation costs, including credential rotation and system audits.
+
+3. Response and Outcome
+-----------------------
+Uber's incident response included disabling compromised accounts, rotating
+credentials and access keys, locking down the codebase, and temporarily taking
+internal tools offline. The attacker was later identified and arrested in the UK.
+Uber confirmed that no user payment data or personal trip history was accessed,
+though internal communications and vulnerability reports were exposed. The breach
+prompted Uber to overhaul MFA policies and tighten access controls.
+
+4. Critical Reflection
+----------------------
+The core failure was not technical but human: a well-protected account was bypassed
+by exploiting employee trust and fatigue. Key mistakes included the absence of
+MFA fatigue-resistant authentication (such as hardware security keys or number
+matching), hardcoded credentials left exposed in an internal file share, and
+insufficient employee training to recognise social engineering over messaging apps.
+This case illustrates that layered defences — strong credentials and MFA — are
+undermined if the human element is not equally hardened. It also shows why accurate
+threat classification matters: recognising this as an endpoint/social-engineering
+vector, rather than a purely technical intrusion, would have directed defences
+toward user awareness and phishing-resistant MFA from the outset.
+
+References
+----------
+[1] UpGuard — "What Caused the Uber Data Breach in 2022?"
+    https://www.upguard.com/blog/what-caused-the-uber-data-breach
+
+[2] GitGuardian — "Uber Breach 2022 – Everything You Need to Know"
+    https://blog.gitguardian.com/uber-breach-2022/
+
+[3] BleepingComputer — "Uber links breach to Lapsus$ group, blames contractor for hack"
+    https://www.bleepingcomputer.com/news/security/uber-links-breach-to-lapsus-group-blames-contractor-for-hack/
+
+[4] The Hacker News — "Uber Blames LAPSUS$ Hacking Group for Recent Security Breach"
+    https://thehackernews.com/2022/09/uber-blames-lapsus-hacking-group-for.html
+
+[5] IronScales — "2022 Uber Breach: Social Engineering and the Lapsus$ Gang"
+    https://ironscales.com/blog/ransomware-gangs-lapsus
